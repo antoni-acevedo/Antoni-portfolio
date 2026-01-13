@@ -72,15 +72,26 @@ const Hero = () => {
 
       {/* Main Content Grid */}
       <div className="flex-1 w-full max-w-[1320px] mx-auto px-6 md:px-12 flex flex-col md:flex-row relative">
-        {/* Left Side: Text & Content */}
-        <div className="w-full md:w-[55%] flex flex-col justify-center relative pt-10 md:pt-0 md:pb-32 z-20">
-          {/* Vertical Label - Absolute on Left */}
-          <div className="hidden lg:block absolute -left-4 top-[40%]">
-            <span className="-rotate-90 inline-block text-gray-300 text-xs font-semibold tracking-widest uppercase transform origin-center whitespace-nowrap">
+        {/* Left Vertical Sidebar */}
+        <div className="hidden xl:flex absolute -left-12 top-0 h-full flex-col items-center py-12 z-30 pointer-events-none">
+          <div className="flex-none pb-4">
+            <span className="[writing-mode:vertical-rl] rotate-180 text-gray-400 text-sm font-semibold tracking-widest uppercase whitespace-nowrap">
               Full-Stack Dev
             </span>
           </div>
 
+          {/* Continuous Vertical Line */}
+          <div className="w-[1px] flex-1 bg-gray-300"></div>
+
+          <div className="flex-none pt-4">
+            <span className="[writing-mode:vertical-rl] rotate-180 text-gray-400 text-sm font-bold tracking-widest block">
+              2024
+            </span>
+          </div>
+        </div>
+
+        {/* Left Side: Text & Content */}
+        <div className="w-full md:w-[55%] flex flex-col justify-center relative pt-10 md:pt-0 md:pb-32 z-20">
           {/* Stats */}
           <div className="flex gap-16 mb-8 md:pl-10">
             <div>
@@ -113,9 +124,6 @@ const Hero = () => {
           {/* Bottom Indicators */}
           <div className="mt-20 md:mt-auto md:absolute md:bottom-12 md:left-12 flex items-end justify-between w-full pr-12">
             <div className="hidden md:flex flex-col gap-12">
-              <span className="-rotate-90 text-gray-300 text-xs font-bold tracking-widest origin-bottom-left transform translate-y-full">
-                2024
-              </span>
               <div className="flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer">
                 Scroll down <ArrowDown />
               </div>
