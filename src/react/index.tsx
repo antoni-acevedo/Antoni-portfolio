@@ -1,3 +1,5 @@
+import profileImage from "../assets/img9.png";
+
 const ArrowUpRight = () => (
   <svg
     width="14"
@@ -32,9 +34,9 @@ const ArrowDown = () => (
 
 const Hero = () => {
   return (
-    <div className="w-full min-h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden">
+    <div className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden max-h-[720px] mx-auto">
       {/* Navigation */}
-      <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1920px] mx-auto z-50">
+      <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1320px] mx-auto z-50">
         <div className="hidden md:flex gap-10 text-sm font-medium text-gray-500">
           <a href="#" className="hover:text-black transition-colors">
             About Me
@@ -50,18 +52,28 @@ const Hero = () => {
           </a>
         </div>
 
-        <a
-          href="#"
-          className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
-        >
-          Book A Call <ArrowUpRight />
-        </a>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <button className="text-black font-semibold">EN</button>
+            <span className="text-gray-300">/</span>
+            <button className="text-gray-500 hover:text-black transition-colors">
+              ES
+            </button>
+          </div>
+
+          <a
+            href="#"
+            className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
+          >
+            Book A Call <ArrowUpRight />
+          </a>
+        </div>
       </nav>
 
       {/* Main Content Grid */}
-      <div className="flex-1 w-full max-w-[1920px] mx-auto px-6 md:px-12 flex flex-col md:flex-row relative">
+      <div className="flex-1 w-full max-w-[1320px] mx-auto px-6 md:px-12 flex flex-col md:flex-row relative">
         {/* Left Side: Text & Content */}
-        <div className="flex-[1.2] flex flex-col justify-center relative pt-10 md:pt-0 md:pb-32">
+        <div className="w-full md:w-[55%] flex flex-col justify-center relative pt-10 md:pt-0 md:pb-32 z-20">
           {/* Vertical Label - Absolute on Left */}
           <div className="hidden lg:block absolute -left-4 top-[40%]">
             <span className="-rotate-90 inline-block text-gray-300 text-xs font-semibold tracking-widest uppercase transform origin-center whitespace-nowrap">
@@ -87,8 +99,8 @@ const Hero = () => {
 
           {/* Headline */}
           <div className="relative md:pl-8">
-            <h1 className="text-[20vw] md:text-[13rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A]">
-              Hello
+            <h1 className="text-[20vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A]">
+              Antoni
             </h1>
             <div className="mt-8 flex items-center gap-3 md:pl-2">
               <span className="h-[1px] w-8 bg-gray-400"></span>
@@ -111,10 +123,18 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Side: Blue Placeholder Box */}
-        <div className="flex-1 flex items-end justify-center md:justify-end relative mt-12 md:mt-0 h-[50vh] md:h-auto">
-          {/* The Blue Box */}
-          <div className="w-full md:w-[85%] h-full md:h-[90%] bg-blue-600 relative z-10 flex items-center justify-center text-white/50 overflow-hidden"></div>
+        {/* Right Side: Image Box */}
+        <div className="absolute bottom-0 right-0 md:right-[5%] w-full md:w-[55%] h-[50vh] md:h-[110%] z-10 flex items-end justify-center pointer-events-none">
+          <div className="w-full h-full relative flex items-end justify-center overflow-hidden">
+            <img
+              style={{
+                filter: "brightness(109.3%) grayscale(100%)",
+              }}
+              src={profileImage.src}
+              alt="Portrait"
+              className="w-full h-full object-cover grayscale"
+            />
+          </div>
         </div>
       </div>
     </div>
