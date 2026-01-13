@@ -1,4 +1,4 @@
-import profileImage from "../assets/img9.png";
+import profileImage from "../assets/img10.png";
 
 const ArrowUpRight = () => (
   <svg
@@ -77,7 +77,7 @@ const Hero = () => {
           {/* Vertical Label - Absolute on Left */}
           <div className="hidden lg:block absolute -left-4 top-[40%]">
             <span className="-rotate-90 inline-block text-gray-300 text-xs font-semibold tracking-widest uppercase transform origin-center whitespace-nowrap">
-              Product designer
+              Full-Stack Dev
             </span>
           </div>
 
@@ -85,15 +85,15 @@ const Hero = () => {
           <div className="flex gap-16 mb-8 md:pl-10">
             <div>
               <h3 className="text-4xl md:text-5xl font-light tracking-tight">
-                +200
+                +4
               </h3>
-              <p className="text-sm text-gray-500 mt-1">Project completed</p>
+              <p className="text-sm text-gray-500 mt-1">Years exp.</p>
             </div>
             <div>
               <h3 className="text-4xl md:text-5xl font-light tracking-tight">
                 +50
               </h3>
-              <p className="text-sm text-gray-500 mt-1">Startup raised</p>
+              <p className="text-sm text-gray-500 mt-1">Project completed</p>
             </div>
           </div>
 
@@ -105,7 +105,7 @@ const Hero = () => {
             <div className="mt-8 flex items-center gap-3 md:pl-2">
               <span className="h-[1px] w-8 bg-gray-400"></span>
               <p className="text-lg text-gray-600 font-medium">
-                It's D.Nova a design wizard
+                Full Stack Developer & UI/UX Specialist
               </p>
             </div>
           </div>
