@@ -49,53 +49,37 @@ const Hero = () => {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Enforce initial states IMMEDIATELY
-      gsap.set(".hero-text-reveal", { y: 100 });
-      gsap.set(".hero-fade-in", { y: 20 });
-      gsap.set(".hero-nav-item", { y: -20 });
-      gsap.set(".sidebar-line", { transformOrigin: "top" });
-      gsap.set(".sidebar-text", { x: -20 });
-      gsap.set(".hero-image", { scale: 1.3 });
+      gsap.set(".hero-text-reveal", { y: 100, autoAlpha: 0 });
+      gsap.set(".hero-fade-in", { y: 20, autoAlpha: 0 });
+      gsap.set(".hero-nav-item", { y: -20, autoAlpha: 0 });
+      gsap.set(".sidebar-line", { scaleY: 0, transformOrigin: "top" });
+      gsap.set(".sidebar-text", { x: -20, autoAlpha: 0 });
 
-      // If loaded, play the animation
+      // Only play text/sidebar animations when image is ready
       if (isLoaded) {
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          delay: 0.2,
+        }); // slight delay to sync with CSS start
 
-        tl.to(".hero-image-container", {
-          clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-          duration: 1.5,
-          ease: "expo.inOut",
+        tl.to(".sidebar-line", {
+          scaleY: 1,
+          duration: 1,
         })
-          .to(
-            ".hero-image",
-            {
-              scale: 1,
-              duration: 1.5,
-              ease: "expo.out",
-            },
-            "<"
-          )
-          .to(
-            ".sidebar-line",
-            {
-              scaleY: 1,
-              duration: 1,
-            },
-            "-=1"
-          )
           .to(
             ".hero-text-reveal",
             {
               y: 0,
-              opacity: 1,
+              autoAlpha: 1,
               duration: 1,
               stagger: 0.1,
             },
-            "-=0.8"
+            "-=0.5"
           )
           .to(
             [".hero-fade-in", ".sidebar-text"],
             {
-              opacity: 1,
+              autoAlpha: 1,
               y: 0,
               x: 0,
               duration: 0.8,
@@ -106,7 +90,7 @@ const Hero = () => {
           .to(
             ".hero-nav-item",
             {
-              opacity: 1,
+              autoAlpha: 1,
               y: 0,
               stagger: 0.05,
               duration: 0.6,
@@ -198,7 +182,7 @@ const Hero = () => {
           <div className="relative md:pl-8">
             <div className="overflow-hidden">
               <h1 className="hero-text-reveal opacity-0 text-[20vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A]">
-                Leider
+                Antoni
               </h1>
             </div>
             <div className="mt-8 flex items-center gap-3 md:pl-2 hero-text-reveal opacity-0">
@@ -222,10 +206,9 @@ const Hero = () => {
         {/* Right Side: Image Box */}
         <div className="absolute bottom-0 right-0 md:right-[5%] w-full md:w-[55%] h-[50vh] md:h-[110%] z-10 flex items-end justify-center pointer-events-none">
           <div
-            className="hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden"
-            style={{
-              clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
-            }}
+            className={`hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden ${
+              isLoaded ? "animate-slide-up" : "image-initial"
+            }`}
           >
             <img
               ref={imgRef}
@@ -235,7 +218,7 @@ const Hero = () => {
               }}
               src={profileImage.src}
               alt="Portrait"
-              className="hero-image w-full h-full object-cover grayscale"
+              className="w-full h-full object-cover grayscale"
             />
           </div>
         </div>
