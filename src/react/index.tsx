@@ -1,6 +1,3 @@
-import React from "react";
-
-// Icons
 const ArrowUpRight = () => (
   <svg
     width="14"
@@ -33,27 +30,11 @@ const ArrowDown = () => (
   </svg>
 );
 
-const Logo = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className="w-8 h-8"
-  >
-    <path d="M12 2L2 19h20L12 2zm0 3l6 14H6l6-14z" />
-  </svg>
-);
-
 const Hero = () => {
   return (
-    <div className="w-full min-h-screen bg-[#FDFDFD] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden">
+    <div className="w-full min-h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden">
       {/* Navigation */}
-      <nav className="w-full flex justify-between items-center px-6 md:px-12 py-8 max-w-[1920px] mx-auto z-50">
-        <div className="flex items-center">
-          <Logo />
-        </div>
-
+      <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1920px] mx-auto z-50">
         <div className="hidden md:flex gap-10 text-sm font-medium text-gray-500">
           <a href="#" className="hover:text-black transition-colors">
             About Me
@@ -80,7 +61,7 @@ const Hero = () => {
       {/* Main Content Grid */}
       <div className="flex-1 w-full max-w-[1920px] mx-auto px-6 md:px-12 flex flex-col md:flex-row relative">
         {/* Left Side: Text & Content */}
-        <div className="flex-[1.2] flex flex-col justify-center relative pt-10 md:pt-0">
+        <div className="flex-[1.2] flex flex-col justify-center relative pt-10 md:pt-0 md:pb-32">
           {/* Vertical Label - Absolute on Left */}
           <div className="hidden lg:block absolute -left-4 top-[40%]">
             <span className="-rotate-90 inline-block text-gray-300 text-xs font-semibold tracking-widest uppercase transform origin-center whitespace-nowrap">
@@ -91,12 +72,16 @@ const Hero = () => {
           {/* Stats */}
           <div className="flex gap-16 mb-8 md:pl-10">
             <div>
-              <h3 className="text-3xl font-light tracking-tight">+200</h3>
-              <p className="text-xs text-gray-500 mt-1">Project completed</p>
+              <h3 className="text-4xl md:text-5xl font-light tracking-tight">
+                +200
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">Project completed</p>
             </div>
             <div>
-              <h3 className="text-3xl font-light tracking-tight">+50</h3>
-              <p className="text-xs text-gray-500 mt-1">Startup raised</p>
+              <h3 className="text-4xl md:text-5xl font-light tracking-tight">
+                +50
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">Startup raised</p>
             </div>
           </div>
 
