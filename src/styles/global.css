@@ -2,7 +2,7 @@
 
 @layer utilities {
   .image-initial {
-    transform: translateY(100%);
+    transform: translateY(10%);
     opacity: 0;
   }
   
@@ -14,7 +14,7 @@
 
 @keyframes slideUp {
   from {
-    transform: translateY(100%);
+    transform: translateY(10%);
     opacity: 0;
   }
   to {
