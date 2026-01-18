@@ -30,38 +30,38 @@ const ArrowUpRight = () => (
 const projects = [
   {
     id: 1,
-    title: "Halo Digital Agency",
-    client: "Squeeze",
+    title: "Validocus",
+    client: "Soluciones Star",
     image: img3,
-    category: "Website",
+    category: "Plataforma Web",
   },
   {
     id: 2,
-    title: "Digital Agency",
-    client: "Squeeze",
+    title: "AdWorkChain",
+    client: "Vinix Code",
     image: img4,
-    category: "Website",
+    category: "Gestión",
   },
   {
     id: 3,
-    title: "Modern Portfolio",
-    client: "Personal",
+    title: "Metradesk",
+    client: "Soluciones Star",
     image: img5,
-    category: "Design",
+    category: "Fintech",
   },
   {
     id: 4,
-    title: "E-commerce Platform",
-    client: "Shopify",
+    title: "TransferX",
+    client: "Konecta",
     image: img6,
-    category: "Development",
+    category: "Logística",
   },
 ];
 
 export default function ProyectCarrousel() {
   return (
     <div className="w-full bg-[#f3f3f3]">
-      <section className="w-full bg-[#f3f3f3] py-0 px-6 md:px-0 relative z-10 text-[#1A1A1A] overflow-hidden max-w-[1700px] mx-auto">
+      <section className="w-full bg-[#f3f3f3] py-10 px-6 md:px-0 relative z-10 text-[#1A1A1A] overflow-hidden max-w-[1700px] mx-auto">
         <div className="max-w-[1400px] mx-auto">
           <div className="pl-6 md:pl-12 cursor-grab active:cursor-grabbing">
             <Swiper
