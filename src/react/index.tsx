@@ -74,7 +74,7 @@ const Hero = () => {
               duration: 1,
               stagger: 0.1,
             },
-            "-=0.5"
+            "-=0.5",
           )
           .to(
             [".hero-fade-in", ".sidebar-text"],
@@ -85,7 +85,7 @@ const Hero = () => {
               duration: 0.8,
               stagger: 0.1,
             },
-            "-=0.6"
+            "-=0.6",
           )
           .to(
             ".hero-nav-item",
@@ -95,7 +95,7 @@ const Hero = () => {
               stagger: 0.05,
               duration: 0.6,
             },
-            "-=0.8"
+            "-=0.8",
           );
       }
     }, container);
@@ -106,7 +106,7 @@ const Hero = () => {
   return (
     <div
       ref={container}
-      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden max-h-[720px] mx-auto"
+      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden max-h-[820px] mx-auto"
     >
       {/* Navigation */}
       <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1320px] mx-auto z-50">
