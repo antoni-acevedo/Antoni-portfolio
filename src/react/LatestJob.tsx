@@ -38,7 +38,7 @@ const jobs = [
 
 export default function LatestJob() {
   return (
-    <section className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
+    <section id="experience" className="w-full bg-[#f3f3f3] pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
       <div className="max-w-[1400px] mx-auto">
         {/* Header */}
         <div className="flex flex-col items-center justify-center text-center mb-16">
@@ -48,7 +48,7 @@ export default function LatestJob() {
               Trayectoria
             </span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-normal tracking-tight">
+          <h2 className="text-5xl md:text-6xl font-medium tracking-tight mt-4">
             Últimos Trabajos
           </h2>
         </div>

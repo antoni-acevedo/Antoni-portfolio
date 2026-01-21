@@ -111,13 +111,18 @@ const Hero = () => {
       {/* Navigation */}
       <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1320px] mx-auto z-50">
         <div className="hidden md:flex gap-10 text-sm font-medium text-gray-500">
-          {["About Me", "Portfolio", "Services", "Blog"].map((item) => (
+          {[
+            { label: "Sobre Mí", href: "#about" },
+            { label: "Portafolio", href: "#portfolio" },
+            { label: "Servicios", href: "#services" },
+            { label: "Trayectoria", href: "#experience" },
+          ].map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.href}
               className="hero-nav-item opacity-0 hover:text-black transition-colors"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </div>
@@ -141,7 +146,7 @@ const Hero = () => {
       </nav>
 
       {/* Main Content Grid */}
-      <div className="flex-1 w-full max-w-[1320px] mx-auto px-6 md:px-12 flex flex-col md:flex-row relative">
+      <div className="flex-1 w-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row relative">
         {/* Left Vertical Sidebar */}
         <div className="hidden xl:flex absolute -left-12 top-0 h-full flex-col items-center py-12 z-30 pointer-events-none">
           <div className="flex-none pb-4 sidebar-text opacity-0">
@@ -206,9 +211,8 @@ const Hero = () => {
         {/* Right Side: Image Box */}
         <div className="absolute bottom-0 right-0 md:right-[5%] w-full md:w-[55%] h-[50vh] md:h-[110%] z-10 flex items-end justify-center pointer-events-none">
           <div
-            className={`hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden ${
-              isLoaded ? "animate-slide-up" : "image-initial"
-            }`}
+            className={`hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden ${isLoaded ? "animate-slide-up" : "image-initial"
+              }`}
           >
             <img
               ref={imgRef}

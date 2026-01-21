@@ -59,7 +59,7 @@ export default function MyProjects() {
   const [activeId, setActiveId] = useState<number | null>(1); // Default expanded
 
   return (
-    <section className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
+    <section id="portfolio" className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
       <div className="max-w-[1320px] mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
@@ -70,8 +70,8 @@ export default function MyProjects() {
                 Experiencia Laboral
               </span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-normal tracking-tight max-w-xl">
-              Mi Trayectoria Profesional
+            <h2 className="text-5xl md:text-6xl font-medium tracking-tight max-w-xl">
+              Mi Trayectoria <br /><br />
             </h2>
           </div>
 

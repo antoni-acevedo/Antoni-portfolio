@@ -20,7 +20,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#f3f3f3] relative z-10 text-[#1A1A1A]">
       {/* Call to Action Section */}
-      <div className="py-32 px-6 md:px-12 flex flex-col items-center justify-center text-center">
+      <div className="pb-32 pt-12 px-6 md:px-12 flex flex-col items-center justify-center text-center">
         <h2 className="text-4xl md:text-6xl font-medium tracking-tight mb-6 max-w-3xl">
           ¿Tienes una visión? <br /> ¡Hagámosla realidad!
         </h2>

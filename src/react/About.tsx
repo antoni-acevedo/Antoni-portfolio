@@ -110,13 +110,14 @@ export default function About() {
 
   return (
     <section
+      id="about"
       ref={container}
       className="w-full bg-[#f3f3f3] py-20 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
     >
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Text */}
         <div className="lg:col-span-4 flex flex-col gap-8 pr-4">
-          <h2 className="about-text text-5xl md:text-6xl font-normal tracking-tight">
+          <h2 className="about-text text-5xl md:text-6xl font-medium tracking-tight">
             Sobre Mí
           </h2>
 
