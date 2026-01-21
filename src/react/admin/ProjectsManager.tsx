@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ProjectData } from '../MyProjects';
 import { Button, Input, TextArea, Card, Modal } from './UI';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 export default function ProjectsManager() {
     const [items, setItems] = useState<ProjectData[]>([]);
@@ -41,8 +42,18 @@ export default function ProjectsManager() {
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this project?')) return;
-        await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-        fetchItems();
+
+        toast.promise(
+            fetch(`/api/projects/${id}`, { method: 'DELETE' }),
+            {
+                loading: 'Eliminando...',
+                success: () => {
+                    setTimeout(() => window.location.reload(), 1000);
+                    return 'Proyecto eliminado correctamente';
+                },
+                error: 'Error al eliminar'
+            }
+        );
     };
 
     const handleSave = async (e: React.FormEvent) => {
@@ -61,14 +72,22 @@ export default function ProjectsManager() {
         delete (payload as any).tagsString;
         delete (payload as any).imagesString;
 
-        await fetch(url, {
-            method,
-            body: JSON.stringify(payload),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        setIsModalOpen(false);
-        fetchItems();
+        toast.promise(
+            fetch(url, {
+                method,
+                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'application/json' }
+            }),
+            {
+                loading: 'Guardando...',
+                success: () => {
+                    setIsModalOpen(false);
+                    setTimeout(() => window.location.reload(), 1000);
+                    return 'Proyecto guardado correctamente';
+                },
+                error: 'Error al guardar'
+            }
+        );
     };
 
     if (loading) return <div>Loading...</div>;

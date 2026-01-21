@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ProfileData } from '../About';
 import { Button, Input, TextArea, Card } from './UI';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 export default function ProfileEditor() {
     const [data, setData] = useState<ProfileData | null>(null);
@@ -27,7 +28,8 @@ export default function ProfileEditor() {
             headers: { 'Content-Type': 'application/json' }
         });
         setSaving(false);
-        alert('Profile updated!');
+        toast.success('Perfil actualizado correctamente');
+        setTimeout(() => window.location.reload(), 1000);
     };
 
     if (loading) return <div>Loading...</div>;

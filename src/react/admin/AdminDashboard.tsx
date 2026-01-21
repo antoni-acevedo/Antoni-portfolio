@@ -1,19 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileEditor from './ProfileEditor';
 import ServicesManager from './ServicesManager';
 import ProjectsManager from './ProjectsManager';
 import JobsManager from './JobsManager';
 import { motion } from 'framer-motion';
+import { Toaster } from 'sonner';
+import { User, Briefcase, Zap, Building2 } from 'lucide-react';
 
 const tabs = [
-    { id: 'profile', label: 'Incio / Perfil', icon: '👤' },
-    { id: 'projects', label: 'Proyectos', icon: '💼' },
-    { id: 'services', label: 'Servicios', icon: '⚡' },
-    { id: 'jobs', label: 'Experiencia', icon: '🏢' },
+    { id: 'profile', label: 'Incio / Perfil', icon: User },
+    { id: 'projects', label: 'Proyectos', icon: Briefcase },
+    { id: 'services', label: 'Servicios', icon: Zap },
+    { id: 'jobs', label: 'Experiencia', icon: Building2 },
 ];
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState('profile');
+    const [activeTab, setActiveTab] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('tab') || 'profile';
+        }
+        return 'profile';
+    });
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', activeTab);
+        window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+    }, [activeTab]);
 
     return (
         <div className="flex min-h-screen bg-[#f3f3f3]">
@@ -31,7 +45,7 @@ export default function AdminDashboard() {
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-[#1A1A1A] text-white shadow-lg shadow-black/10' : 'text-gray-500 hover:bg-gray-50 hover:text-black'}`}
                         >
-                            <span>{tab.icon}</span>
+                            <tab.icon className="w-5 h-5" />
                             {tab.label}
                         </button>
                     ))}
@@ -72,6 +86,7 @@ export default function AdminDashboard() {
                     {activeTab === 'services' && <ServicesManager />}
                     {activeTab === 'jobs' && <JobsManager />}
                 </motion.div>
+                <Toaster position="bottom-right" richColors closeButton />
             </main>
         </div>
     );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ServiceData } from '../Services';
 import { Button, Input, TextArea, Card, Modal } from './UI';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 export default function ServicesManager() {
     const [items, setItems] = useState<ServiceData[]>([]);
@@ -34,8 +35,18 @@ export default function ServicesManager() {
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this service?')) return;
-        await fetch(`/api/services/${id}`, { method: 'DELETE' });
-        fetchItems();
+
+        toast.promise(
+            fetch(`/api/services/${id}`, { method: 'DELETE' }),
+            {
+                loading: 'Eliminando...',
+                success: () => {
+                    setTimeout(() => window.location.reload(), 1000);
+                    return 'Servicio eliminado correctamente';
+                },
+                error: 'Error al eliminar'
+            }
+        );
     };
 
     const handleSave = async (e: React.FormEvent) => {
@@ -44,14 +55,22 @@ export default function ServicesManager() {
         const url = isNew ? '/api/services' : `/api/services/${editingItem.id}`;
         const method = isNew ? 'POST' : 'PUT';
 
-        await fetch(url, {
-            method,
-            body: JSON.stringify(editingItem),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        setIsModalOpen(false);
-        fetchItems();
+        toast.promise(
+            fetch(url, {
+                method,
+                body: JSON.stringify(editingItem),
+                headers: { 'Content-Type': 'application/json' }
+            }),
+            {
+                loading: 'Guardando...',
+                success: () => {
+                    setIsModalOpen(false);
+                    setTimeout(() => window.location.reload(), 1000);
+                    return 'Servicio guardado correctamente';
+                },
+                error: 'Error al guardar'
+            }
+        );
     };
 
     if (loading) return <div>Loading...</div>;
