@@ -1,7 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import img10 from "../assets/profile2.jpeg";
-import img11 from "../assets/profile2.jpg";
 import img2 from "../assets/arrow.png";
 
 const GlobeIcon = () => (
@@ -62,7 +60,27 @@ const CurvyArrow = () => (
   />
 );
 
-export default function About() {
+export interface ProfileData {
+  id: number;
+  title: string;
+  description: string;
+  highlight_text: string;
+  years_experience: number;
+  experience_text: string;
+  profile_image: string;
+  secondary_image: string;
+  bullet_1: string;
+  bullet_2: string;
+}
+
+interface AboutProps {
+  profileData: ProfileData;
+}
+
+export default function About({ profileData }: AboutProps) {
+  // Fallback if no data provided
+  if (!profileData) return null;
+
   return (
     <section
       id="about"
@@ -78,7 +96,7 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-6xl font-medium tracking-tight"
           >
-            Sobre Mí
+            {profileData.title}
           </motion.h2>
 
           <div className="space-y-6 text-gray-500 text-lg leading-relaxed">
@@ -88,10 +106,7 @@ export default function About() {
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              Desarrollador Full-Stack con más de 4 años de experiencia creando
-              aplicaciones web y móviles escalables con JavaScript/TypeScript.
-              Especializado en React, Vue, Node.js, y desarrollo híbrido con
-              Ionic, React Native y Flutter.
+              {profileData.description}
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 50 }}
@@ -100,7 +115,7 @@ export default function About() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="font-medium text-[#1A1A1A]"
             >
-              ¿Listo para iniciar tu próximo proyecto?
+              {profileData.highlight_text}
             </motion.p>
           </div>
 
@@ -125,21 +140,20 @@ export default function About() {
         >
           <div className="bg-white p-8 rounded-3xl shadow-sm h-full flex flex-col items-start gap-8 relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center justify-between w-full gap-4">
-              <h3 className="text-6xl font-normal tracking-tighter">+4</h3>
+              <h3 className="text-6xl font-normal tracking-tighter">+{profileData.years_experience}</h3>
               <div className="bg-[#f3f3f3] p-3 rounded-full">
                 <GlobeIcon />
               </div>
             </div>
             <div>
               <p className="text-gray-500 mt-4 leading-snug">
-                Años de experiencia liderando el desarrollo de soluciones
-                digitales completas.
+                {profileData.experience_text}
               </p>
             </div>
 
             <div className="w-full mt-auto pt-8 aspect-[4/5] relative rounded-2xl overflow-hidden">
               <img
-                src={img10.src}
+                src={`/images/${profileData.profile_image}`}
                 alt="Portrait"
                 className="absolute inset-0 w-full h-full object-cover grayscale contrast-110 group-hover:scale-105 transition-transform duration-700 aspect-square"
               />
@@ -159,7 +173,7 @@ export default function About() {
           >
             <div className="w-full h-full relative rounded-2xl overflow-hidden">
               <img
-                src={img11.src}
+                src={`/images/${profileData.secondary_image}`}
                 alt="Detail"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
@@ -185,9 +199,7 @@ export default function About() {
             >
               <SparkleIcon />
               <p className="text-gray-500 leading-relaxed text-sm md:text-base pt-1">
-                Enfoque en arquitecturas eficientes y escalables, optimizando
-                tanto el rendimiento del frontend como la robustez del backend
-                para clientes globales.
+                {profileData.bullet_1}
               </p>
             </motion.div>
 
@@ -200,9 +212,7 @@ export default function About() {
             >
               <SparkleIcon />
               <p className="text-gray-500 leading-relaxed text-sm md:text-base pt-1">
-                Experiencia integral abarcando desde la concepción del diseño
-                UI/UX hasta el despliegue en producción, integrando pasarelas de
-                pago y servicios cloud.
+                {profileData.bullet_2}
               </p>
             </motion.div>
           </div>

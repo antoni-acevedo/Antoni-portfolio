@@ -1,8 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import img3 from "../assets/mockImg.png";
-import img4 from "../assets/mockImg.png";
-import img5 from "../assets/mockImg.png";
 
 const ArrowUpRight = () => (
   <svg
@@ -20,33 +17,21 @@ const ArrowUpRight = () => (
   </svg>
 );
 
-const services = [
-  {
-    id: 1,
-    title: "Desarrollo Web Full-Stack",
-    description: "Aplicaciones web modernas y escalables con React y Node.js.",
-    image: img3,
-    tag: "Web & PWA",
-  },
-  {
-    id: 2,
-    title: "Desarrollo Móvil",
-    description:
-      "Apps nativas e híbridas para iOS y Android con React Native y Flutter.",
-    image: img4,
-    tag: "Mobile",
-  },
-  {
-    id: 3,
-    title: "Arquitectura & Cloud",
-    description:
-      "Sistemas robustos, bases de datos y despliegue en la nube (AWS).",
-    image: img5,
-    tag: "Backend",
-  },
-];
+export interface ServiceData {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  tag: string;
+}
 
-export default function Services() {
+interface ServicesProps {
+  services: ServiceData[];
+}
+
+export default function Services({ services }: ServicesProps) {
+  if (!services) return null;
+
   return (
     <section id="services" className="w-full bg-[#f3f3f3] pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
       <div className="max-w-[1400px] mx-auto">
@@ -83,7 +68,7 @@ export default function Services() {
               {/* Image Card */}
               <div className="relative overflow-hidden rounded-3xl aspect-[4/3] bg-gray-200">
                 <img
-                  src={service.image.src}
+                  src={`/images/${service.image}`}
                   alt={service.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -93,11 +78,6 @@ export default function Services() {
                   <div className="bg-[#1A1A1A] text-white w-20 h-20 rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300 shadow-xl">
                     <ArrowUpRight />
                   </div>
-                </div>
-
-                {/* Internal Tags (Optional, matching style of some modern cards) */}
-                <div className="absolute bottom-6 left-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                  {/* Can put content here if needed */}
                 </div>
               </div>
 

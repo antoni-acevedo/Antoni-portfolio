@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import img3 from "../assets/mockImg.png";
-import img4 from "../assets/mockImg.png";
-import img5 from "../assets/mockImg.png";
 
 const ArrowUpRight = () => (
   <svg
@@ -20,44 +17,25 @@ const ArrowUpRight = () => (
   </svg>
 );
 
-const projects = [
-  {
-    id: 1,
-    company: "Soluciones Star",
-    role: "Desarrollador Full-Stack",
-    date: "Agosto 2024 – Presente",
-    desc: "Desarrollo de soluciones digitales completas (Web & Mobile)",
-    longDesc:
-      "Contribución activa en plataformas como Validocus y Wasapi. Enfoque en arquitecturas eficientes y escalables, optimizando tanto el rendimiento del frontend como la robustez del backend utilizando React, Node.js y tecnologías móviles híbridas.",
-    tags: ["FullStack", "Mobile"],
-    images: [img3, img4, img5],
-  },
-  {
-    id: 2,
-    company: "Vinix Code",
-    role: "Desarrollador de Software",
-    date: "Junio 2022 – Junio 2024",
-    desc: "Desarrollo de aplicaciones web y móviles con React y Vue.js",
-    longDesc:
-      "Implementación de pasarelas de pago (Stripe, PayU), gestión de bases de datos (MySQL, Firebase) y contenerización con Docker. Colaboración estrecha en diseño UI/UX y despliegues consistentes en AWS.",
-    tags: ["Frontend", "Backend"],
-    images: [img4, img5, img3],
-  },
-  {
-    id: 3,
-    company: "Konecta",
-    role: "Desarrollador Web",
-    date: "Octubre 2019 – Marzo 2020",
-    desc: "Construcción de aplicaciones web con Angular y Node.js",
-    longDesc:
-      "Desarrollo de interfaces de usuario modernas y experiencias digitales. Creación de aplicaciones robustas utilizando Angular (CLI, Material) e integración de servicios backend con Express.js.",
-    tags: ["Web", "UI/UX"],
-    images: [img5, img3, img4],
-  },
-];
+export interface ProjectData {
+  id: number;
+  company: string;
+  role: string;
+  date: string;
+  desc: string;
+  long_desc: string;
+  tags: string[];
+  images: string[];
+}
 
-export default function MyProjects() {
+interface MyProjectsProps {
+  projects: ProjectData[];
+}
+
+export default function MyProjects({ projects }: MyProjectsProps) {
   const [activeId, setActiveId] = useState<number | null>(1); // Default expanded
+
+  if (!projects) return null;
 
   return (
     <section id="portfolio" className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
@@ -168,7 +146,7 @@ export default function MyProjects() {
                             className="w-32 h-24 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200"
                           >
                             <img
-                              src={img.src}
+                              src={`/images/${img}`}
                               alt=""
                               className="w-full h-full object-cover"
                             />
@@ -179,7 +157,7 @@ export default function MyProjects() {
                       {/* Description & Action */}
                       <div className="flex-1 flex items-center justify-between gap-8 w-full">
                         <p className="text-gray-500 leading-relaxed text-sm md:text-lg max-w-xl">
-                          {project.longDesc}
+                          {project.long_desc}
                         </p>
 
                         <button className="hidden md:flex bg-[#1A1A1A] text-white w-16 h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300">

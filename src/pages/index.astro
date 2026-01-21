@@ -1,12 +1,28 @@
 ---
 import Hero from "../react/index";
-import About from "../react/About";
+import About, { type ProfileData } from "../react/About";
 import ProyectCarrousel from "../react/ProyectCarrousel";
-import MyProjects from "../react/MyProjects";
-import Services from "../react/Services";
-import LatestJob from "../react/LatestJob";
+import MyProjects, { type ProjectData } from "../react/MyProjects";
+import Services, { type ServiceData } from "../react/Services";
+import LatestJob, { type JobData } from "../react/LatestJob";
 import Footer from "../react/Footer";
 import "../styles/global.css";
+import db from "../db/client";
+
+// Fetch Data
+const profileData = db
+  .prepare("SELECT * FROM profile LIMIT 1")
+  .get() as ProfileData;
+const services = db.prepare("SELECT * FROM services").all() as ServiceData[];
+const jobs = db.prepare("SELECT * FROM jobs").all() as JobData[];
+const projectsRaw = db.prepare("SELECT * FROM projects").all();
+
+// Parse JSON fields for projects
+const projects = projectsRaw.map((p: any) => ({
+  ...p,
+  tags: JSON.parse(p.tags),
+  images: JSON.parse(p.images),
+})) as ProjectData[];
 ---
 
 <html lang="es">
@@ -28,11 +44,11 @@ import "../styles/global.css";
       class="flex flex-col items-center w-full relative font-sans text-[#1A1A1A] selection:bg-blue-100 bg-[#f3f3f3]"
     >
       <Hero client:load />
-      <About client:load />
+      <About client:load profileData={profileData} />
       <ProyectCarrousel client:load />
-      <MyProjects client:load />
-      <Services client:load />
-      <LatestJob client:load />
+      <MyProjects client:load projects={projects} />
+      <Services client:load services={services} />
+      <LatestJob client:load jobs={jobs} />
       <Footer client:load />
     </main>
   </body>
