@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import img3 from "../assets/mockImg.png";
 import img4 from "../assets/mockImg.png";
 import img5 from "../assets/mockImg.png";
@@ -63,7 +64,12 @@ export default function MyProjects() {
       <div className="max-w-[1320px] mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8 }}
+          >
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 rounded-full bg-black"></span>
               <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
@@ -73,9 +79,15 @@ export default function MyProjects() {
             <h2 className="text-5xl md:text-6xl font-medium tracking-tight max-w-xl">
               Mi Trayectoria <br /><br />
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="max-w-md text-gray-500 text-sm md:text-base leading-relaxed">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="max-w-md text-gray-500 text-sm md:text-base leading-relaxed"
+          >
             <p className="mb-4">
               Durante más de 4 años, he trabajado en una amplia gama de
               proyectos de desarrollo, colaborando con diversos equipos y
@@ -89,14 +101,18 @@ export default function MyProjects() {
             >
               Contáctame <ArrowUpRight />
             </a>
-          </div>
+          </motion.div>
         </div>
 
         {/* List */}
         <div className="flex flex-col">
-          {projects.map((project) => (
-            <div
+          {projects.map((project, index) => (
+            <motion.div
               key={project.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               onClick={() =>
                 setActiveId(activeId === project.id ? null : project.id)
               }
@@ -134,39 +150,47 @@ export default function MyProjects() {
               </div>
 
               {/* Expanded Content */}
-              <div
-                className={`overflow-hidden transition-[max-height,opacity] duration-500 ease-in-out ${activeId === project.id ? "max-h-[500px] opacity-100 mt-8" : "max-h-0 opacity-0"}`}
-              >
-                <div className="flex flex-col md:flex-row gap-8 items-start">
-                  {/* Images */}
-                  <div className="flex gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                    {project.images.map((img, idx) => (
-                      <div
-                        key={idx}
-                        className="w-32 h-24 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200"
-                      >
-                        <img
-                          src={img.src}
-                          alt=""
-                          className="w-full h-full object-cover"
-                        />
+              <AnimatePresence>
+                {activeId === project.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                    animate={{ height: "auto", opacity: 1, marginTop: 32 }}
+                    exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="flex flex-col md:flex-row gap-8 items-start">
+                      {/* Images */}
+                      <div className="flex gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+                        {project.images.map((img, idx) => (
+                          <div
+                            key={idx}
+                            className="w-32 h-24 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200"
+                          >
+                            <img
+                              src={img.src}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
 
-                  {/* Description & Action */}
-                  <div className="flex-1 flex items-center justify-between gap-8 w-full">
-                    <p className="text-gray-500 leading-relaxed text-sm md:text-lg max-w-xl">
-                      {project.longDesc}
-                    </p>
+                      {/* Description & Action */}
+                      <div className="flex-1 flex items-center justify-between gap-8 w-full">
+                        <p className="text-gray-500 leading-relaxed text-sm md:text-lg max-w-xl">
+                          {project.longDesc}
+                        </p>
 
-                    <button className="hidden md:flex bg-[#1A1A1A] text-white w-16 h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300">
-                      <ArrowUpRight />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+                        <button className="hidden md:flex bg-[#1A1A1A] text-white w-16 h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300">
+                          <ArrowUpRight />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
           <div className="border-t border-gray-300"></div>
         </div>

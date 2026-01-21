@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import img3 from "../assets/mockImg.png";
 import img4 from "../assets/mockImg.png";
 import img5 from "../assets/mockImg.png";
@@ -50,7 +51,13 @@ export default function Services() {
     <section id="services" className="w-full bg-[#f3f3f3] pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
       <div className="max-w-[1400px] mx-auto">
         {/* Header */}
-        <div className="flex flex-col items-center justify-center text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center justify-center text-center mb-16"
+        >
           <div className="flex items-center gap-2 mb-4 bg-white px-4 py-1.5 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-black"></span>
             <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
@@ -60,13 +67,17 @@ export default function Services() {
           <h2 className="text-5xl md:text-6xl font-medium tracking-tight mt-4">
             Mis Servicios
           </h2>
-        </div>
+        </motion.div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {services.map((service) => (
-            <div
+          {services.map((service, index) => (
+            <motion.div
               key={service.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
               className="group cursor-pointer flex flex-col gap-4"
             >
               {/* Image Card */}
@@ -112,12 +123,18 @@ export default function Services() {
                   {service.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Bottom Link (Optional based on design image "Check out More ->") */}
-        <div className="flex justify-center mt-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="flex justify-center mt-16 text-center"
+        >
           <a
             href="https://wa.me/573016236319"
             target="_blank"
@@ -128,7 +145,7 @@ export default function Services() {
               Contáctame <ArrowUpRight />
             </span>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const ArrowUpRight = () => (
   <svg
@@ -20,7 +21,13 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#f3f3f3] relative z-10 text-[#1A1A1A]">
       {/* Call to Action Section */}
-      <div className="pb-32 pt-12 px-6 md:px-12 flex flex-col items-center justify-center text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.8 }}
+        className="pb-32 pt-12 px-6 md:px-12 flex flex-col items-center justify-center text-center"
+      >
         <h2 className="text-4xl md:text-6xl font-medium tracking-tight mb-6 max-w-3xl">
           ¿Tienes una visión? <br /> ¡Hagámosla realidad!
         </h2>
@@ -36,10 +43,16 @@ export default function Footer() {
         >
           Agenda una llamada <ArrowUpRight />
         </a>
-      </div>
+      </motion.div>
 
       {/* Dark Footer Section */}
-      <div className="bg-[#111111] text-white py-16 px-6 md:px-12 rounded-t-[3rem]">
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="bg-[#111111] text-white py-16 px-6 md:px-12 rounded-t-[3rem]"
+      >
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 md:gap-0 min-h-[120px]">
             {/* Navigation */}
@@ -86,7 +99,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }

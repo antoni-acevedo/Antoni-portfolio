@@ -1,14 +1,8 @@
-import React, { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
+import { motion } from "framer-motion";
 import img10 from "../assets/profile2.jpeg";
 import img11 from "../assets/profile2.jpg";
 import img2 from "../assets/arrow.png";
-
-// Register ScrollTrigger safely for SSG/SSR
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const GlobeIcon = () => (
   <svg
@@ -69,77 +63,66 @@ const CurvyArrow = () => (
 );
 
 export default function About() {
-  const container = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".about-text",
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: container.current,
-            start: "top 80%",
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".about-card",
-        { y: 80, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          stagger: 0.2,
-          scrollTrigger: {
-            trigger: container.current,
-            start: "top 70%",
-          },
-        },
-      );
-    }, container);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="about"
-      ref={container}
       className="w-full bg-[#f3f3f3] py-20 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
     >
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Text */}
         <div className="lg:col-span-4 flex flex-col gap-8 pr-4">
-          <h2 className="about-text text-5xl md:text-6xl font-medium tracking-tight">
+          <motion.h2
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-6xl font-medium tracking-tight"
+          >
             Sobre Mí
-          </h2>
+          </motion.h2>
 
-          <div className="about-text space-y-6 text-gray-500 text-lg leading-relaxed">
-            <p>
+          <div className="space-y-6 text-gray-500 text-lg leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+            >
               Desarrollador Full-Stack con más de 4 años de experiencia creando
               aplicaciones web y móviles escalables con JavaScript/TypeScript.
               Especializado en React, Vue, Node.js, y desarrollo híbrido con
               Ionic, React Native y Flutter.
-            </p>
-            <p className="font-medium text-[#1A1A1A]">
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="font-medium text-[#1A1A1A]"
+            >
               ¿Listo para iniciar tu próximo proyecto?
-            </p>
+            </motion.p>
           </div>
 
-          <div className="about-text hidden md:block mt-8 ml-12">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="hidden md:block mt-8 ml-12"
+          >
             <CurvyArrow />
-          </div>
+          </motion.div>
         </div>
 
         {/* Middle Column: Stats Card */}
-        <div className="lg:col-span-4 about-card">
+        <motion.div
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="lg:col-span-4"
+        >
           <div className="bg-white p-8 rounded-3xl shadow-sm h-full flex flex-col items-start gap-8 relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center justify-between w-full gap-4">
               <h3 className="text-6xl font-normal tracking-tighter">+4</h3>
@@ -162,12 +145,18 @@ export default function About() {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Column: Experience */}
         <div className="lg:col-span-4 flex flex-col gap-8">
           {/* Top Image Card */}
-          <div className="about-card self-end w-3/4 aspect-square bg-white p-2 rounded-3xl shadow-sm relative group cursor-pointer hover:shadow-md transition-shadow">
+          <motion.div
+            initial={{ opacity: 0, y: 80 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8 }}
+            className="self-end w-3/4 aspect-square bg-white p-2 rounded-3xl shadow-sm relative group cursor-pointer hover:shadow-md transition-shadow"
+          >
             <div className="w-full h-full relative rounded-2xl overflow-hidden">
               <img
                 src={img11.src}
@@ -183,27 +172,39 @@ export default function About() {
                 <ArrowUpRight />
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Bullet Points */}
           <div className="space-y-8 mt-4 pl-4">
-            <div className="about-card flex gap-4 items-start">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex gap-4 items-start"
+            >
               <SparkleIcon />
               <p className="text-gray-500 leading-relaxed text-sm md:text-base pt-1">
                 Enfoque en arquitecturas eficientes y escalables, optimizando
                 tanto el rendimiento del frontend como la robustez del backend
                 para clientes globales.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="about-card flex gap-4 items-start">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="flex gap-4 items-start"
+            >
               <SparkleIcon />
               <p className="text-gray-500 leading-relaxed text-sm md:text-base pt-1">
                 Experiencia integral abarcando desde la concepción del diseño
                 UI/UX hasta el despliegue en producción, integrando pasarelas de
                 pago y servicios cloud.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
