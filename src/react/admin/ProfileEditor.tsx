@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import type { ProfileData } from '../About';
-import { Button, Input, TextArea, Card } from './UI';
+import { Button, Input, TextArea } from './UI';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { User, Image as ImageIcon, Star, AlignLeft, Sparkles, Save } from 'lucide-react';
 
 export default function ProfileEditor() {
     const [data, setData] = useState<ProfileData | null>(null);
@@ -32,80 +33,168 @@ export default function ProfileEditor() {
         setTimeout(() => window.location.reload(), 1000);
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return (
+        <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
+        </div>
+    );
+
     if (!data) return <div>Error loading profile</div>;
 
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-bold tracking-tight">Editar Perfil</h2>
-                <Button onClick={handleSubmit} disabled={saving}>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-7xl mx-auto space-y-8"
+        >
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                <div className="flex items-center gap-4">
+                    <div className="bg-black text-white p-3 rounded-2xl">
+                        <User size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold tracking-tight">Editar Perfil</h2>
+                        <p className="text-gray-500 text-sm">Gestiona la información principal de tu presentación</p>
+                    </div>
+                </div>
+                <Button onClick={handleSubmit} disabled={saving} className="flex items-center gap-2 px-6">
+                    <Save size={18} />
                     {saving ? 'Guardando...' : 'Guardar Cambios'}
                 </Button>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card className="flex flex-col gap-4">
-                    <h3 className="font-bold text-lg border-b pb-2 mb-2">Información Principal</h3>
-                    <Input
-                        label="Título Principal"
-                        value={data.title}
-                        onChange={(e: any) => setData({ ...data, title: e.target.value })}
-                    />
-                    <TextArea
-                        label="Descripción Corta"
-                        value={data.description}
-                        onChange={(e: any) => setData({ ...data, description: e.target.value })}
-                        rows={4}
-                    />
-                    <Input
-                        label="Texto Destacado"
-                        value={data.highlight_text}
-                        onChange={(e: any) => setData({ ...data, highlight_text: e.target.value })}
-                    />
-                </Card>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                <Card className="flex flex-col gap-4">
-                    <h3 className="font-bold text-lg border-b pb-2 mb-2">Estadísticas & Imágenes</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                {/* Left Column: Main Info */}
+                <div className="lg:col-span-8 space-y-8">
+                    {/* General Info Card */}
+                    <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 space-y-6">
+                        <div className="flex items-center gap-3 border-b border-gray-100 pb-4 mb-2">
+                            <div className="bg-blue-50 text-blue-600 p-2 rounded-xl">
+                                <AlignLeft size={20} />
+                            </div>
+                            <h3 className="font-bold text-lg">Información General</h3>
+                        </div>
+
+                        <div className="grid gap-6">
+                            <Input
+                                label="Título Principal"
+                                value={data.title}
+                                onChange={(e: any) => setData({ ...data, title: e.target.value })}
+                                placeholder="Ej: Sobre Mí"
+                                className="text-lg font-medium"
+                            />
+                            <TextArea
+                                label="Descripción Corta"
+                                value={data.description}
+                                onChange={(e: any) => setData({ ...data, description: e.target.value })}
+                                rows={4}
+                                className="leading-relaxed"
+                            />
+                            <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                                <Input
+                                    label="Texto Destacado (Call to Action)"
+                                    value={data.highlight_text}
+                                    onChange={(e: any) => setData({ ...data, highlight_text: e.target.value })}
+                                    className="font-medium text-blue-600"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bullet Points */}
+                    <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 space-y-6">
+                        <div className="flex items-center gap-3 border-b border-gray-100 pb-4 mb-2">
+                            <div className="bg-yellow-50 text-yellow-600 p-2 rounded-xl">
+                                <Sparkles size={20} />
+                            </div>
+                            <h3 className="font-bold text-lg">Puntos Clave</h3>
+                        </div>
+                        <div className="grid gap-6">
+                            <TextArea
+                                label="Punto Clave #1"
+                                value={data.bullet_1}
+                                onChange={(e: any) => setData({ ...data, bullet_1: e.target.value })}
+                                rows={2}
+                            />
+                            <TextArea
+                                label="Punto Clave #2"
+                                value={data.bullet_2}
+                                onChange={(e: any) => setData({ ...data, bullet_2: e.target.value })}
+                                rows={2}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column: Stats & Images */}
+                <div className="lg:col-span-4 space-y-8">
+                    {/* Stats */}
+                    <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 space-y-6">
+                        <div className="flex items-center gap-3 border-b border-gray-100 pb-4 mb-2">
+                            <div className="bg-purple-50 text-purple-600 p-2 rounded-xl">
+                                <Star size={20} />
+                            </div>
+                            <h3 className="font-bold text-lg">Estadísticas</h3>
+                        </div>
                         <Input
                             type="number"
-                            label="Años Experiencia"
+                            label="Años de Experiencia"
                             value={data.years_experience}
                             onChange={(e: any) => setData({ ...data, years_experience: parseInt(e.target.value) })}
+                            className="text-3xl font-bold text-center"
                         />
-                        <Input
-                            label="Texto Experiencia"
+                        <TextArea
+                            label="Texto Descriptivo"
                             value={data.experience_text}
                             onChange={(e: any) => setData({ ...data, experience_text: e.target.value })}
+                            rows={3}
+                            className="text-sm text-gray-600"
                         />
                     </div>
 
-                    <Input
-                        label="Imagen Principal (nombre archivo en public/images/)"
-                        value={data.profile_image}
-                        onChange={(e: any) => setData({ ...data, profile_image: e.target.value })}
-                    />
-                    <Input
-                        label="Imagen Secundaria"
-                        value={data.secondary_image}
-                        onChange={(e: any) => setData({ ...data, secondary_image: e.target.value })}
-                    />
-                </Card>
+                    {/* Images */}
+                    <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 space-y-6">
+                        <div className="flex items-center gap-3 border-b border-gray-100 pb-4 mb-2">
+                            <div className="bg-pink-50 text-pink-600 p-2 rounded-xl">
+                                <ImageIcon size={20} />
+                            </div>
+                            <h3 className="font-bold text-lg">Imágenes</h3>
+                        </div>
 
-                <Card className="md:col-span-2 flex flex-col gap-4">
-                    <h3 className="font-bold text-lg border-b pb-2 mb-2">Puntos Clave</h3>
-                    <TextArea
-                        label="Bullet Point 1"
-                        value={data.bullet_1}
-                        onChange={(e: any) => setData({ ...data, bullet_1: e.target.value })}
-                    />
-                    <TextArea
-                        label="Bullet Point 2"
-                        value={data.bullet_2}
-                        onChange={(e: any) => setData({ ...data, bullet_2: e.target.value })}
-                    />
-                </Card>
+                        <div className="space-y-4">
+                            <div>
+                                <Input
+                                    label="Foto Perfil (filename)"
+                                    value={data.profile_image}
+                                    onChange={(e: any) => setData({ ...data, profile_image: e.target.value })}
+                                />
+                                {data.profile_image && (
+                                    <div className="mt-2 rounded-xl overflow-hidden aspect-square w-20 bg-gray-100 border border-gray-200">
+                                        <img src={`/images/${data.profile_image}`} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                                    </div>
+                                )}
+                            </div>
+
+                            <hr className="border-gray-100" />
+
+                            <div>
+                                <Input
+                                    label="Foto Secundaria (filename)"
+                                    value={data.secondary_image}
+                                    onChange={(e: any) => setData({ ...data, secondary_image: e.target.value })}
+                                />
+                                {data.secondary_image && (
+                                    <div className="mt-2 rounded-xl overflow-hidden aspect-square w-20 bg-gray-100 border border-gray-200">
+                                        <img src={`/images/${data.secondary_image}`} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </form>
         </motion.div>
     );
