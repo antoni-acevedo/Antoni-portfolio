@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .image-initial {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 1.0s;
+  }
+
+  .font-manrope {
+    font-family: "Manrope", sans-serif;
+  }
+}
+
+@layer base {
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Manrope", sans-serif;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
