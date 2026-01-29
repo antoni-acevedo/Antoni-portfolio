@@ -8,7 +8,7 @@
 
   .animate-slide-up {
     animation: slideUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 1.0s;
+    animation-delay: 1s;
   }
 
   .font-manrope {
@@ -17,7 +17,6 @@
 }
 
 @layer base {
-
   html {
     scroll-behavior: smooth;
   }
@@ -42,4 +41,30 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* Custom Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f3f3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 20px;
+  border: 2px solid #f3f3f3;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1a1a1a;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d1d1 #f3f3f3;
 }

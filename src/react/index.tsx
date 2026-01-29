@@ -155,7 +155,7 @@ const Hero = () => {
             key={item.label}
             href={item.href}
             onClick={(e) => handleScroll(e, item.href)}
-            className="text-3xl font-medium hover:text-gray-500 transition-colors"
+            className="text-3xl font-medium hover:text-gray-500 transition-colors cursor-pointer"
           >
             {item.label}
           </a>
@@ -166,7 +166,7 @@ const Hero = () => {
       <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1320px] mx-auto z-50">
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-[#1A1A1A] p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors relative z-50"
+          className="md:hidden text-[#1A1A1A] p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors relative z-50 cursor-pointer"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -177,7 +177,7 @@ const Hero = () => {
               key={item.label}
               href={item.href}
               onClick={(e) => handleScroll(e, item.href)}
-              className="hero-nav-item opacity-0 hover:text-black transition-colors"
+              className="hero-nav-item opacity-0 hover:text-black transition-colors cursor-pointer"
             >
               {item.label}
             </a>
@@ -187,14 +187,14 @@ const Hero = () => {
         <div className="hero-nav-item opacity-0 flex items-center gap-6">
           <div className="flex items-center gap-2 text-sm font-medium">
             <button
-              className={`${lang === "en" ? "text-black font-semibold" : "text-gray-500 hover:text-black"} transition-colors`}
+              className={`${lang === "en" ? "text-black font-semibold" : "text-gray-500 hover:text-black"} transition-colors cursor-pointer`}
               onClick={() => setLanguage("en")}
             >
               EN
             </button>
             <span className="text-gray-300">/</span>
             <button
-              className={`${lang === "es" ? "text-black font-semibold" : "text-gray-500 hover:text-black"} transition-colors`}
+              className={`${lang === "es" ? "text-black font-semibold" : "text-gray-500 hover:text-black"} transition-colors cursor-pointer`}
               onClick={() => setLanguage("es")}
             >
               ES
@@ -204,7 +204,7 @@ const Hero = () => {
           <a
             href="https://wa.me/573016236319"
             target="_blank"
-            className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
+            className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity cursor-pointer"
           >
             {lang === "es" ? "Reserva una llamada" : "Book A Call"}{" "}
             <ArrowUpRight />

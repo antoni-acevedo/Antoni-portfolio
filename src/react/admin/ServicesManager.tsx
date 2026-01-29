@@ -86,6 +86,14 @@ export default function ServicesManager() {
     return (item[key] as string) || item[field] || "";
   };
 
+  const getImageUrl = (name?: string) => {
+    if (!name) return "";
+    if (name.startsWith("http") || name.startsWith("data:")) return name;
+    // Clean up input
+    const cleanName = name.replace("src/assets/", "").replace(/^\//, "");
+    return `${import.meta.env.BASE_URL}images/${cleanName}`;
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -117,7 +125,7 @@ export default function ServicesManager() {
             <Card key={item.id} className="flex flex-col gap-4 relative group">
               <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                 <img
-                  src={`${import.meta.env.BASE_URL}images/${item.image}`}
+                  src={getImageUrl(item.image)}
                   alt={item.title}
                   className="w-full h-full object-cover"
                 />
