@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import img2 from "../assets/arrow.png";
+// import img2 from "../assets/arrow.png";
 
 const GlobeIcon = () => (
   <svg
@@ -54,7 +54,7 @@ const SparkleIcon = () => (
 
 const CurvyArrow = () => (
   <img
-    src={img2.src}
+    src={`${import.meta.env.BASE_URL}images/arrow.png`}
     alt="Curvy Arrow"
     className="w-[90%] h-[90%] object-contain"
   />

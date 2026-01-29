@@ -5,11 +5,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// Import images
-import img3 from "../assets/mockImg.png";
-import img4 from "../assets/mockImg.png";
-import img5 from "../assets/mockImg.png";
-import img6 from "../assets/mockImg.png";
+// Import images (Removed in favor of public assets)
+// const img3 = "mockImg.png";
+// const img4 = "mockImg.png";
+// ... we will use strings directly in the object or a helper variable
 
 const ArrowUpRight = () => (
   <svg
@@ -32,28 +31,28 @@ const projects = [
     id: 1,
     title: "Validocus",
     client: "Soluciones Star",
-    image: img3,
+    image: "mockImg.png",
     category: "Plataforma Web",
   },
   {
     id: 2,
     title: "AdWorkChain",
     client: "Vinix Code",
-    image: img4,
+    image: "mockImg.png",
     category: "Gestión",
   },
   {
     id: 3,
     title: "Metradesk",
     client: "Soluciones Star",
-    image: img5,
+    image: "mockImg.png",
     category: "Fintech",
   },
   {
     id: 4,
     title: "TransferX",
     client: "Konecta",
-    image: img6,
+    image: "mockImg.png",
     category: "Logística",
   },
 ];
@@ -91,7 +90,7 @@ export default function ProyectCarrousel() {
                     {/* Image Container */}
                     <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-3xl bg-gray-200">
                       <img
-                        src={project.image.src}
+                        src={`${import.meta.env.BASE_URL}images/${project.image}`}
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
