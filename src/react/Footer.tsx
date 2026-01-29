@@ -18,6 +18,38 @@ const ArrowUpRight = () => (
 );
 
 export default function Footer() {
+  const handleScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    e.preventDefault();
+
+    if (href === "#") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      history.pushState(null, "", " ");
+      return;
+    }
+
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      history.pushState(null, "", href);
+    }
+  };
+
+  const footerLinks = [
+    { label: "Inicio", href: "#" },
+    { label: "Sobre Mí", href: "#about" },
+    { label: "Portafolio", href: "#portfolio" },
+    { label: "Servicios", href: "#services" },
+    { label: "Trayectoria", href: "#experience" },
+  ];
+
   return (
     <footer className="w-full bg-[#f3f3f3] relative z-10 text-[#1A1A1A]">
       {/* Call to Action Section */}
@@ -57,17 +89,16 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center md:items-center gap-12 md:gap-0 min-h-[120px]">
             {/* Navigation */}
             <div className="flex flex-wrap justify-center gap-2 bg-[#1A1A1A] p-2 rounded-full border border-white/10">
-              {["Inicio", "Sobre Mí", "Portafolio", "Servicios", "Blog"].map(
-                (item, index) => (
-                  <a
-                    href="#"
-                    key={index}
-                    className={`px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-colors ${index === 0 ? "bg-white text-black" : "hover:text-white text-gray-400"}`}
-                  >
-                    {item}
-                  </a>
-                ),
-              )}
+              {footerLinks.map((item, index) => (
+                <a
+                  href={item.href}
+                  key={index}
+                  onClick={(e) => handleScroll(e, item.href)}
+                  className={`px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-colors ${index === 0 ? "bg-white text-black" : "hover:text-white text-gray-400"}`}
+                >
+                  {item.label}
+                </a>
+              ))}
             </div>
 
             {/* Email */}

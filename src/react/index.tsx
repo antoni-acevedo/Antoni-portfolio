@@ -105,6 +105,27 @@ const Hero = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Smooth scroll handler
+  const handleScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    e.preventDefault();
+    setIsMenuOpen(false); // Close mobile menu if open
+
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      // Optionally update URL
+      history.pushState(null, "", href);
+    }
+  };
+
   const navLinks = [
     { label: "Sobre Mí", href: "#about" },
     { label: "Portafolio", href: "#portfolio" },
@@ -127,7 +148,7 @@ const Hero = () => {
           <a
             key={item.label}
             href={item.href}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={(e) => handleScroll(e, item.href)}
             className="text-3xl font-medium hover:text-gray-500 transition-colors"
           >
             {item.label}
@@ -150,6 +171,7 @@ const Hero = () => {
             <a
               key={item.label}
               href={item.href}
+              onClick={(e) => handleScroll(e, item.href)}
               className="hero-nav-item opacity-0 hover:text-black transition-colors"
             >
               {item.label}
