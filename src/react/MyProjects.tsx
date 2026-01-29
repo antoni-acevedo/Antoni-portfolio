@@ -38,7 +38,10 @@ export default function MyProjects({ projects }: MyProjectsProps) {
   if (!projects) return null;
 
   return (
-    <section id="portfolio" className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
+    <section
+      id="portfolio"
+      className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
+    >
       <div className="max-w-[1320px] mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
@@ -55,7 +58,8 @@ export default function MyProjects({ projects }: MyProjectsProps) {
               </span>
             </div>
             <h2 className="text-5xl md:text-6xl font-medium tracking-tight max-w-xl">
-              Mi Trayectoria <br /><br />
+              Mi Trayectoria <br />
+              <br />
             </h2>
           </motion.div>
 
@@ -146,7 +150,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                             className="w-32 h-24 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200"
                           >
                             <img
-                              src={`/images/${img}`}
+                              src={`${import.meta.env.BASE_URL}images/${img}`}
                               alt=""
                               className="w-full h-full object-cover"
                             />

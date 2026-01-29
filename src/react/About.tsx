@@ -140,7 +140,9 @@ export default function About({ profileData }: AboutProps) {
         >
           <div className="bg-white p-8 rounded-3xl shadow-sm h-full flex flex-col items-start gap-8 relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center justify-between w-full gap-4">
-              <h3 className="text-6xl font-normal tracking-tighter">+{profileData.years_experience}</h3>
+              <h3 className="text-6xl font-normal tracking-tighter">
+                +{profileData.years_experience}
+              </h3>
               <div className="bg-[#f3f3f3] p-3 rounded-full">
                 <GlobeIcon />
               </div>
@@ -153,7 +155,7 @@ export default function About({ profileData }: AboutProps) {
 
             <div className="w-full mt-auto pt-8 aspect-[4/5] relative rounded-2xl overflow-hidden">
               <img
-                src={`/images/${profileData.profile_image}`}
+                src={`${import.meta.env.BASE_URL}images/${profileData.profile_image}`}
                 alt="Portrait"
                 className="absolute inset-0 w-full h-full object-cover grayscale contrast-110 group-hover:scale-105 transition-transform duration-700 aspect-square"
               />
@@ -173,7 +175,7 @@ export default function About({ profileData }: AboutProps) {
           >
             <div className="w-full h-full relative rounded-2xl overflow-hidden">
               <img
-                src={`/images/${profileData.secondary_image}`}
+                src={`${import.meta.env.BASE_URL}images/${profileData.secondary_image}`}
                 alt="Detail"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
