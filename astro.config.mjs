@@ -7,7 +7,7 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://nadxus.github.io', // Nombre del repositorio (case-sensitive)
-  base: '/Portfolio', // Nombre del repositorio (case-sensitive)
+  base: '/Portfolio/', // Agregamos slash final para evitar errores de concatenación
   output: 'server',
   vite: {
     plugins: [tailwindcss()]

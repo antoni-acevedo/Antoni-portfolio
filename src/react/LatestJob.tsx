@@ -57,7 +57,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
               {/* Image */}
               <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3] mb-6 bg-gray-100">
                 <img
-                  src={`${import.meta.env.BASE_URL}images/${job.image}`}
+                  src={`${import.meta.env.BASE_URL}/images/${job.image}`}
                   alt={job.company}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
