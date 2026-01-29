@@ -1,0 +1,52 @@
+
+> portfolio@0.0.1 build
+> astro build
+
+21:49:40 [@astrojs/node] Enabling sessions with filesystem storage
+21:49:40 [vite] Re-optimizing dependencies because lockfile has changed
+21:49:40 [content] Syncing content
+21:49:40 [content] Synced content
+21:49:40 [types] Generated 95ms
+21:49:40 [build] output: "server"
+21:49:40 [build] mode: "server"
+21:49:40 [build] directory: /home/antoni/Escritorio/Personal/Portafolio/dist/
+21:49:40 [build] adapter: @astrojs/node
+21:49:40 [build] Collecting build info...
+21:49:40 [build] ✓ Completed in 116ms.
+21:49:40 [build] Building server entrypoints...
+21:49:40 [vite] ✓ built in 574ms
+21:49:40 [build] ✓ Completed in 602ms.
+
+ building client (vite) 
+21:49:40 [vite] transforming...
+21:49:42 [vite] ✓ 2158 modules transformed.
+21:49:42 [vite] rendering chunks...
+21:49:42 [vite] computing gzip size...
+21:49:42 [vite] dist/client/_astro/index.Cm8ke0I4.css              9.63 kB │ gzip:  2.09 kB
+21:49:42 [vite] dist/client/_astro/jsx-runtime.D_zvdyIk.js         0.73 kB │ gzip:  0.46 kB
+21:49:42 [vite] dist/client/_astro/createLucideIcon.BUizcrss.js    1.86 kB │ gzip:  0.80 kB
+21:49:42 [vite] dist/client/_astro/LatestJob.KhoPypQr.js           2.11 kB │ gzip:  0.92 kB
+21:49:42 [vite] dist/client/_astro/Services.BAeUujv5.js            3.46 kB │ gzip:  1.36 kB
+21:49:42 [vite] dist/client/_astro/Footer.FwSqOo60.js              3.52 kB │ gzip:  1.57 kB
+21:49:42 [vite] dist/client/_astro/index.DmQmbRI4.js               3.82 kB │ gzip:  1.80 kB
+21:49:42 [vite] dist/client/_astro/index.DbQ44s1q.js               3.89 kB │ gzip:  1.52 kB
+21:49:42 [vite] dist/client/_astro/MyProjects.BXghxOue.js          4.49 kB │ gzip:  1.74 kB
+21:49:42 [vite] dist/client/_astro/About.DwZeyGel.js               5.17 kB │ gzip:  1.65 kB
+21:49:42 [vite] dist/client/_astro/index.JXKNaeUN.js               7.98 kB │ gzip:  3.10 kB
+21:49:42 [vite] dist/client/_astro/AdminDashboard.BsaCyvPt.js     57.50 kB │ gzip: 14.87 kB
+21:49:42 [vite] dist/client/_astro/index.CrwREy15.js              77.59 kB │ gzip: 30.21 kB
+21:49:42 [vite] dist/client/_astro/ProyectCarrousel.CejK3YED.js  101.05 kB │ gzip: 30.97 kB
+21:49:42 [vite] dist/client/_astro/proxy.BkugbE8K.js             115.50 kB │ gzip: 37.89 kB
+21:49:42 [vite] dist/client/_astro/client.BAYO3tSc.js            182.74 kB │ gzip: 57.61 kB
+21:49:42 [vite] ✓ built in 1.62s
+
+ prerendering static routes 
+21:49:42 ▶ src/pages/admin.astro
+21:49:42   └─ /admin/index.html (+7ms) 
+21:49:42 ▶ src/pages/index.astro
+21:49:42   └─ /index.html (+27ms) 
+21:49:42 ✓ Completed in 366ms.
+
+21:49:42 [build] Rearranging server assets...
+21:49:42 [build] Server built in 2.72s
+21:49:42 [build] Complete!
