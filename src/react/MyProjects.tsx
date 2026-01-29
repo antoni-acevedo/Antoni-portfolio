@@ -125,9 +125,10 @@ export default function MyProjects({ projects }: MyProjectsProps) {
               }
               className="group border-t border-gray-300 py-8 transition-all duration-300 cursor-pointer hover:bg-gray-200/40 px-6 -mx-6 rounded-3xl"
             >
-              {/* Top Row: Header Info */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <div className="md:col-span-5 transition-transform duration-300 group-hover:translate-x-2">
+              {/* Top Row: Header Info using Flexbox */}
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 w-full">
+                {/* Title and Date */}
+                <div className="min-w-[180px] transition-transform duration-300 group-hover:translate-x-2">
                   <h3 className="text-2xl font-medium tracking-tight mb-1">
                     {project.company}
                   </h3>
@@ -136,15 +137,33 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                   </p>
                 </div>
 
-                {/* Middle Role - Hidden on Hover/Expand */}
+                {/* Thumbnails - Visible when collapsed */}
                 <div
-                  className={`md:col-span-4 hidden md:block text-gray-500 text-sm max-w-xs transition-opacity duration-300 ${activeId === project.id ? "opacity-0" : "opacity-100"}`}
+                  className={`flex gap-2 transition-opacity duration-300 ${activeId === project.id ? "opacity-0 pointer-events-none hidden md:flex" : "opacity-100"}`}
                 >
-                  {t(project, "desc")}
+                  {project.images.slice(0, 4).map((img, idx) => (
+                    <div
+                      key={idx}
+                      className="w-12 h-8 md:w-16 md:h-10 rounded-md overflow-hidden bg-gray-200 shrink-0 shadow-sm border border-white/50 group-hover:scale-110 transition-transform duration-300"
+                    >
+                      <img
+                        src={getImageUrl(img)}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
 
-                {/* Tags */}
-                <div className="md:col-span-3 flex flex-wrap md:flex-nowrap gap-2 justify-start md:justify-end mt-2 md:mt-0">
+                {/* Middle Role - Hidden on Collapse/Hover */}
+                <div
+                  className={`hidden lg:block text-gray-500 text-sm max-w-[500px] transition-opacity duration-300 ${activeId === project.id ? "opacity-0" : "opacity-100"}`}
+                >
+                  <p className="line-clamp-2">{t(project, "desc")}</p>
+                </div>
+
+                {/* Tags - Pushed to the right */}
+                <div className="flex flex-wrap gap-2 justify-start md:justify-end ml-auto">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
@@ -166,13 +185,13 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
-                      {/* Images */}
-                      <div className="flex gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide snap-x">
+                    <div className="flex flex-col gap-8 items-start">
+                      {/* Images - Horizontal Scroll on Top */}
+                      <div className="flex gap-4 w-full overflow-x-auto pb-4 scrollbar-hide snap-x">
                         {project.images.map((img, idx) => (
                           <div
                             key={idx}
-                            className="w-40 h-28 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200 snap-center"
+                            className="w-64 h-40 md:w-[450px] md:h-[280px] shrink-0 rounded-2xl overflow-hidden bg-gray-200 snap-center shadow-md border border-white"
                           >
                             <img
                               src={getImageUrl(img)}
@@ -183,15 +202,22 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                         ))}
                       </div>
 
-                      {/* Description & Action */}
-                      <div className="flex-1 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-8 w-full">
-                        <p className="text-gray-500 leading-relaxed text-sm md:text-lg max-w-xl">
-                          {t(project, "long_desc")}
-                        </p>
+                      {/* Description & Action - Below Images */}
+                      <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-12 w-full pt-4 border-t border-gray-200/50">
+                        <div className="flex-1 max-w-4xl">
+                          <p className="text-gray-500 leading-relaxed text-base md:text-xl italic mb-4">
+                            {t(project, "desc")}
+                          </p>
+                          <p className="text-[#1A1A1A] leading-relaxed text-sm md:text-lg">
+                            {t(project, "long_desc")}
+                          </p>
+                        </div>
 
-                        <button className="flex bg-[#1A1A1A] text-white w-12 h-12 md:w-16 md:h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300 self-end md:self-auto">
-                          <ArrowUpRight />
-                        </button>
+                        <div className="flex flex-col items-center md:items-end gap-6 shrink-0">
+                          <button className="flex bg-[#1A1A1A] text-white w-14 h-14 md:w-20 md:h-20 rounded-full items-center justify-center shrink-0 hover:scale-110 hover:rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
+                            <ArrowUpRight />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
