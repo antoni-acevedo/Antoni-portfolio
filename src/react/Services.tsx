@@ -33,7 +33,10 @@ export default function Services({ services }: ServicesProps) {
   if (!services) return null;
 
   return (
-    <section id="services" className="w-full bg-[#f3f3f3] pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]">
+    <section
+      id="services"
+      className="w-full bg-[#f3f3f3] pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
+    >
       <div className="max-w-[1400px] mx-auto">
         {/* Header */}
         <motion.div
@@ -68,7 +71,7 @@ export default function Services({ services }: ServicesProps) {
               {/* Image Card */}
               <div className="relative overflow-hidden rounded-3xl aspect-[4/3] bg-gray-200">
                 <img
-                  src={`/images/${service.image}`}
+                  src={`${import.meta.env.BASE_URL}images/${service.image}`}
                   alt={service.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
