@@ -150,7 +150,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                             className="w-32 h-24 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200"
                           >
                             <img
-                              src={`${import.meta.env.BASE_URL}images/${img}`}
+                              src={`${import.meta.env.BASE_URL}/images/${img}`}
                               alt=""
                               className="w-full h-full object-cover"
                             />

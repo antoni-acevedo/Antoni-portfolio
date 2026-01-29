@@ -54,7 +54,7 @@ const SparkleIcon = () => (
 
 const CurvyArrow = () => (
   <img
-    src={`${import.meta.env.BASE_URL}images/arrow.png`}
+    src={`${import.meta.env.BASE_URL}/images/arrow.png`}
     alt="Curvy Arrow"
     className="w-[90%] h-[90%] object-contain"
   />
@@ -155,7 +155,7 @@ export default function About({ profileData }: AboutProps) {
 
             <div className="w-full mt-auto pt-8 aspect-[4/5] relative rounded-2xl overflow-hidden">
               <img
-                src={`${import.meta.env.BASE_URL}images/${profileData.profile_image}`}
+                src={`${import.meta.env.BASE_URL}/images/${profileData.profile_image}`}
                 alt="Portrait"
                 className="absolute inset-0 w-full h-full object-cover grayscale contrast-110 group-hover:scale-105 transition-transform duration-700 aspect-square"
               />
@@ -175,7 +175,7 @@ export default function About({ profileData }: AboutProps) {
           >
             <div className="w-full h-full relative rounded-2xl overflow-hidden">
               <img
-                src={`${import.meta.env.BASE_URL}images/${profileData.secondary_image}`}
+                src={`${import.meta.env.BASE_URL}/images/${profileData.secondary_image}`}
                 alt="Detail"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
