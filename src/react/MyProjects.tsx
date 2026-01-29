@@ -203,7 +203,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                       </div>
 
                       {/* Description & Action - Below Images */}
-                      <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-12 w-full pt-4 border-t border-gray-200/50">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 w-full pt-4 border-t border-gray-200/50 px-6">
                         <div className="flex-1 max-w-4xl">
                           <p className="text-gray-500 leading-relaxed text-base md:text-xl italic mb-4">
                             {t(project, "desc")}
@@ -213,7 +213,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                           </p>
                         </div>
 
-                        <div className="flex flex-col items-center md:items-end gap-6 shrink-0">
+                        <div className="flex flex-col items-center gap-6 shrink-0">
                           <button className="flex bg-[#1A1A1A] text-white w-14 h-14 md:w-20 md:h-20 rounded-full items-center justify-center shrink-0 hover:scale-110 hover:rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
                             <ArrowUpRight />
                           </button>
