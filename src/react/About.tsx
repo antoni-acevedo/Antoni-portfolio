@@ -71,6 +71,13 @@ export interface ProfileData {
   secondary_image: string;
   bullet_1: string;
   bullet_2: string;
+  // English translations
+  title_en?: string;
+  description_en?: string;
+  highlight_text_en?: string;
+  experience_text_en?: string;
+  bullet_1_en?: string;
+  bullet_2_en?: string;
 }
 
 interface AboutProps {
@@ -88,13 +95,13 @@ export default function About({ profileData }: AboutProps) {
     >
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Text */}
-        <div className="lg:col-span-4 flex flex-col gap-8 pr-4">
+        <div className="lg:col-span-4 flex flex-col gap-8 pr-0 lg:pr-4 items-center text-center lg:items-start lg:text-left">
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-6xl font-medium tracking-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight"
           >
             {profileData.title}
           </motion.h2>
@@ -171,7 +178,7 @@ export default function About({ profileData }: AboutProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8 }}
-            className="self-end w-3/4 aspect-square bg-white p-2 rounded-3xl shadow-sm relative group cursor-pointer hover:shadow-md transition-shadow"
+            className="self-center w-full sm:w-3/4 lg:w-3/4 aspect-square bg-white p-2 rounded-3xl shadow-sm relative group cursor-pointer hover:shadow-md transition-shadow lg:self-end"
           >
             <div className="w-full h-full relative rounded-2xl overflow-hidden">
               <img

@@ -23,6 +23,9 @@ export interface ServiceData {
   description: string;
   image: string;
   tag: string;
+  title_en?: string;
+  description_en?: string;
+  tag_en?: string;
 }
 
 interface ServicesProps {
@@ -52,7 +55,7 @@ export default function Services({ services }: ServicesProps) {
               Lo que hago
             </span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-medium tracking-tight mt-4">
+          <h2 className="text-4xl md:text-6xl font-medium tracking-tight mt-4">
             Mis Servicios
           </h2>
         </motion.div>
@@ -77,8 +80,8 @@ export default function Services({ services }: ServicesProps) {
                 />
 
                 {/* Overlay with Arrow */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 backdrop-blur-[2px]">
-                  <div className="bg-[#1A1A1A] text-white w-20 h-20 rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300 shadow-xl">
+                <div className="absolute inset-0 flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 backdrop-blur-[2px]">
+                  <div className="bg-[#1A1A1A] text-white w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center transform scale-100 md:scale-75 group-hover:scale-100 transition-transform duration-300 shadow-xl">
                     <ArrowUpRight />
                   </div>
                 </div>
@@ -121,7 +124,7 @@ export default function Services({ services }: ServicesProps) {
           <a
             href="https://wa.me/573016236319"
             target="_blank"
-            className="group inline-flex items-center gap-2 text-lg font-medium text-gray-500 hover:text-black transition-colors"
+            className="group inline-flex flex-col md:flex-row items-center gap-2 text-lg font-medium text-gray-500 hover:text-black transition-colors"
           >
             ¿Necesitas una solución personalizada?
             <span className="text-black flex items-center gap-1 group-hover:translate-x-1 transition-transform">

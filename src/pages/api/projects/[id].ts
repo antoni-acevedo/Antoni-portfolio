@@ -4,11 +4,11 @@ import db from '../../../db/client';
 export const PUT: APIRoute = async ({ params, request }) => {
     const { id } = params;
     const body = await request.json();
-    const { company, role, date, desc, long_desc, tags, images } = body;
+    const { company, role, date, desc, long_desc, tags, images, role_en, desc_en, long_desc_en } = body;
 
     const update = db.prepare(`
     UPDATE projects
-    SET company = ?, role = ?, date = ?, desc = ?, long_desc = ?, tags = ?, images = ?
+    SET company = ?, role = ?, date = ?, desc = ?, long_desc = ?, tags = ?, images = ?, role_en = ?, desc_en = ?, long_desc_en = ?
     WHERE id = ?
   `);
 
@@ -20,6 +20,9 @@ export const PUT: APIRoute = async ({ params, request }) => {
         long_desc,
         JSON.stringify(tags),
         JSON.stringify(images),
+        role_en,
+        desc_en,
+        long_desc_en,
         id
     );
 

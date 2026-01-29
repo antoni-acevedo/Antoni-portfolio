@@ -4,15 +4,15 @@ import db from '../../../db/client';
 export const PUT: APIRoute = async ({ params, request }) => {
     const { id } = params;
     const body = await request.json();
-    const { title, description, tag, image } = body;
+    const { title, description, tag, image, title_en, description_en, tag_en } = body;
 
     const update = db.prepare(`
     UPDATE services
-    SET title = ?, description = ?, tag = ?, image = ?
+    SET title = ?, description = ?, tag = ?, image = ?, title_en = ?, description_en = ?, tag_en = ?
     WHERE id = ?
   `);
 
-    update.run(title, description, tag, image, id);
+    update.run(title, description, tag, image, title_en, description_en, tag_en, id);
 
     return new Response(JSON.stringify({ success: true }), {
         headers: { 'Content-Type': 'application/json' },

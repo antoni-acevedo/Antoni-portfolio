@@ -10,14 +10,14 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
-    const { company, role, date, description, tag, image } = body;
+    const { company, role, date, description, tag, image, role_en, description_en, tag_en } = body;
 
     const insert = db.prepare(`
-    INSERT INTO jobs (company, role, date, description, tag, image)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO jobs (company, role, date, description, tag, image, role_en, description_en, tag_en)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-    const info = insert.run(company, role, date, description, tag, image);
+    const info = insert.run(company, role, date, description, tag, image, role_en, description_en, tag_en);
 
     return new Response(JSON.stringify({ id: info.lastInsertRowid }), {
         headers: { 'Content-Type': 'application/json' },

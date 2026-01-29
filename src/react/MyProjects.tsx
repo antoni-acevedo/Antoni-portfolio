@@ -26,6 +26,9 @@ export interface ProjectData {
   long_desc: string;
   tags: string[];
   images: string[];
+  role_en?: string;
+  desc_en?: string;
+  long_desc_en?: string;
 }
 
 interface MyProjectsProps {
@@ -57,7 +60,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                 Experiencia Laboral
               </span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-medium tracking-tight max-w-xl">
+            <h2 className="text-4xl md:text-6xl font-medium tracking-tight max-w-xl">
               Mi Trayectoria <br />
               <br />
             </h2>
@@ -119,11 +122,11 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                 </div>
 
                 {/* Tags */}
-                <div className="md:col-span-3 flex gap-2 md:justify-end">
+                <div className="md:col-span-3 flex flex-wrap md:flex-nowrap gap-2 justify-start md:justify-end mt-2 md:mt-0">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-300 ${activeId === project.id ? "bg-[#1A1A1A] text-white" : "bg-gray-200 text-gray-600"}`}
+                      className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-xs md:text-sm font-medium transition-colors duration-300 ${activeId === project.id ? "bg-[#1A1A1A] text-white" : "bg-gray-200 text-gray-600"}`}
                     >
                       {tag}
                     </span>
@@ -141,13 +144,13 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="flex flex-col md:flex-row gap-8 items-start">
+                    <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
                       {/* Images */}
-                      <div className="flex gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+                      <div className="flex gap-4 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide snap-x">
                         {project.images.map((img, idx) => (
                           <div
                             key={idx}
-                            className="w-32 h-24 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200"
+                            className="w-40 h-28 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200 snap-center"
                           >
                             <img
                               src={`${import.meta.env.BASE_URL}/images/${img}`}
@@ -159,12 +162,12 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                       </div>
 
                       {/* Description & Action */}
-                      <div className="flex-1 flex items-center justify-between gap-8 w-full">
+                      <div className="flex-1 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-8 w-full">
                         <p className="text-gray-500 leading-relaxed text-sm md:text-lg max-w-xl">
                           {project.long_desc}
                         </p>
 
-                        <button className="hidden md:flex bg-[#1A1A1A] text-white w-16 h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300">
+                        <button className="flex bg-[#1A1A1A] text-white w-12 h-12 md:w-16 md:h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300 self-end md:self-auto">
                           <ArrowUpRight />
                         </button>
                       </div>
