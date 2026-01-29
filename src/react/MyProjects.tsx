@@ -52,6 +52,17 @@ export default function MyProjects({ projects }: MyProjectsProps) {
     );
   };
 
+  const getImageUrl = (name: string) => {
+    if (!name) return "";
+    if (name.startsWith("http") || name.startsWith("data:")) return name;
+    const cleanName = name
+      .replace("src/assets/projectImages/", "projectImages/")
+      .replace("src/assets/", "")
+      .replace(/^\//, "");
+
+    return `${import.meta.env.BASE_URL}images/${cleanName}`;
+  };
+
   return (
     <section
       id="portfolio"
@@ -164,7 +175,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                             className="w-40 h-28 md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-200 snap-center"
                           >
                             <img
-                              src={`${import.meta.env.BASE_URL}/images/${img}`}
+                              src={getImageUrl(img)}
                               alt=""
                               className="w-full h-full object-cover"
                             />

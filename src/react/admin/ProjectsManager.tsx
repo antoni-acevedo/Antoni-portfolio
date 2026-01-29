@@ -108,6 +108,18 @@ export default function ProjectsManager() {
     return (editingItem[key] as string) || "";
   };
 
+  const getImageUrl = (name: string) => {
+    if (!name) return "";
+    if (name.startsWith("http") || name.startsWith("data:")) return name;
+    // Clean up input if user pasted something like src/assets/projectImages/
+    const cleanName = name
+      .replace("src/assets/projectImages/", "projectImages/")
+      .replace("src/assets/", "")
+      .replace(/^\//, "");
+
+    return `${import.meta.env.BASE_URL}images/${cleanName}`;
+  };
+
   const getDisplayValue = (item: ProjectData, field: keyof ProjectData) => {
     const key = lang === "es" ? field : (`${field}_en` as keyof ProjectData);
     return (item[key] as string) || (item[field] as string) || "";
@@ -147,7 +159,7 @@ export default function ProjectsManager() {
             >
               <div className="w-full md:w-48 aspect-video bg-gray-100 rounded-lg overflow-hidden shrink-0">
                 <img
-                  src={`${import.meta.env.BASE_URL}images/${item.images[0]}`}
+                  src={getImageUrl(item.images[0])}
                   alt={item.company}
                   className="w-full h-full object-cover"
                 />

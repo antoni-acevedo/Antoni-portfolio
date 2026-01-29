@@ -33,6 +33,13 @@ export default function LatestJob({ jobs }: LatestJobProps) {
     );
   };
 
+  const getImageUrl = (name?: string) => {
+    if (!name) return "";
+    if (name.startsWith("http") || name.startsWith("data:")) return name;
+    const cleanName = name.replace("src/assets/", "").replace(/^\//, "");
+    return `${import.meta.env.BASE_URL}images/${cleanName}`;
+  };
+
   return (
     <section
       id="experience"
@@ -72,7 +79,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
               {/* Image */}
               <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3] mb-6 bg-gray-100">
                 <img
-                  src={`${import.meta.env.BASE_URL}/images/${job.image}`}
+                  src={getImageUrl(job.image)}
                   alt={job.company}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
