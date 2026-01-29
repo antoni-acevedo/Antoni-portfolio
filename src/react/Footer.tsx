@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useStore } from "@nanostores/react";
+import { languageStore } from "../store/languageStore";
 
 const ArrowUpRight = () => (
+  // ... (svg)
   <svg
     width="24"
     height="24"
@@ -18,6 +21,8 @@ const ArrowUpRight = () => (
 );
 
 export default function Footer() {
+  const lang = useStore(languageStore);
+
   const handleScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string,
@@ -43,11 +48,14 @@ export default function Footer() {
   };
 
   const footerLinks = [
-    { label: "Inicio", href: "#" },
-    { label: "Sobre Mí", href: "#about" },
-    { label: "Portafolio", href: "#portfolio" },
-    { label: "Servicios", href: "#services" },
-    { label: "Trayectoria", href: "#experience" },
+    { label: lang === "es" ? "Inicio" : "Home", href: "#" },
+    { label: lang === "es" ? "Sobre Mí" : "About Me", href: "#about" },
+    { label: lang === "es" ? "Portafolio" : "Portfolio", href: "#portfolio" },
+    { label: lang === "es" ? "Servicios" : "Services", href: "#services" },
+    {
+      label: lang === "es" ? "Trayectoria" : "Experience",
+      href: "#experience",
+    },
   ];
 
   return (
@@ -61,19 +69,21 @@ export default function Footer() {
         className="pb-24 pt-12 px-6 md:px-12 flex flex-col items-center justify-center text-center"
       >
         <h2 className="text-3xl md:text-6xl font-medium tracking-tight mb-6 max-w-3xl leading-tight">
-          ¿Tienes una visión? <br /> ¡Hagámosla realidad!
+          {lang === "es" ? "¿Tienes una visión?" : "Have a vision?"} <br />
+          {lang === "es" ? "¡Hagámosla realidad!" : "Let’s make it real!"}
         </h2>
         <p className="text-gray-500 max-w-2xl text-base md:text-lg mb-8 leading-relaxed">
-          Siempre estoy emocionado por colaborar en proyectos nuevos e
-          innovadores. Ya sea que estés empezando desde cero o refinando una
-          idea existente, estoy aquí para ayudarte.
+          {lang === "es"
+            ? "Siempre estoy emocionado por colaborar en proyectos nuevos e innovadores. Ya sea que estés empezando desde cero o refinando una idea existente, estoy aquí para ayudarte."
+            : "I’m always excited to collaborate on new and innovative projects. Whether you are starting from scratch or refining an existing idea, I’m here to help."}
         </p>
         <a
           href="https://wa.me/573016236319"
           target="_blank"
           className="inline-flex items-center gap-2 text-lg font-medium border-b border-black pb-1 hover:opacity-70 transition-opacity"
         >
-          Agenda una llamada <ArrowUpRight />
+          {lang === "es" ? "Agenda una llamada" : "Book a call"}{" "}
+          <ArrowUpRight />
         </a>
       </motion.div>
 
@@ -112,7 +122,10 @@ export default function Footer() {
 
           <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-sm gap-4 text-center md:text-left">
             <p className="order-2 md:order-1">
-              © 2026 Leider Acevedo. Todos los derechos reservados.
+              © 2026 Leider Acevedo.{" "}
+              {lang === "es"
+                ? "Todos los derechos reservados."
+                : "All rights reserved."}
             </p>
             <div className="flex gap-6 order-1 md:order-2">
               <a

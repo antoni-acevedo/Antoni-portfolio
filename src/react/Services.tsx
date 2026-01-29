@@ -1,5 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useStore } from "@nanostores/react";
+import { languageStore } from "../store/languageStore";
 
 const ArrowUpRight = () => (
   <svg
@@ -33,7 +35,17 @@ interface ServicesProps {
 }
 
 export default function Services({ services }: ServicesProps) {
+  const lang = useStore(languageStore);
+
   if (!services) return null;
+
+  const t = (item: ServiceData, field: keyof ServiceData) => {
+    if (lang === "es") return item[field] as string;
+    return (
+      (item[`${field}_en` as keyof ServiceData] as string) ||
+      (item[field] as string)
+    );
+  };
 
   return (
     <section
@@ -52,11 +64,11 @@ export default function Services({ services }: ServicesProps) {
           <div className="flex items-center gap-2 mb-4 bg-white px-4 py-1.5 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-black"></span>
             <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-              Lo que hago
+              {lang === "es" ? "Lo que hago" : "What I do"}
             </span>
           </div>
           <h2 className="text-4xl md:text-6xl font-medium tracking-tight mt-4">
-            Mis Servicios
+            {lang === "es" ? "Mis Servicios" : "My Services"}
           </h2>
         </motion.div>
 
@@ -91,22 +103,22 @@ export default function Services({ services }: ServicesProps) {
               <div className="flex flex-col gap-1 mt-2">
                 <div className="flex justify-between items-start">
                   <h3 className="text-2xl font-medium tracking-tight group-hover:underline underline-offset-4 decoration-1">
-                    {service.title}
+                    {t(service, "title")}
                   </h3>
                 </div>
                 <div className="flex items-center gap-2 text-gray-500 text-sm md:text-base">
                   <span className="font-medium bg-gray-200/50 px-3 py-1 rounded-full">
-                    {service.tag}
+                    {t(service, "tag")}
                   </span>
                   <span>
-                    For{" "}
+                    {lang === "es" ? "Para" : "For"}{" "}
                     <span className="text-[#1A1A1A] font-medium">
-                      Clientes Globales
+                      {lang === "es" ? "Clientes Globales" : "Global Clients"}
                     </span>
                   </span>
                 </div>
                 <p className="text-gray-400 text-sm mt-1 leading-relaxed line-clamp-2">
-                  {service.description}
+                  {t(service, "description")}
                 </p>
               </div>
             </motion.div>
@@ -126,9 +138,11 @@ export default function Services({ services }: ServicesProps) {
             target="_blank"
             className="group inline-flex flex-col md:flex-row items-center gap-2 text-lg font-medium text-gray-500 hover:text-black transition-colors"
           >
-            ¿Necesitas una solución personalizada?
+            {lang === "es"
+              ? "¿Necesitas una solución personalizada?"
+              : "Need a custom solution?"}
             <span className="text-black flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              Contáctame <ArrowUpRight />
+              {lang === "es" ? "Contáctame" : "Contact Me"} <ArrowUpRight />
             </span>
           </a>
         </motion.div>
