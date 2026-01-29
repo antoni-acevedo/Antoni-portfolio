@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-// import img2 from "../assets/arrow.png";
+import { useStore } from "@nanostores/react";
+import { languageStore } from "../store/languageStore";
 
 const GlobeIcon = () => (
   <svg
@@ -85,8 +86,17 @@ interface AboutProps {
 }
 
 export default function About({ profileData }: AboutProps) {
+  const lang = useStore(languageStore);
+
   // Fallback if no data provided
   if (!profileData) return null;
+
+  const t = (field: keyof ProfileData) => {
+    if (lang === "es") return profileData[field];
+    return (
+      profileData[`${field}_en` as keyof ProfileData] || profileData[field]
+    );
+  };
 
   return (
     <section
@@ -103,7 +113,7 @@ export default function About({ profileData }: AboutProps) {
             transition={{ duration: 0.8 }}
             className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight"
           >
-            {profileData.title}
+            {t("title")}
           </motion.h2>
 
           <div className="space-y-6 text-gray-500 text-lg leading-relaxed">
@@ -113,7 +123,7 @@ export default function About({ profileData }: AboutProps) {
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              {profileData.description}
+              {t("description")}
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 50 }}
@@ -122,7 +132,7 @@ export default function About({ profileData }: AboutProps) {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="font-medium text-[#1A1A1A]"
             >
-              {profileData.highlight_text}
+              {t("highlight_text")}
             </motion.p>
           </div>
 
@@ -156,7 +166,7 @@ export default function About({ profileData }: AboutProps) {
             </div>
             <div>
               <p className="text-gray-500 mt-4 leading-snug">
-                {profileData.experience_text}
+                {t("experience_text")}
               </p>
             </div>
 
@@ -208,7 +218,7 @@ export default function About({ profileData }: AboutProps) {
             >
               <SparkleIcon />
               <p className="text-gray-500 leading-relaxed text-sm md:text-base pt-1">
-                {profileData.bullet_1}
+                {t("bullet_1")}
               </p>
             </motion.div>
 
@@ -221,7 +231,7 @@ export default function About({ profileData }: AboutProps) {
             >
               <SparkleIcon />
               <p className="text-gray-500 leading-relaxed text-sm md:text-base pt-1">
-                {profileData.bullet_2}
+                {t("bullet_2")}
               </p>
             </motion.div>
           </div>

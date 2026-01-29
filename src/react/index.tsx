@@ -1,6 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
+import { useStore } from "@nanostores/react";
+import { languageStore, setLanguage } from "../store/languageStore";
 
 const ArrowUpRight = () => (
   <svg
@@ -35,6 +37,7 @@ const ArrowDown = () => (
 );
 
 const Hero = () => {
+  const lang = useStore(languageStore);
   const container = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -101,7 +104,7 @@ const Hero = () => {
     }, container);
 
     return () => ctx.revert();
-  }, [isLoaded]);
+  }, [isLoaded, lang]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -127,10 +130,13 @@ const Hero = () => {
   };
 
   const navLinks = [
-    { label: "Sobre Mí", href: "#about" },
-    { label: "Portafolio", href: "#portfolio" },
-    { label: "Servicios", href: "#services" },
-    { label: "Trayectoria", href: "#experience" },
+    { label: lang === "es" ? "Sobre Mí" : "About Me", href: "#about" },
+    { label: lang === "es" ? "Portafolio" : "Portfolio", href: "#portfolio" },
+    { label: lang === "es" ? "Servicios" : "Services", href: "#services" },
+    {
+      label: lang === "es" ? "Trayectoria" : "Experience",
+      href: "#experience",
+    },
   ];
 
   return (
@@ -165,7 +171,6 @@ const Hero = () => {
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-
         <div className="hidden md:flex gap-10 text-sm font-medium text-gray-500">
           {navLinks.map((item) => (
             <a
@@ -181,9 +186,17 @@ const Hero = () => {
 
         <div className="hero-nav-item opacity-0 flex items-center gap-6">
           <div className="flex items-center gap-2 text-sm font-medium">
-            <button className="text-black font-semibold">EN</button>
+            <button
+              className={`${lang === "en" ? "text-black font-semibold" : "text-gray-500 hover:text-black"} transition-colors`}
+              onClick={() => setLanguage("en")}
+            >
+              EN
+            </button>
             <span className="text-gray-300">/</span>
-            <button className="text-gray-500 hover:text-black transition-colors">
+            <button
+              className={`${lang === "es" ? "text-black font-semibold" : "text-gray-500 hover:text-black"} transition-colors`}
+              onClick={() => setLanguage("es")}
+            >
               ES
             </button>
           </div>
@@ -193,7 +206,8 @@ const Hero = () => {
             target="_blank"
             className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
           >
-            Book A Call <ArrowUpRight />
+            {lang === "es" ? "Reserva una llamada" : "Book A Call"}{" "}
+            <ArrowUpRight />
           </a>
         </div>
       </nav>
@@ -204,7 +218,7 @@ const Hero = () => {
         <div className="hidden xl:flex absolute -left-12 top-0 h-full flex-col items-center py-12 z-30 pointer-events-none">
           <div className="flex-none pb-4 sidebar-text opacity-0">
             <span className="[writing-mode:vertical-rl] rotate-180 text-gray-400 text-sm font-semibold tracking-widest uppercase whitespace-nowrap">
-              Full-Stack Dev
+              {lang === "es" ? "Dev Full-Stack" : "Full-Stack Dev"}
             </span>
           </div>
 
@@ -213,7 +227,7 @@ const Hero = () => {
 
           <div className="flex-none pt-4 sidebar-text opacity-0">
             <span className="[writing-mode:vertical-rl] rotate-180 text-gray-400 text-sm font-bold tracking-widest block">
-              2024
+              2025
             </span>
           </div>
         </div>
@@ -226,13 +240,17 @@ const Hero = () => {
               <h3 className="text-3xl md:text-5xl font-light tracking-tight">
                 +4
               </h3>
-              <p className="text-sm text-gray-500 mt-1">Years exp.</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {lang === "es" ? "Años exp." : "Years exp."}
+              </p>
             </div>
             <div className="hero-fade-in opacity-0">
               <h3 className="text-3xl md:text-5xl font-light tracking-tight">
                 +50
               </h3>
-              <p className="text-sm text-gray-500 mt-1">Project completed</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {lang === "es" ? "Proyectos completados" : "Project completed"}
+              </p>
             </div>
           </div>
 
@@ -246,7 +264,9 @@ const Hero = () => {
             <div className="mt-8 flex items-center justify-center md:justify-start gap-3 md:pl-2 hero-text-reveal opacity-0">
               <span className="h-[1px] w-8 bg-gray-400"></span>
               <p className="text-base md:text-lg text-gray-600 font-medium max-w-[200px] md:max-w-none text-left md:text-left">
-                Full Stack Developer & UI/UX Specialist
+                {lang === "es"
+                  ? "Desarrollador Full Stack & Especialista UI/UX"
+                  : "Full Stack Developer & UI/UX Specialist"}
               </p>
             </div>
           </div>
@@ -258,7 +278,8 @@ const Hero = () => {
                 onClick={(e) => handleScroll(e as any, "#about")}
                 className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group"
               >
-                Scroll down <ArrowDown />
+                {lang === "es" ? "Desliza hacia abajo" : "Scroll down"}{" "}
+                <ArrowDown />
               </div>
             </div>
           </div>

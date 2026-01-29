@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useStore } from "@nanostores/react";
+import { languageStore } from "../store/languageStore";
 
 const ArrowUpRight = () => (
   <svg
@@ -18,6 +20,7 @@ const ArrowUpRight = () => (
 );
 
 export interface ProjectData {
+  // ... (keep interface mostly same, but make sure usage reflects it)
   id: number;
   company: string;
   role: string;
@@ -36,9 +39,18 @@ interface MyProjectsProps {
 }
 
 export default function MyProjects({ projects }: MyProjectsProps) {
-  const [activeId, setActiveId] = useState<number | null>(1); // Default expanded
+  const [activeId, setActiveId] = useState<number | null>(1);
+  const lang = useStore(languageStore);
 
   if (!projects) return null;
+
+  const t = (item: ProjectData, field: keyof ProjectData) => {
+    if (lang === "es") return item[field] as string;
+    return (
+      (item[`${field}_en` as keyof ProjectData] as string) ||
+      (item[field] as string)
+    );
+  };
 
   return (
     <section
@@ -57,11 +69,11 @@ export default function MyProjects({ projects }: MyProjectsProps) {
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 rounded-full bg-black"></span>
               <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                Experiencia Laboral
+                {lang === "es" ? "Experiencia Laboral" : "Work Experience"}
               </span>
             </div>
             <h2 className="text-4xl md:text-6xl font-medium tracking-tight max-w-xl">
-              Mi Trayectoria <br />
+              {lang === "es" ? "Mi Trayectoria" : "My Journey"} <br />
               <br />
             </h2>
           </motion.div>
@@ -74,17 +86,16 @@ export default function MyProjects({ projects }: MyProjectsProps) {
             className="max-w-md text-gray-500 text-sm md:text-base leading-relaxed"
           >
             <p className="mb-4">
-              Durante más de 4 años, he trabajado en una amplia gama de
-              proyectos de desarrollo, colaborando con diversos equipos y
-              clientes para dar vida a soluciones digitales escalables y
-              eficientes.
+              {lang === "es"
+                ? "Durante más de 4 años, he trabajado en una amplia gama de proyectos de desarrollo, colaborando con diversos equipos y clientes para dar vida a soluciones digitales escalables y eficientes."
+                : "For over 4 years, I have worked on a wide range of development projects, collaborating with various teams and clients to bring scalable and efficient digital solutions to life."}
             </p>
             <a
               href="https://wa.me/573016236319"
               target="_blank"
               className="inline-flex items-center gap-1 font-semibold text-[#1A1A1A] border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
             >
-              Contáctame <ArrowUpRight />
+              {lang === "es" ? "Contáctame" : "Contact Me"} <ArrowUpRight />
             </a>
           </motion.div>
         </div>
@@ -118,7 +129,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                 <div
                   className={`md:col-span-4 hidden md:block text-gray-500 text-sm max-w-xs transition-opacity duration-300 ${activeId === project.id ? "opacity-0" : "opacity-100"}`}
                 >
-                  {project.desc}
+                  {t(project, "desc")}
                 </div>
 
                 {/* Tags */}
@@ -164,7 +175,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                       {/* Description & Action */}
                       <div className="flex-1 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-8 w-full">
                         <p className="text-gray-500 leading-relaxed text-sm md:text-lg max-w-xl">
-                          {project.long_desc}
+                          {t(project, "long_desc")}
                         </p>
 
                         <button className="flex bg-[#1A1A1A] text-white w-12 h-12 md:w-16 md:h-16 rounded-full items-center justify-center shrink-0 hover:scale-110 transition-transform duration-300 self-end md:self-auto">

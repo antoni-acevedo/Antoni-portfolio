@@ -1,5 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useStore } from "@nanostores/react";
+import { languageStore } from "../store/languageStore";
 
 export interface JobData {
   id: number;
@@ -19,7 +21,17 @@ interface LatestJobProps {
 }
 
 export default function LatestJob({ jobs }: LatestJobProps) {
+  const lang = useStore(languageStore);
+
   if (!jobs) return null;
+
+  const t = (item: JobData, field: keyof JobData) => {
+    if (lang === "es") return item[field] as string;
+    return (
+      (item[`${field}_en` as keyof JobData] as string) ||
+      (item[field] as string)
+    );
+  };
 
   return (
     <section
@@ -38,11 +50,11 @@ export default function LatestJob({ jobs }: LatestJobProps) {
           <div className="flex items-center gap-2 mb-4 bg-white px-4 py-1.5 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-black"></span>
             <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-              Trayectoria
+              {lang === "es" ? "Trayectoria" : "Background"}
             </span>
           </div>
           <h2 className="text-4xl md:text-6xl font-medium tracking-tight mt-4">
-            Últimos Trabajos
+            {lang === "es" ? "Últimos Trabajos" : "Latest Work"}
           </h2>
         </motion.div>
 
@@ -70,7 +82,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
               <div className="px-2 pb-4">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="bg-[#1A1A1A] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    {job.tag}
+                    {t(job, "tag")}
                   </span>
                   <span className="text-gray-500 text-sm font-medium">
                     {job.date}
@@ -82,7 +94,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
                 </h3>
 
                 <p className="text-gray-500 leading-relaxed text-sm md:text-base">
-                  {job.role} - {job.description}
+                  {t(job, "role")} - {t(job, "description")}
                 </p>
               </div>
             </motion.div>

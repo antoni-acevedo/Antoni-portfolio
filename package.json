@@ -11,6 +11,8 @@
   "dependencies": {
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
+    "@nanostores/persistent": "^1.2.1",
+    "@nanostores/react": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/better-sqlite3": "^7.6.13",
     "@types/react": "^19.2.8",
@@ -20,6 +22,7 @@
     "framer-motion": "^12.27.5",
     "gsap": "^3.14.2",
     "lucide-react": "^0.562.0",
+    "nanostores": "^1.1.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "sonner": "^2.0.7",
