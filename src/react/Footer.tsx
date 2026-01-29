@@ -26,12 +26,12 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.8 }}
-        className="pb-32 pt-12 px-6 md:px-12 flex flex-col items-center justify-center text-center"
+        className="pb-24 pt-12 px-6 md:px-12 flex flex-col items-center justify-center text-center"
       >
-        <h2 className="text-4xl md:text-6xl font-medium tracking-tight mb-6 max-w-3xl">
+        <h2 className="text-3xl md:text-6xl font-medium tracking-tight mb-6 max-w-3xl leading-tight">
           ¿Tienes una visión? <br /> ¡Hagámosla realidad!
         </h2>
-        <p className="text-gray-500 max-w-2xl text-lg mb-10 leading-relaxed">
+        <p className="text-gray-500 max-w-2xl text-base md:text-lg mb-8 leading-relaxed">
           Siempre estoy emocionado por colaborar en proyectos nuevos e
           innovadores. Ya sea que estés empezando desde cero o refinando una
           idea existente, estoy aquí para ayudarte.
@@ -54,15 +54,15 @@ export default function Footer() {
         className="bg-[#111111] text-white py-16 px-6 md:px-12 rounded-t-[3rem]"
       >
         <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12 md:gap-0 min-h-[120px]">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-center gap-12 md:gap-0 min-h-[120px]">
             {/* Navigation */}
-            <div className="flex flex-wrap gap-2 bg-[#1A1A1A] p-2 rounded-full border border-white/10">
+            <div className="flex flex-wrap justify-center gap-2 bg-[#1A1A1A] p-2 rounded-full border border-white/10">
               {["Inicio", "Sobre Mí", "Portafolio", "Servicios", "Blog"].map(
                 (item, index) => (
                   <a
                     href="#"
                     key={index}
-                    className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors ${index === 0 ? "bg-white text-black" : "hover:text-white text-gray-400"}`}
+                    className={`px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-colors ${index === 0 ? "bg-white text-black" : "hover:text-white text-gray-400"}`}
                   >
                     {item}
                   </a>
@@ -73,15 +73,17 @@ export default function Footer() {
             {/* Email */}
             <a
               href="mailto:leideracevedo07@gmail.com"
-              className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight hover:text-gray-300 transition-colors break-all md:break-normal"
+              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-light tracking-tight hover:text-gray-300 transition-colors break-all md:break-normal text-center"
             >
               leideracevedo07@gmail.com
             </a>
           </div>
 
-          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-sm gap-4">
-            <p>© 2026 Leider Acevedo. Todos los derechos reservados.</p>
-            <div className="flex gap-6">
+          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-sm gap-4 text-center md:text-left">
+            <p className="order-2 md:order-1">
+              © 2026 Leider Acevedo. Todos los derechos reservados.
+            </p>
+            <div className="flex gap-6 order-1 md:order-2">
               <a
                 href="https://www.linkedin.com/in/leideracevedo"
                 target="_blank"

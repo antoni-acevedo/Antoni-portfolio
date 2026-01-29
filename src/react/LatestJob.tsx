@@ -21,7 +21,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
   return (
     <section
       id="experience"
-      className="w-full bg-[#f3f3f3] pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
+      className="w-full bg-[#f3f3f3] pb-16 md:pb-24 pt-12 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
     >
       <div className="max-w-[1400px] mx-auto">
         {/* Header */}
@@ -38,7 +38,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
               Trayectoria
             </span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-medium tracking-tight mt-4">
+          <h2 className="text-4xl md:text-6xl font-medium tracking-tight mt-4">
             Últimos Trabajos
           </h2>
         </motion.div>
@@ -74,7 +74,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-medium tracking-tight mb-3">
+                <h3 className="text-xl md:text-2xl font-medium tracking-tight mb-3">
                   {job.company}
                 </h3>
 

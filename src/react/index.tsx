@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
-// import profileImage from "../assets/img10.png";
+import { Menu, X } from "lucide-react";
 
 const ArrowUpRight = () => (
   <svg
@@ -103,20 +103,50 @@ const Hero = () => {
     return () => ctx.revert();
   }, [isLoaded]);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { label: "Sobre Mí", href: "#about" },
+    { label: "Portafolio", href: "#portfolio" },
+    { label: "Servicios", href: "#services" },
+    { label: "Trayectoria", href: "#experience" },
+  ];
+
   return (
     <div
       ref={container}
       className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden max-h-[820px] mx-auto"
     >
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`fixed inset-0 bg-[#f3f3f3] z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-300 md:hidden ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {navLinks.map((item) => (
+          <a
+            key={item.label}
+            href={item.href}
+            onClick={() => setIsMenuOpen(false)}
+            className="text-3xl font-medium hover:text-gray-500 transition-colors"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+
       {/* Navigation */}
       <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1320px] mx-auto z-50">
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden text-[#1A1A1A] p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors relative z-50"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
         <div className="hidden md:flex gap-10 text-sm font-medium text-gray-500">
-          {[
-            { label: "Sobre Mí", href: "#about" },
-            { label: "Portafolio", href: "#portfolio" },
-            { label: "Servicios", href: "#services" },
-            { label: "Trayectoria", href: "#experience" },
-          ].map((item) => (
+          {navLinks.map((item) => (
             <a
               key={item.label}
               href={item.href}
@@ -166,17 +196,17 @@ const Hero = () => {
         </div>
 
         {/* Left Side: Text & Content */}
-        <div className="w-full md:w-[55%] flex flex-col justify-center relative pt-10 md:pt-0 md:pb-32 z-20">
+        <div className="w-full md:w-[55%] flex flex-col justify-center items-center md:items-start text-center md:text-left relative pt-10 md:pt-0 md:pb-32 z-20">
           {/* Stats */}
-          <div className="flex gap-16 mb-8 md:pl-10">
+          <div className="flex justify-center md:justify-start gap-8 md:gap-16 mb-8 md:pl-10 w-full md:w-auto">
             <div className="hero-fade-in opacity-0">
-              <h3 className="text-4xl md:text-5xl font-light tracking-tight">
+              <h3 className="text-3xl md:text-5xl font-light tracking-tight">
                 +4
               </h3>
               <p className="text-sm text-gray-500 mt-1">Years exp.</p>
             </div>
             <div className="hero-fade-in opacity-0">
-              <h3 className="text-4xl md:text-5xl font-light tracking-tight">
+              <h3 className="text-3xl md:text-5xl font-light tracking-tight">
                 +50
               </h3>
               <p className="text-sm text-gray-500 mt-1">Project completed</p>
@@ -184,22 +214,22 @@ const Hero = () => {
           </div>
 
           {/* Headline */}
-          <div className="relative md:pl-8">
+          <div className="relative md:pl-8 flex flex-col items-center md:items-start">
             <div className="overflow-hidden">
-              <h1 className="hero-text-reveal opacity-0 text-[20vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A]">
+              <h1 className="hero-text-reveal opacity-0 text-[16vw] sm:text-[18vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A]">
                 Antoni
               </h1>
             </div>
-            <div className="mt-8 flex items-center gap-3 md:pl-2 hero-text-reveal opacity-0">
+            <div className="mt-8 flex items-center justify-center md:justify-start gap-3 md:pl-2 hero-text-reveal opacity-0">
               <span className="h-[1px] w-8 bg-gray-400"></span>
-              <p className="text-lg text-gray-600 font-medium">
+              <p className="text-base md:text-lg text-gray-600 font-medium max-w-[200px] md:max-w-none text-left md:text-left">
                 Full Stack Developer & UI/UX Specialist
               </p>
             </div>
           </div>
 
           {/* Bottom Indicators */}
-          <div className="mt-20 md:mt-auto md:absolute md:bottom-12 md:left-12 flex items-end justify-between w-full pr-12">
+          <div className="mt-12 md:mt-auto md:absolute md:bottom-12 md:left-12 flex items-end justify-center md:justify-between w-full pr-0 md:pr-12">
             <div className="hidden md:flex flex-col gap-12">
               <div className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer">
                 Scroll down <ArrowDown />
