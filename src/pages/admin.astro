@@ -1,21 +1,23 @@
 ---
 import AdminDashboard from "../react/admin/AdminDashboard";
 import "../styles/global.css";
+
+export const prerender = true;
 ---
 
 <html lang="es">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Dashboard</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
-            rel="stylesheet"
-        />
-    </head>
-    <body class="font-sans text-[#1A1A1A] bg-[#f3f3f3]">
-        <AdminDashboard client:only="react" />
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="font-sans text-[#1A1A1A] bg-[#f3f3f3]">
+    <AdminDashboard client:only="react" />
+  </body>
 </html>
