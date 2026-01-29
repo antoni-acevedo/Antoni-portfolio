@@ -189,7 +189,8 @@ const Hero = () => {
           </div>
 
           <a
-            href="#"
+            href="https://wa.me/573016236319"
+            target="_blank"
             className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
           >
             Book A Call <ArrowUpRight />
@@ -253,7 +254,10 @@ const Hero = () => {
           {/* Bottom Indicators */}
           <div className="mt-12 md:mt-auto md:absolute md:bottom-12 md:left-12 flex items-end justify-center md:justify-between w-full pr-0 md:pr-12">
             <div className="hidden md:flex flex-col gap-12">
-              <div className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer">
+              <div
+                onClick={(e) => handleScroll(e as any, "#about")}
+                className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group"
+              >
                 Scroll down <ArrowDown />
               </div>
             </div>
