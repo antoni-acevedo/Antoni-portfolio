@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import profileImage from "../assets/img10.png";
+// import profileImage from "../assets/img10.png";
 
 const ArrowUpRight = () => (
   <svg
@@ -211,8 +211,9 @@ const Hero = () => {
         {/* Right Side: Image Box */}
         <div className="absolute bottom-0 right-0 md:right-[5%] w-full md:w-[55%] h-[50vh] md:h-[110%] z-10 flex items-end justify-center pointer-events-none">
           <div
-            className={`hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden ${isLoaded ? "animate-slide-up" : "image-initial"
-              }`}
+            className={`hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden ${
+              isLoaded ? "animate-slide-up" : "image-initial"
+            }`}
           >
             <img
               ref={imgRef}
@@ -220,7 +221,7 @@ const Hero = () => {
               style={{
                 filter: "brightness(109.3%) grayscale(100%)",
               }}
-              src={profileImage.src}
+              src={`${import.meta.env.BASE_URL}images/img10.png`}
               alt="Portrait"
               className="w-full h-full object-cover grayscale"
             />
