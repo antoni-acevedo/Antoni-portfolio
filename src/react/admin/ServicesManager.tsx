@@ -9,6 +9,7 @@ export default function ServicesManager() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Partial<ServiceData>>({});
+  const [lang, setLang] = useState<"es" | "en">("es");
 
   const fetchItems = () => {
     fetch("/api/services")
@@ -70,13 +71,44 @@ export default function ServicesManager() {
     );
   };
 
+  const handleTextChange = (field: keyof ServiceData, value: string) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof ServiceData);
+    setEditingItem({ ...editingItem, [key]: value });
+  };
+
+  const getValue = (field: keyof ServiceData) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof ServiceData);
+    return (editingItem[key] as string) || "";
+  };
+
+  const getDisplayValue = (item: ServiceData, field: keyof ServiceData) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof ServiceData);
+    return (item[key] as string) || item[field] || "";
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold tracking-tight">Servicios</h2>
-        <Button onClick={handleCreate}>+ Nuevo Servicio</Button>
+        <div className="flex gap-4">
+          <div className="flex bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => setLang("es")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "es" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              Español
+            </button>
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "en" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              English
+            </button>
+          </div>
+          <Button onClick={handleCreate}>+ Nuevo Servicio</Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -92,11 +124,13 @@ export default function ServicesManager() {
               </div>
               <div>
                 <span className="bg-gray-100 text-xs px-2 py-1 rounded-full uppercase font-bold text-gray-600">
-                  {item.tag}
+                  {getDisplayValue(item, "tag")}
                 </span>
-                <h3 className="font-bold text-xl mt-2">{item.title}</h3>
+                <h3 className="font-bold text-xl mt-2">
+                  {getDisplayValue(item, "title")}
+                </h3>
                 <p className="text-gray-500 text-sm mt-1 line-clamp-2">
-                  {item.description}
+                  {getDisplayValue(item, "description")}
                 </p>
               </div>
 
@@ -124,32 +158,32 @@ export default function ServicesManager() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingItem.id ? "Editar Servicio" : "Nuevo Servicio"}
+        title={
+          editingItem.id
+            ? `Editar Servicio (${lang})`
+            : `Nuevo Servicio (${lang})`
+        }
       >
         <form onSubmit={handleSave} className="flex flex-col gap-4">
           <Input
-            label="Título"
-            value={editingItem.title || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, title: e.target.value })
-            }
-            required
+            label={`Título (${lang})`}
+            value={getValue("title")}
+            onChange={(e: any) => handleTextChange("title", e.target.value)}
+            required={lang === "es"}
           />
           <Input
-            label="Tag (Categoría)"
-            value={editingItem.tag || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, tag: e.target.value })
-            }
-            required
+            label={`Tag (Categoría) (${lang})`}
+            value={getValue("tag")}
+            onChange={(e: any) => handleTextChange("tag", e.target.value)}
+            required={lang === "es"}
           />
           <TextArea
-            label="Descripción"
-            value={editingItem.description || ""}
+            label={`Descripción (${lang})`}
+            value={getValue("description")}
             onChange={(e: any) =>
-              setEditingItem({ ...editingItem, description: e.target.value })
+              handleTextChange("description", e.target.value)
             }
-            required
+            required={lang === "es"}
           />
           <Input
             label="Imagen (filename)"

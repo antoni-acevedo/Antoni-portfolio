@@ -16,6 +16,7 @@ export default function ProfileEditor() {
   const [data, setData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [lang, setLang] = useState<"es" | "en">("es");
 
   useEffect(() => {
     fetch("/api/profile")
@@ -40,6 +41,18 @@ export default function ProfileEditor() {
     setTimeout(() => window.location.reload(), 1000);
   };
 
+  const handleTextChange = (field: keyof ProfileData, value: string) => {
+    if (!data) return;
+    const key = lang === "es" ? field : (`${field}_en` as keyof ProfileData);
+    setData({ ...data, [key]: value });
+  };
+
+  const getValue = (field: keyof ProfileData) => {
+    if (!data) return "";
+    const key = lang === "es" ? field : (`${field}_en` as keyof ProfileData);
+    return (data[key] as string) || "";
+  };
+
   if (loading)
     return (
       <div className="flex items-center justify-center h-64">
@@ -56,6 +69,7 @@ export default function ProfileEditor() {
       className="max-w-7xl mx-auto space-y-8"
     >
       {/* Header */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
         <div className="flex items-center gap-4">
           <div className="bg-black text-white p-3 rounded-2xl">
@@ -68,20 +82,37 @@ export default function ProfileEditor() {
             </p>
           </div>
         </div>
-        <Button
-          onClick={handleSubmit}
-          disabled={saving}
-          className="flex items-center gap-2 px-6"
-        >
-          <Save size={18} />
-          {saving ? "Guardando..." : "Guardar Cambios"}
-        </Button>
+        <div className="flex gap-3">
+          <div className="flex bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => setLang("es")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "es" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              Español
+            </button>
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "en" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              English
+            </button>
+          </div>
+          <Button
+            onClick={handleSubmit}
+            disabled={saving}
+            className="flex items-center gap-2 px-6"
+          >
+            <Save size={18} />
+            {saving ? "Guardando..." : "Guardar Cambios"}
+          </Button>
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 lg:grid-cols-12 gap-8"
       >
+        {/* Left Column: Main Info */}
         {/* Left Column: Main Info */}
         <div className="lg:col-span-8 space-y-8">
           {/* General Info Card */}
@@ -90,34 +121,34 @@ export default function ProfileEditor() {
               <div className="bg-blue-50 text-blue-600 p-2 rounded-xl">
                 <AlignLeft size={20} />
               </div>
-              <h3 className="font-bold text-lg">Información General</h3>
+              <h3 className="font-bold text-lg">
+                Información General ({lang.toUpperCase()})
+              </h3>
             </div>
 
             <div className="grid gap-6">
               <Input
-                label="Título Principal"
-                value={data.title}
-                onChange={(e: any) =>
-                  setData({ ...data, title: e.target.value })
-                }
+                label={`Título Principal (${lang})`}
+                value={getValue("title")}
+                onChange={(e: any) => handleTextChange("title", e.target.value)}
                 placeholder="Ej: Sobre Mí"
                 className="text-lg font-medium"
               />
               <TextArea
-                label="Descripción Corta"
-                value={data.description}
+                label={`Descripción Corta (${lang})`}
+                value={getValue("description")}
                 onChange={(e: any) =>
-                  setData({ ...data, description: e.target.value })
+                  handleTextChange("description", e.target.value)
                 }
                 rows={4}
                 className="leading-relaxed"
               />
               <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                 <Input
-                  label="Texto Destacado (Call to Action)"
-                  value={data.highlight_text}
+                  label={`Texto Destacado (${lang})`}
+                  value={getValue("highlight_text")}
                   onChange={(e: any) =>
-                    setData({ ...data, highlight_text: e.target.value })
+                    handleTextChange("highlight_text", e.target.value)
                   }
                   className="font-medium text-blue-600"
                 />
@@ -131,22 +162,24 @@ export default function ProfileEditor() {
               <div className="bg-yellow-50 text-yellow-600 p-2 rounded-xl">
                 <Sparkles size={20} />
               </div>
-              <h3 className="font-bold text-lg">Puntos Clave</h3>
+              <h3 className="font-bold text-lg">
+                Puntos Clave ({lang.toUpperCase()})
+              </h3>
             </div>
             <div className="grid gap-6">
               <TextArea
-                label="Punto Clave #1"
-                value={data.bullet_1}
+                label={`Punto Clave #1 (${lang})`}
+                value={getValue("bullet_1")}
                 onChange={(e: any) =>
-                  setData({ ...data, bullet_1: e.target.value })
+                  handleTextChange("bullet_1", e.target.value)
                 }
                 rows={2}
               />
               <TextArea
-                label="Punto Clave #2"
-                value={data.bullet_2}
+                label={`Punto Clave #2 (${lang})`}
+                value={getValue("bullet_2")}
                 onChange={(e: any) =>
-                  setData({ ...data, bullet_2: e.target.value })
+                  handleTextChange("bullet_2", e.target.value)
                 }
                 rows={2}
               />
@@ -174,10 +207,10 @@ export default function ProfileEditor() {
               className="text-3xl font-bold text-center"
             />
             <TextArea
-              label="Texto Descriptivo"
-              value={data.experience_text}
+              label={`Texto Descriptivo (${lang})`}
+              value={getValue("experience_text")}
               onChange={(e: any) =>
-                setData({ ...data, experience_text: e.target.value })
+                handleTextChange("experience_text", e.target.value)
               }
               rows={3}
               className="text-sm text-gray-600"

@@ -9,6 +9,7 @@ export default function JobsManager() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Partial<JobData>>({});
+  const [lang, setLang] = useState<"es" | "en">("es");
 
   const fetchItems = () => {
     fetch("/api/jobs")
@@ -70,6 +71,21 @@ export default function JobsManager() {
     );
   };
 
+  const handleTextChange = (field: keyof JobData, value: string) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof JobData);
+    setEditingItem({ ...editingItem, [key]: value });
+  };
+
+  const getValue = (field: keyof JobData) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof JobData);
+    return (editingItem[key] as string) || "";
+  };
+
+  const getDisplayValue = (item: JobData, field: keyof JobData) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof JobData);
+    return (item[key] as string) || (item[field] as string) || "";
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -78,7 +94,23 @@ export default function JobsManager() {
         <h2 className="text-3xl font-bold tracking-tight">
           Experiencia (Trabajos)
         </h2>
-        <Button onClick={handleCreate}>+ Nuevo Trabajo</Button>
+        <div className="flex gap-4">
+          <div className="flex bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => setLang("es")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "es" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              Español
+            </button>
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "en" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              English
+            </button>
+          </div>
+          <Button onClick={handleCreate}>+ Nuevo Trabajo</Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -95,16 +127,16 @@ export default function JobsManager() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="bg-[#1A1A1A] text-white text-xs px-2 py-1 rounded-full uppercase font-bold">
-                    {item.tag}
+                    {getDisplayValue(item, "tag")}
                   </span>
                   <span className="text-xs text-gray-500">{item.date}</span>
                 </div>
                 <h3 className="font-bold text-xl">{item.company}</h3>
                 <p className="font-medium text-sm text-gray-700 mb-1">
-                  {item.role}
+                  {getDisplayValue(item, "role")}
                 </p>
                 <p className="text-gray-500 text-sm mt-1 line-clamp-3">
-                  {item.description}
+                  {getDisplayValue(item, "description")}
                 </p>
               </div>
 
@@ -132,7 +164,11 @@ export default function JobsManager() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingItem.id ? "Editar Trabajo" : "Nuevo Trabajo"}
+        title={
+          editingItem.id
+            ? `Editar Trabajo (${lang})`
+            : `Nuevo Trabajo (${lang})`
+        }
       >
         <form onSubmit={handleSave} className="flex flex-col gap-4">
           <Input
@@ -144,12 +180,10 @@ export default function JobsManager() {
             required
           />
           <Input
-            label="Rol"
-            value={editingItem.role || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, role: e.target.value })
-            }
-            required
+            label={`Rol (${lang})`}
+            value={getValue("role")}
+            onChange={(e: any) => handleTextChange("role", e.target.value)}
+            required={lang === "es"}
           />
           <Input
             label="Fecha"
@@ -160,20 +194,18 @@ export default function JobsManager() {
             required
           />
           <Input
-            label="Tag"
-            value={editingItem.tag || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, tag: e.target.value })
-            }
-            required
+            label={`Tag (${lang})`}
+            value={getValue("tag")}
+            onChange={(e: any) => handleTextChange("tag", e.target.value)}
+            required={lang === "es"}
           />
           <TextArea
-            label="Descripción"
-            value={editingItem.description || ""}
+            label={`Descripción (${lang})`}
+            value={getValue("description")}
             onChange={(e: any) =>
-              setEditingItem({ ...editingItem, description: e.target.value })
+              handleTextChange("description", e.target.value)
             }
-            required
+            required={lang === "es"}
           />
           <Input
             label="Imagen (filename)"

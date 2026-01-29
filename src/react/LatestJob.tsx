@@ -9,6 +9,9 @@ export interface JobData {
   description: string;
   image: string;
   tag: string;
+  role_en?: string;
+  description_en?: string;
+  tag_en?: string;
 }
 
 interface LatestJobProps {

@@ -11,6 +11,7 @@ export default function ProjectsManager() {
   const [editingItem, setEditingItem] = useState<
     Partial<ProjectData> & { tagsString?: string; imagesString?: string }
   >({});
+  const [lang, setLang] = useState<"es" | "en">("es");
 
   const fetchItems = () => {
     fetch("/api/projects")
@@ -97,13 +98,44 @@ export default function ProjectsManager() {
     );
   };
 
+  const handleTextChange = (field: keyof ProjectData, value: string) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof ProjectData);
+    setEditingItem({ ...editingItem, [key]: value });
+  };
+
+  const getValue = (field: keyof ProjectData) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof ProjectData);
+    return (editingItem[key] as string) || "";
+  };
+
+  const getDisplayValue = (item: ProjectData, field: keyof ProjectData) => {
+    const key = lang === "es" ? field : (`${field}_en` as keyof ProjectData);
+    return (item[key] as string) || (item[field] as string) || "";
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold tracking-tight">Proyectos</h2>
-        <Button onClick={handleCreate}>+ Nuevo Proyecto</Button>
+        <div className="flex gap-4">
+          <div className="flex bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => setLang("es")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "es" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              Español
+            </button>
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${lang === "en" ? "bg-white shadow-sm text-black" : "text-gray-500 hover:text-black"}`}
+            >
+              English
+            </button>
+          </div>
+          <Button onClick={handleCreate}>+ Nuevo Proyecto</Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6">
@@ -125,7 +157,7 @@ export default function ProjectsManager() {
                   <div>
                     <h3 className="font-bold text-xl">{item.company}</h3>
                     <p className="text-sm font-medium text-gray-500">
-                      {item.role} • {item.date}
+                      {getDisplayValue(item, "role")} • {item.date}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -139,7 +171,9 @@ export default function ProjectsManager() {
                     ))}
                   </div>
                 </div>
-                <p className="text-gray-600 mt-2">{item.desc}</p>
+                <p className="text-gray-600 mt-2">
+                  {getDisplayValue(item, "desc")}
+                </p>
                 <div className="flex gap-2 mt-4">
                   <Button
                     variant="ghost"
@@ -165,7 +199,11 @@ export default function ProjectsManager() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingItem.id ? "Editar Proyecto" : "Nuevo Proyecto"}
+        title={
+          editingItem.id
+            ? `Editar Proyecto (${lang})`
+            : `Nuevo Proyecto (${lang})`
+        }
       >
         <form
           onSubmit={handleSave}
@@ -181,12 +219,10 @@ export default function ProjectsManager() {
             className="md:col-span-2"
           />
           <Input
-            label="Rol"
-            value={editingItem.role || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, role: e.target.value })
-            }
-            required
+            label={`Rol (${lang})`}
+            value={getValue("role")}
+            onChange={(e: any) => handleTextChange("role", e.target.value)}
+            required={lang === "es"}
           />
           <Input
             label="Fecha"
@@ -215,22 +251,20 @@ export default function ProjectsManager() {
             className="md:col-span-2"
           />
           <TextArea
-            label="Descripción Corta"
-            value={editingItem.desc || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, desc: e.target.value })
-            }
+            label={`Descripción Corta (${lang})`}
+            value={getValue("desc")}
+            onChange={(e: any) => handleTextChange("desc", e.target.value)}
             rows={2}
             className="md:col-span-2"
+            required={lang === "es"}
           />
           <TextArea
-            label="Descripción Larga"
-            value={editingItem.long_desc || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, long_desc: e.target.value })
-            }
+            label={`Descripción Larga (${lang})`}
+            value={getValue("long_desc")}
+            onChange={(e: any) => handleTextChange("long_desc", e.target.value)}
             rows={4}
             className="md:col-span-2"
+            required={lang === "es"}
           />
 
           <div className="flex justify-end gap-2 mt-4 md:col-span-2">

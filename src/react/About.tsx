@@ -71,6 +71,13 @@ export interface ProfileData {
   secondary_image: string;
   bullet_1: string;
   bullet_2: string;
+  // English translations
+  title_en?: string;
+  description_en?: string;
+  highlight_text_en?: string;
+  experience_text_en?: string;
+  bullet_1_en?: string;
+  bullet_2_en?: string;
 }
 
 interface AboutProps {

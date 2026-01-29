@@ -23,6 +23,9 @@ export interface ServiceData {
   description: string;
   image: string;
   tag: string;
+  title_en?: string;
+  description_en?: string;
+  tag_en?: string;
 }
 
 interface ServicesProps {

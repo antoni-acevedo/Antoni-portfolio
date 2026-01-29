@@ -17,11 +17,11 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
-    const { company, role, date, desc, long_desc, tags, images } = body;
+    const { company, role, date, desc, long_desc, tags, images, role_en, desc_en, long_desc_en } = body;
 
     const insert = db.prepare(`
-    INSERT INTO projects (company, role, date, desc, long_desc, tags, images)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO projects (company, role, date, desc, long_desc, tags, images, role_en, desc_en, long_desc_en)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
     // Assume body sends arrays for tags/images, we stringify
@@ -32,7 +32,10 @@ export const POST: APIRoute = async ({ request }) => {
         desc,
         long_desc,
         JSON.stringify(tags),
-        JSON.stringify(images)
+        JSON.stringify(images),
+        role_en,
+        desc_en,
+        long_desc_en
     );
 
     return new Response(JSON.stringify({ id: info.lastInsertRowid }), {

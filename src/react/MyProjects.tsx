@@ -26,6 +26,9 @@ export interface ProjectData {
   long_desc: string;
   tags: string[];
   images: string[];
+  role_en?: string;
+  desc_en?: string;
+  long_desc_en?: string;
 }
 
 interface MyProjectsProps {
