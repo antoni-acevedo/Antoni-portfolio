@@ -104,7 +104,7 @@ const Hero = () => {
     }, container);
 
     return () => ctx.revert();
-  }, [isLoaded]);
+  }, [isLoaded, lang]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -206,7 +206,8 @@ const Hero = () => {
             target="_blank"
             className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity"
           >
-            Book A Call <ArrowUpRight />
+            {lang === "es" ? "Reserva una llamada" : "Book A Call"}{" "}
+            <ArrowUpRight />
           </a>
         </div>
       </nav>
@@ -217,7 +218,7 @@ const Hero = () => {
         <div className="hidden xl:flex absolute -left-12 top-0 h-full flex-col items-center py-12 z-30 pointer-events-none">
           <div className="flex-none pb-4 sidebar-text opacity-0">
             <span className="[writing-mode:vertical-rl] rotate-180 text-gray-400 text-sm font-semibold tracking-widest uppercase whitespace-nowrap">
-              Full-Stack Dev
+              {lang === "es" ? "Dev Full-Stack" : "Full-Stack Dev"}
             </span>
           </div>
 
@@ -226,7 +227,7 @@ const Hero = () => {
 
           <div className="flex-none pt-4 sidebar-text opacity-0">
             <span className="[writing-mode:vertical-rl] rotate-180 text-gray-400 text-sm font-bold tracking-widest block">
-              2024
+              2025
             </span>
           </div>
         </div>
@@ -277,7 +278,8 @@ const Hero = () => {
                 onClick={(e) => handleScroll(e as any, "#about")}
                 className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group"
               >
-                Scroll down <ArrowDown />
+                {lang === "es" ? "Desliza hacia abajo" : "Scroll down"}{" "}
+                <ArrowDown />
               </div>
             </div>
           </div>
