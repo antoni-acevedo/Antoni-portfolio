@@ -1,14 +1,21 @@
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { useStore } from "@nanostores/react";
+import { languageStore } from "../store/languageStore";
 
-// Import images (Removed in favor of public assets)
-// const img3 = "mockImg.png";
-// const img4 = "mockImg.png";
-// ... we will use strings directly in the object or a helper variable
+interface FeaturedProject {
+  id: number;
+  title: string;
+  client: string;
+  image: string;
+  category: string;
+  category_en?: string;
+  link?: string;
+}
 
 const ArrowUpRight = () => (
   <svg
@@ -26,38 +33,22 @@ const ArrowUpRight = () => (
   </svg>
 );
 
-const projects = [
-  {
-    id: 1,
-    title: "Validocus",
-    client: "Soluciones Star",
-    image: "mockImg.png",
-    category: "Plataforma Web",
-  },
-  {
-    id: 2,
-    title: "AdWorkChain",
-    client: "Vinix Code",
-    image: "mockImg.png",
-    category: "Gestión",
-  },
-  {
-    id: 3,
-    title: "Metradesk",
-    client: "Soluciones Star",
-    image: "mockImg.png",
-    category: "Fintech",
-  },
-  {
-    id: 4,
-    title: "TransferX",
-    client: "Konecta",
-    image: "mockImg.png",
-    category: "Logística",
-  },
-];
-
 export default function ProyectCarrousel() {
+  const [projects, setProjects] = useState<FeaturedProject[]>([]);
+  const lang = useStore(languageStore);
+
+  useEffect(() => {
+    fetch("/api/featured-projects")
+      .then((res) => res.json())
+      .then((data) => setProjects(data))
+      .catch((err) => console.error("Error fetching featured projects:", err));
+  }, []);
+
+  const getCategory = (project: FeaturedProject) => {
+    if (lang === "es") return project.category;
+    return project.category_en || project.category;
+  };
+
   return (
     <div className="w-full bg-[#f3f3f3]">
       <section className="w-full bg-[#f3f3f3] py-10 px-6 md:px-0 relative z-10 text-[#1A1A1A] overflow-hidden max-w-[1700px] mx-auto">
@@ -65,7 +56,7 @@ export default function ProyectCarrousel() {
           <div className="pl-6 md:pl-12 cursor-grab active:cursor-grabbing">
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
-              loop={true}
+              loop={projects.length > 2} // Only loop if enough slides
               autoplay={{
                 delay: 2500,
                 disableOnInteraction: false,
@@ -110,7 +101,7 @@ export default function ProyectCarrousel() {
                           {project.title}
                         </h3>
                         <div className="flex items-center gap-2 mt-2 text-gray-500 text-sm md:text-base font-medium">
-                          <span>{project.category}</span>
+                          <span>{getCategory(project)}</span>
                           <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                           <span>
                             For{" "}
