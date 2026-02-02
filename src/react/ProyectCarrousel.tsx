@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -40,21 +40,8 @@ const ArrowUpRight = () => (
 export default function ProyectCarrousel({
   initialProjects = [],
 }: ProyectCarrouselProps) {
-  const [projects, setProjects] = useState<FeaturedProject[]>(initialProjects);
+  const projects = initialProjects;
   const lang = useStore(languageStore);
-
-  useEffect(() => {
-    // Only fetch if no initial data provided (e.g., if somehow mounted without props)
-    // For static build, initialProjects will be populated.
-    if (initialProjects.length === 0) {
-      fetch("/api/featured-projects")
-        .then((res) => res.json())
-        .then((data) => setProjects(data))
-        .catch((err) =>
-          console.error("Error fetching featured projects:", err),
-        );
-    }
-  }, [initialProjects]);
 
   const getCategory = (project: FeaturedProject) => {
     if (lang === "es") return project.category;
