@@ -2,7 +2,9 @@
 import Hero from "../react/index";
 export const prerender = true;
 import About, { type ProfileData } from "../react/About";
-import ProyectCarrousel from "../react/ProyectCarrousel";
+import ProyectCarrousel, {
+  type FeaturedProject,
+} from "../react/ProyectCarrousel";
 import MyProjects, { type ProjectData } from "../react/MyProjects";
 import Services, { type ServiceData } from "../react/Services";
 import LatestJob, { type JobData } from "../react/LatestJob";
@@ -24,6 +26,10 @@ const projects = projectsRaw.map((p: any) => ({
   tags: JSON.parse(p.tags),
   images: JSON.parse(p.images),
 })) as ProjectData[];
+
+const featuredProjects = db
+  .prepare("SELECT * FROM featured_projects")
+  .all() as FeaturedProject[];
 ---
 
 <html lang="es">
@@ -50,7 +56,7 @@ const projects = projectsRaw.map((p: any) => ({
     >
       <Hero client:load />
       <About client:load profileData={profileData} />
-      <ProyectCarrousel client:load />
+      <ProyectCarrousel client:load initialProjects={featuredProjects} />
       <MyProjects client:load projects={projects} />
       <Services client:load services={services} />
       <LatestJob client:load jobs={jobs} />
