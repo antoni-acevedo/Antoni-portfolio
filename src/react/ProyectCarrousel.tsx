@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { useStore } from "@nanostores/react";
 import { languageStore } from "../store/languageStore";
 
-interface FeaturedProject {
+export interface FeaturedProject {
   id: number;
   title: string;
   client: string;
@@ -15,6 +15,10 @@ interface FeaturedProject {
   category: string;
   category_en?: string;
   link?: string;
+}
+
+interface ProyectCarrouselProps {
+  initialProjects?: FeaturedProject[];
 }
 
 const ArrowUpRight = () => (
@@ -33,21 +37,31 @@ const ArrowUpRight = () => (
   </svg>
 );
 
-export default function ProyectCarrousel() {
-  const [projects, setProjects] = useState<FeaturedProject[]>([]);
+export default function ProyectCarrousel({
+  initialProjects = [],
+}: ProyectCarrouselProps) {
+  const [projects, setProjects] = useState<FeaturedProject[]>(initialProjects);
   const lang = useStore(languageStore);
 
   useEffect(() => {
-    fetch("/api/featured-projects")
-      .then((res) => res.json())
-      .then((data) => setProjects(data))
-      .catch((err) => console.error("Error fetching featured projects:", err));
-  }, []);
+    // Only fetch if no initial data provided (e.g., if somehow mounted without props)
+    // For static build, initialProjects will be populated.
+    if (initialProjects.length === 0) {
+      fetch("/api/featured-projects")
+        .then((res) => res.json())
+        .then((data) => setProjects(data))
+        .catch((err) =>
+          console.error("Error fetching featured projects:", err),
+        );
+    }
+  }, [initialProjects]);
 
   const getCategory = (project: FeaturedProject) => {
     if (lang === "es") return project.category;
     return project.category_en || project.category;
   };
+
+  if (projects.length === 0) return null; // Or return a loading skeleton?
 
   return (
     <div className="w-full bg-[#f3f3f3]">
