@@ -58,6 +58,17 @@ export default function FeaturedProjectsManager() {
     });
   };
 
+  const cleanImageForSave = (path: string) => {
+    if (!path) return "";
+    let clean = path;
+    // Remove known prefixes that shouldn't be in the DB
+    clean = clean.replace("/Portfolio/", ""); // Remove explicit base url if present
+    clean = clean.replace("src/assets/projectImages/", "projectImages/");
+    clean = clean.replace("src/assets/", "");
+    clean = clean.replace(/^\/+/, ""); // Remove leading slashes
+    return clean;
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const isNew = !editingItem.id;
@@ -66,10 +77,15 @@ export default function FeaturedProjectsManager() {
       : `/api/featured-projects/${editingItem.id}`;
     const method = isNew ? "POST" : "PUT";
 
+    const payload = {
+      ...editingItem,
+      image: cleanImageForSave(editingItem.image || ""),
+    };
+
     toast.promise(
       fetch(url, {
         method,
-        body: JSON.stringify(editingItem),
+        body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" },
       }),
       {
