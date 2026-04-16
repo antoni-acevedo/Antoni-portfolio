@@ -6,6 +6,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useStore } from "@nanostores/react";
 import { languageStore } from "../store/languageStore";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 export interface FeaturedProject {
   id: number;
@@ -42,6 +48,14 @@ export default function ProyectCarrousel({
 }: ProyectCarrouselProps) {
   const projects = initialProjects;
   const lang = useStore(languageStore);
+  const [open, setOpen] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
+
+  const slides = projects.map((project) => ({
+    src: `${import.meta.env.BASE_URL}images/${project.image}`,
+    title: project.title,
+    description: project.client,
+  }));
 
   const getCategory = (project: FeaturedProject) => {
     if (lang === "es") return project.category;
@@ -76,7 +90,7 @@ export default function ProyectCarrousel({
               }}
               className="w-full !overflow-visible"
             >
-              {projects.map((project) => (
+              {projects.map((project, idx) => (
                 <SwiperSlide key={project.id} className="group">
                   <div className="flex flex-col gap-6">
                     {/* Image Container */}
@@ -88,7 +102,13 @@ export default function ProyectCarrousel({
                       />
 
                       {/* Hover Overlay Button */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 backdrop-blur-[2px]">
+                      <div
+                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 backdrop-blur-[2px] cursor-pointer"
+                        onClick={() => {
+                          setIndex(idx);
+                          setOpen(true);
+                        }}
+                      >
                         <div className="bg-[#1A1A1A] text-white w-20 h-20 rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300 shadow-xl">
                           <ArrowUpRight />
                         </div>
@@ -120,6 +140,22 @@ export default function ProyectCarrousel({
           </div>
         </div>
       </section>
+
+      <Lightbox
+        open={open}
+        close={() => setOpen(false)}
+        index={index}
+        slides={slides}
+        plugins={[Fullscreen, Zoom, Thumbnails]}
+        carousel={{ padding: "60px" }}
+        styles={{
+          container: { backgroundColor: "rgba(0, 0, 0, 0.95)" },
+        }}
+        zoom={{
+          maxZoomPixelRatio: 3,
+          scrollToZoom: true,
+        }}
+      />
     </div>
   );
 }
