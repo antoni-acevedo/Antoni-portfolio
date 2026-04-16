@@ -206,8 +206,7 @@ const Hero = () => {
             target="_blank"
             className="flex items-center gap-1 text-sm font-semibold border-b border-black pb-0.5 hover:opacity-70 transition-opacity cursor-pointer"
           >
-            {lang === "es" ? "Reserva una llamada" : "Book A Call"}{" "}
-            <ArrowUpRight />
+            {lang === "es" ? "Charlemos" : "Let's Talk"} <ArrowUpRight />
           </a>
         </div>
       </nav>

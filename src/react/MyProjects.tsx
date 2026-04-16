@@ -39,7 +39,7 @@ interface MyProjectsProps {
 }
 
 export default function MyProjects({ projects }: MyProjectsProps) {
-  const [activeId, setActiveId] = useState<number | null>(1);
+  const [activeId, setActiveId] = useState<number | null>(0);
   const lang = useStore(languageStore);
 
   if (!projects) return null;
