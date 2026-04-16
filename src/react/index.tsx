@@ -1,5 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 import { Menu, X } from "lucide-react";
 import { useStore } from "@nanostores/react";
 import { languageStore, setLanguage } from "../store/languageStore";
@@ -139,16 +141,55 @@ const Hero = () => {
     },
   ];
 
+  // Parallax effect for the hero image
+  useLayoutEffect(() => {
+    if (!isLoaded || !imgRef.current) return;
+
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      gsap.to(imgRef.current, {
+        y: "10%", // Moves DOWN
+        ease: "none",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    });
+
+    return () => mm.revert();
+  }, [isLoaded]);
+
   return (
     <div
       ref={container}
-      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative overflow-hidden max-h-[820px] mx-auto"
+      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[820px] mx-auto"
     >
+      {/* Right Side: Image Box (Small at bottom on mobile) - Moved to back */}
+      <div className="absolute bottom-0 md:top-0 right-0 md:right-[5%] w-full md:w-[50%] h-[40vh] md:h-full z-10 flex items-end justify-center pointer-events-none overflow-hidden">
+        <div
+          className={`hero-image-container w-full h-full relative flex items-end justify-center ${isLoaded ? "animate-slide-up" : "image-initial"
+            }`}
+        >
+          <img
+            ref={imgRef}
+            onLoad={() => setIsLoaded(true)}
+            style={{
+              filter: "brightness(109.3%) grayscale(100%)",
+            }}
+            src={`${import.meta.env.BASE_URL}/images/img10.png`}
+            alt="Portrait"
+            className="w-full h-[115%] md:h-[100%] -top-10 md:-top-[0%] absolute object-cover object-top grayscale transition-opacity duration-1000 left-[0%] md:left-[-10%]"
+          />
+        </div>
+      </div>
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 bg-[#f3f3f3] z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-300 md:hidden ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-0 bg-[#f3f3f3] z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-300 md:hidden ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {navLinks.map((item) => (
           <a
@@ -284,25 +325,6 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Side: Image Box */}
-        <div className="absolute bottom-0 right-0 md:right-[5%] w-full md:w-[55%] h-[50vh] md:h-[110%] z-10 flex items-end justify-center pointer-events-none">
-          <div
-            className={`hero-image-container w-full h-full relative flex items-end justify-center overflow-hidden ${
-              isLoaded ? "animate-slide-up" : "image-initial"
-            }`}
-          >
-            <img
-              ref={imgRef}
-              onLoad={() => setIsLoaded(true)}
-              style={{
-                filter: "brightness(109.3%) grayscale(100%)",
-              }}
-              src={`${import.meta.env.BASE_URL}/images/img10.png`}
-              alt="Portrait"
-              className="w-full h-full object-cover grayscale"
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
