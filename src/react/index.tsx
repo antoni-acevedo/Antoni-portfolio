@@ -145,7 +145,9 @@ const Hero = () => {
   useLayoutEffect(() => {
     if (!isLoaded || !imgRef.current) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
       gsap.to(imgRef.current, {
         y: "10%", // Moves DOWN
         ease: "none",
@@ -158,7 +160,7 @@ const Hero = () => {
       });
     });
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, [isLoaded]);
 
   return (
@@ -166,6 +168,24 @@ const Hero = () => {
       ref={container}
       className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[820px] mx-auto"
     >
+      {/* Right Side: Image Box (Small at bottom on mobile) - Moved to back */}
+      <div className="absolute bottom-0 md:top-0 right-0 md:right-[5%] w-full md:w-[50%] h-[40vh] md:h-full z-10 flex items-end justify-center pointer-events-none overflow-hidden">
+        <div
+          className={`hero-image-container w-full h-full relative flex items-end justify-center ${isLoaded ? "animate-slide-up" : "image-initial"
+            }`}
+        >
+          <img
+            ref={imgRef}
+            onLoad={() => setIsLoaded(true)}
+            style={{
+              filter: "brightness(109.3%) grayscale(100%)",
+            }}
+            src={`${import.meta.env.BASE_URL}/images/img10.png`}
+            alt="Portrait"
+            className="w-full h-[115%] md:h-[100%] -top-10 md:-top-[0%] absolute object-cover object-top grayscale transition-opacity duration-1000 left-[0%] md:left-[-10%]"
+          />
+        </div>
+      </div>
       {/* Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 bg-[#f3f3f3] z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-300 md:hidden ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -305,25 +325,6 @@ const Hero = () => {
           </div>
         </div>
 
-      </div>
-
-      {/* Right Side: Image Box (Full Screen Height) */}
-      <div className="absolute top-0 right-0 md:right-[5%] w-full md:w-[50%] h-full z-10 flex items-end justify-center pointer-events-none overflow-hidden">
-        <div
-          className={`hero-image-container w-full h-full relative flex items-end justify-center ${isLoaded ? "animate-slide-up" : "image-initial"
-            }`}
-        >
-          <img
-            ref={imgRef}
-            onLoad={() => setIsLoaded(true)}
-            style={{
-              filter: "brightness(109.3%) grayscale(100%)",
-            }}
-            src={`${import.meta.env.BASE_URL}/images/img10.png`}
-            alt="Portrait"
-            className="w-full h-[100%] -top-[10%] md:-top-[0%] absolute object-cover object-top grayscale transition-opacity duration-1000 left-[-5%]"
-          />
-        </div>
       </div>
     </div>
   );
