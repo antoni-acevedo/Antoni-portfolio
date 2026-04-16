@@ -80,69 +80,61 @@ export default function Services({ services }: ServicesProps) {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="group cursor-pointer flex flex-col gap-4"
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="group"
             >
-              {/* Image Card */}
-              <div className="relative overflow-hidden rounded-3xl aspect-[4/3] bg-gray-200">
-                <img
-                  src={`${import.meta.env.BASE_URL}/images/${service.image}`}
-                  alt={service.title}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-                />
-
-                {/* Overlay with Arrow */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 backdrop-blur-[2px]">
-                  <div className="bg-[#1A1A1A] text-white w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center transform scale-100 md:scale-75 group-hover:scale-100 transition-transform duration-300 shadow-xl">
-                    <ArrowUpRight />
+              <div className="h-full bg-white p-10 rounded-[40px] border border-gray-100 hover:bg-[#1A1A1A] transition-all duration-500 shadow-sm hover:shadow-2xl flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-12">
+                    <span className="text-4xl md:text-5xl font-light text-gray-200 group-hover:text-white/20 transition-colors">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="w-12 h-12 rounded-full bg-[#f3f3f3] flex items-center justify-center group-hover:bg-white/10 group-hover:text-white transition-all duration-300">
+                      <ArrowUpRight />
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Content Below */}
-              <div className="flex flex-col gap-1 mt-2">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-2xl font-medium tracking-tight group-hover:underline underline-offset-4 decoration-1">
+                  <h3 className="text-3xl font-medium mb-4 group-hover:text-white transition-colors">
                     {t(service, "title")}
                   </h3>
+                  <p className="text-gray-500 group-hover:text-gray-400 text-lg leading-relaxed transition-colors">
+                    {t(service, "description")}
+                  </p>
                 </div>
-                <div className="flex items-center gap-2 text-gray-500 text-sm md:text-base">
-                  <span className="font-medium bg-gray-200/50 px-3 py-1 rounded-full">
+
+                <div className="mt-12 flex flex-wrap gap-2">
+                  <span className="px-4 py-1.5 rounded-full bg-[#f3f3f3] text-gray-600 text-sm font-medium group-hover:bg-white/10 group-hover:text-white transition-all duration-300">
                     {t(service, "tag")}
                   </span>
-                  <span>
-                    {lang === "es" ? "Para" : "For"}{" "}
-                    <span className="text-[#1A1A1A] font-medium">
-                      {lang === "es" ? "Clientes Globales" : "Global Clients"}
-                    </span>
-                  </span>
                 </div>
-                <p className="text-gray-400 text-sm mt-1 leading-relaxed line-clamp-2">
-                  {t(service, "description")}
-                </p>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Bottom Link (Optional based on design image "Check out More ->") */}
+        {/* Bottom Link */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center mt-16 text-center"
+          transition={{ duration: 0.8 }}
+          className="flex justify-center mt-20"
         >
           <a
             href="https://wa.me/573016236319"
             target="_blank"
-            className="group inline-flex flex-col md:flex-row items-center gap-2 text-lg font-medium text-gray-500 hover:text-black transition-colors"
+            className="group flex items-center gap-4 bg-white hover:bg-[#1A1A1A] px-8 py-5 rounded-full transition-all duration-300 shadow-sm hover:shadow-xl border border-gray-100"
           >
-            {lang === "es"
-              ? "¿Necesitas una solución personalizada?"
-              : "Need a custom solution?"}
-            <span className="text-black flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              {lang === "es" ? "Contáctame" : "Contact Me"} <ArrowUpRight />
+            <span className="text-lg font-medium text-gray-600 group-hover:text-white transition-colors">
+              {lang === "es"
+                ? "¿Buscas algo específico?"
+                : "Looking for something specific?"}
+            </span>
+            <span className="flex items-center gap-2 text-black group-hover:text-white transition-colors font-bold">
+              {lang === "es" ? "Hablemos" : "Let's talk"}{" "}
+              <div className="group-hover:rotate-45 transition-transform duration-300">
+                <ArrowUpRight />
+              </div>
             </span>
           </a>
         </motion.div>
