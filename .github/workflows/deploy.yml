@@ -29,16 +29,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Organize for GitHub Pages
-        run: |
-          # If the build uses 'server' output (adapter), valid static files are in dist/client
-          if [ -d "dist/client" ]; then
-            echo "Flattening dist/client to dist/..."
-            cp -r dist/client/* dist/
-            rm -rf dist/client dist/server
-          fi
-          # If 'static' output, files are already in dist root, so we are good.
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

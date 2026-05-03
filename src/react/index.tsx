@@ -180,7 +180,7 @@ const Hero = () => {
             style={{
               filter: "brightness(109.3%) grayscale(100%)",
             }}
-            src={`${import.meta.env.BASE_URL}/images/img10.png`}
+            src={`${import.meta.env.BASE_URL}images/img10.png`}
             alt="Portrait"
             className="w-full h-[115%] md:h-[100%] -top-10 md:-top-[0%] absolute object-cover object-top grayscale transition-opacity duration-1000 left-[0%] md:left-[-10%]"
           />
