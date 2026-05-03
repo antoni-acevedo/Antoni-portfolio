@@ -2,7 +2,7 @@
 
 This is a modern, high-performance portfolio template built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com).
 
-## Features
+### Features
 
 - **⚡️ Super Fast**: Built with Astro for zero-JS by default.
 - **🎨 Tailwind CSS v4**: Using the latest CSS-first configuration.
