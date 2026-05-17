@@ -77,7 +77,7 @@ export default function LatestJob({ jobs }: LatestJobProps) {
               className="group bg-white rounded-[2rem] p-4 transition-transform duration-300 hover:-translate-y-2"
             >
               {/* Image */}
-              <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3] mb-6 bg-gray-100">
+              <div className="relative overflow-hidden rounded-[1.5rem] aspect-video mb-6 bg-gray-100">
                 <img
                   src={getImageUrl(job.image)}
                   alt={job.company}

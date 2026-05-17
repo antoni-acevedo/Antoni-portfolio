@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStore } from "@nanostores/react";
 import { languageStore } from "../store/languageStore";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 const ArrowUpRight = () => (
   <svg
@@ -41,6 +47,9 @@ interface MyProjectsProps {
 export default function MyProjects({ projects }: MyProjectsProps) {
   const [activeId, setActiveId] = useState<number | null>(0);
   const lang = useStore(languageStore);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [currentLightboxImages, setCurrentLightboxImages] = useState<string[]>([]);
 
   if (!projects) return null;
 
@@ -186,20 +195,63 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                     className="overflow-hidden"
                   >
                     <div className="flex flex-col gap-8 items-start">
-                      {/* Images - Horizontal Scroll on Top */}
-                      <div className="flex gap-4 w-full overflow-x-auto pb-4 scrollbar-hide snap-x">
-                        {project.images.map((img, idx) => (
-                          <div
-                            key={idx}
-                            className="w-64 h-40 md:w-[450px] md:h-[280px] shrink-0 rounded-2xl overflow-hidden bg-gray-200 snap-center shadow-md border border-white"
-                          >
-                            <img
-                              src={getImageUrl(img)}
-                              alt=""
-                              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                            />
-                          </div>
-                        ))}
+                      {/* Images - Carousel with Swiper */}
+                      <div className="relative w-full group/carousel">
+                        <Swiper
+                          modules={[Autoplay, Navigation]}
+                          navigation={{
+                            nextEl: `.swiper-next-${project.id}`,
+                            prevEl: `.swiper-prev-${project.id}`,
+                          }}
+                          autoplay={{
+                            delay: 3000,
+                            disableOnInteraction: false,
+                          }}
+                          slidesPerView={1.2}
+                          spaceBetween={16}
+                          breakpoints={{
+                            768: { slidesPerView: 2, spaceBetween: 24 },
+                            1280: { slidesPerView: 2.5, spaceBetween: 32 },
+                          }}
+                          className="w-full"
+                        >
+                          {project.images.map((img, idx) => (
+                            <SwiperSlide key={idx}>
+                              <div
+                                className="w-full h-52 md:h-[280px] rounded-2xl overflow-hidden bg-gray-200 shadow-md border border-white cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCurrentLightboxImages(
+                                    project.images.map(getImageUrl),
+                                  );
+                                  setLightboxIndex(idx);
+                                  setLightboxOpen(true);
+                                }}
+                              >
+                                <img
+                                  src={getImageUrl(img)}
+                                  alt=""
+                                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                                />
+                              </div>
+                            </SwiperSlide>
+                          ))}
+                        </Swiper>
+
+                        <button
+                          className={`swiper-prev-${project.id} absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm shadow-md flex items-center justify-center hover:bg-white hover:scale-110 transition-all opacity-0 group-hover/carousel:opacity-100`}
+                          aria-label="Previous image"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <button
+                          className={`swiper-next-${project.id} absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm shadow-md flex items-center justify-center hover:bg-white hover:scale-110 transition-all opacity-0 group-hover/carousel:opacity-100`}
+                          aria-label="Next image"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
                       </div>
 
                       {/* Description & Action - Below Images */}
@@ -228,6 +280,12 @@ export default function MyProjects({ projects }: MyProjectsProps) {
           <div className="border-t border-gray-300"></div>
         </div>
       </div>
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        index={lightboxIndex}
+        slides={currentLightboxImages.map((src) => ({ src }))}
+      />
     </section>
   );
 }
