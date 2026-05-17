@@ -94,12 +94,13 @@ export default function ProyectCarrousel({
                 <SwiperSlide key={project.id} className="group">
                   <div className="flex flex-col gap-6">
                     {/* Image Container */}
-                    <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-3xl bg-gray-200 filter-[grayscale(1)] group-hover:filter-none transition-all duration-700">
+                    <div className="relative aspect-video overflow-hidden rounded-3xl bg-gray-200 grayscale group-hover:grayscale-0 transition-all duration-700">
                       <img
                         src={`${import.meta.env.BASE_URL}images/${project.image}`}
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
+
 
                       {/* Hover Overlay Button */}
                       <div
