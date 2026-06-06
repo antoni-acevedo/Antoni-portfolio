@@ -5,7 +5,7 @@ import type { APIRoute } from 'astro';
 import db from '../../../db/client';
 
 export const GET: APIRoute = async () => {
-    const projects = db.prepare('SELECT * FROM featured_projects').all();
+    const projects = db.prepare('SELECT * FROM featured_projects ORDER BY id DESC').all();
     return new Response(JSON.stringify(projects), {
         headers: { 'Content-Type': 'application/json' },
     });

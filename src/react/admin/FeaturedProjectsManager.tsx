@@ -146,9 +146,9 @@ export default function FeaturedProjectsManager() {
 
   const handleCategoryChange = (val: string) => {
     if (lang === "es") {
-      setEditingItem({ ...editingItem, category: val });
+      setEditingItem((prev) => ({ ...prev, category: val }));
     } else {
-      setEditingItem({ ...editingItem, category_en: val });
+      setEditingItem((prev) => ({ ...prev, category_en: val }));
     }
   };
 
@@ -268,7 +268,7 @@ export default function FeaturedProjectsManager() {
             label="Título"
             value={editingItem.title || ""}
             onChange={(e: any) =>
-              setEditingItem({ ...editingItem, title: e.target.value })
+              setEditingItem((prev) => ({ ...prev, title: e.target.value }))
             }
             required
           />
@@ -276,7 +276,7 @@ export default function FeaturedProjectsManager() {
             label="Cliente"
             value={editingItem.client || ""}
             onChange={(e: any) =>
-              setEditingItem({ ...editingItem, client: e.target.value })
+              setEditingItem((prev) => ({ ...prev, client: e.target.value }))
             }
             required
           />
@@ -305,7 +305,7 @@ export default function FeaturedProjectsManager() {
                       type="button"
                       key={filename}
                       onClick={() =>
-                        setEditingItem({ ...editingItem, image: imagePath })
+                        setEditingItem((prev) => ({ ...prev, image: imagePath }))
                       }
                       className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
                         isSelected
@@ -344,7 +344,7 @@ export default function FeaturedProjectsManager() {
               <button
                 type="button"
                 onClick={() =>
-                  setEditingItem({ ...editingItem, image: "" })
+                  setEditingItem((prev) => ({ ...prev, image: "" }))
                 }
                 className="text-xs text-red-500 hover:text-red-700"
               >

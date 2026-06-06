@@ -4,7 +4,7 @@ import type { APIRoute } from 'astro';
 import db from '../../../db/client';
 
 export const GET: APIRoute = async () => {
-    const projectsRaw = db.prepare('SELECT * FROM projects').all();
+    const projectsRaw = db.prepare('SELECT * FROM projects ORDER BY id DESC').all();
 
     const projects = projectsRaw.map((p: any) => ({
         ...p,
