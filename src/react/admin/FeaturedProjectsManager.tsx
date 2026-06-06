@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Input, Card, Modal } from "./UI";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import type { ProjectData } from "../MyProjects";
 
 export interface FeaturedProjectData {
   id: number;
@@ -21,6 +22,10 @@ export default function FeaturedProjectsManager() {
   );
   const [lang, setLang] = useState<"es" | "en">("es");
 
+  const [projects, setProjects] = useState<ProjectData[]>([]);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [projectImages, setProjectImages] = useState<string[]>([]);
+
   const fetchItems = () => {
     fetch("/api/featured-projects")
       .then((res) => res.json())
@@ -34,6 +39,17 @@ export default function FeaturedProjectsManager() {
     fetchItems();
   }, []);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      fetch("/api/projects")
+        .then((res) => res.json())
+        .then(setProjects);
+    } else {
+      setSelectedProjectId(null);
+      setProjectImages([]);
+    }
+  }, [isModalOpen]);
+
   const handleEdit = (item: FeaturedProjectData) => {
     setEditingItem({ ...item });
     setIsModalOpen(true);
@@ -42,6 +58,29 @@ export default function FeaturedProjectsManager() {
   const handleCreate = () => {
     setEditingItem({});
     setIsModalOpen(true);
+  };
+
+  const selectProject = (projectId: string) => {
+    if (!projectId) {
+      setSelectedProjectId(null);
+      setProjectImages([]);
+      return;
+    }
+    const id = Number(projectId);
+    const project = projects.find((p) => p.id === id);
+    if (!project) return;
+
+    setSelectedProjectId(id);
+    setEditingItem((prev) => ({ ...prev, title: project.company }));
+
+    // Extract folder name from first image path
+    const folderMatch = project.images[0]?.match(/projectImages\/([^/]+)/);
+    const folder = folderMatch ? folderMatch[1] : project.company;
+    const images = project.images.map((img) => {
+      const parts = img.split("/");
+      return { filename: parts[parts.length - 1], folder };
+    });
+    setProjectImages(images);
   };
 
   const handleDelete = async (id: number) => {
@@ -107,9 +146,9 @@ export default function FeaturedProjectsManager() {
 
   const handleCategoryChange = (val: string) => {
     if (lang === "es") {
-      setEditingItem({ ...editingItem, category: val });
+      setEditingItem((prev) => ({ ...prev, category: val }));
     } else {
-      setEditingItem({ ...editingItem, category_en: val });
+      setEditingItem((prev) => ({ ...prev, category_en: val }));
     }
   };
 
@@ -206,11 +245,30 @@ export default function FeaturedProjectsManager() {
         title={editingItem.id ? `Editar Destacado` : `Nuevo Destacado`}
       >
         <form onSubmit={handleSave} className="grid grid-cols-1 gap-4">
+          {/* Project selector */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-600">
+              Proyecto de referencia
+            </label>
+            <select
+              value={selectedProjectId ?? ""}
+              onChange={(e) => selectProject(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
+            >
+              <option value="">-- Seleccionar proyecto --</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.company}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <Input
-            label="Título (Nombre del Proyecto)"
+            label="Título"
             value={editingItem.title || ""}
             onChange={(e: any) =>
-              setEditingItem({ ...editingItem, title: e.target.value })
+              setEditingItem((prev) => ({ ...prev, title: e.target.value }))
             }
             required
           />
@@ -218,7 +276,7 @@ export default function FeaturedProjectsManager() {
             label="Cliente"
             value={editingItem.client || ""}
             onChange={(e: any) =>
-              setEditingItem({ ...editingItem, client: e.target.value })
+              setEditingItem((prev) => ({ ...prev, client: e.target.value }))
             }
             required
           />
@@ -226,20 +284,74 @@ export default function FeaturedProjectsManager() {
             label={`Categoría (${lang})`}
             value={currentCategoryValue}
             onChange={(e: any) => handleCategoryChange(e.target.value)}
-            required={lang === "es"} // Only required for base language, or make both required?
+            required={lang === "es"}
             placeholder={
               lang === "es" ? "Ej: Plataforma Web" : "Ex: Web Platform"
             }
           />
-          <Input
-            label="Imagen (Nombre de archivo)"
-            value={editingItem.image || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, image: e.target.value })
-            }
-            placeholder="mockImg.png"
-            required
-          />
+
+          {/* Image selector */}
+          {projectImages.length > 0 && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-600">
+                Seleccionar imagen destacada
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {projectImages.map(({ filename, folder }) => {
+                  const imagePath = `projectImages/${folder}/${filename}`;
+                  const isSelected = editingItem.image === imagePath;
+                  return (
+                    <button
+                      type="button"
+                      key={filename}
+                      onClick={() =>
+                        setEditingItem((prev) => ({ ...prev, image: imagePath }))
+                      }
+                      className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+                        isSelected
+                          ? "border-black ring-2 ring-black/20"
+                          : "border-transparent hover:border-gray-300"
+                      }`}
+                    >
+                      <img
+                        src={`${import.meta.env.BASE_URL}images/${imagePath}`}
+                        alt={filename}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-xs font-bold">
+                          ✓
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {editingItem.image && (
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <img
+                src={`${import.meta.env.BASE_URL}images/${editingItem.image}`}
+                alt="preview"
+                className="w-16 h-10 object-cover rounded"
+              />
+              <span className="text-xs text-gray-500 truncate flex-1">
+                {editingItem.image}
+              </span>
+              <button
+                type="button"
+                onClick={() =>
+                  setEditingItem((prev) => ({ ...prev, image: "" }))
+                }
+                className="text-xs text-red-500 hover:text-red-700"
+              >
+                Quitar
+              </button>
+            </div>
+          )}
 
           <div className="flex justify-end gap-2 mt-4">
             <Button

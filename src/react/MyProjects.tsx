@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStore } from "@nanostores/react";
 import { languageStore } from "../store/languageStore";
@@ -50,6 +50,15 @@ export default function MyProjects({ projects }: MyProjectsProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [currentLightboxImages, setCurrentLightboxImages] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const ITEMS_PER_PAGE = 5;
+  const totalPages = Math.ceil((projects?.length || 0) / ITEMS_PER_PAGE);
+  const currentProjects = useMemo(
+    () => projects?.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE) || [],
+    [projects, currentPage],
+  );
 
   if (!projects) return null;
 
@@ -72,8 +81,35 @@ export default function MyProjects({ projects }: MyProjectsProps) {
     return `${import.meta.env.BASE_URL}images/${cleanName}`;
   };
 
+  const goToPage = (page: number) => {
+    setActiveId(null);
+    setCurrentPage(page);
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const pageNumbers = useMemo(() => {
+    const pages: (number | "ellipsis")[] = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible + 2) {
+      for (let i = 0; i < totalPages; i++) pages.push(i);
+    } else {
+      pages.push(0);
+      const start = Math.max(1, currentPage - 1);
+      const end = Math.min(totalPages - 2, currentPage + 1);
+
+      if (start > 1) pages.push("ellipsis");
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (end < totalPages - 2) pages.push("ellipsis");
+
+      pages.push(totalPages - 1);
+    }
+    return pages;
+  }, [currentPage, totalPages]);
+
   return (
     <section
+      ref={sectionRef}
       id="portfolio"
       className="w-full bg-[#f3f3f3] py-24 px-6 md:px-12 relative z-10 text-[#1A1A1A]"
     >
@@ -122,7 +158,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
 
         {/* List */}
         <div className="flex flex-col">
-          {projects.map((project, index) => (
+          {currentProjects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 50 }}
@@ -279,6 +315,49 @@ export default function MyProjects({ projects }: MyProjectsProps) {
           ))}
           <div className="border-t border-gray-300"></div>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-3 mt-16">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 0}
+              className="px-4 py-2 rounded-full text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all disabled:opacity-30 disabled:pointer-events-none"
+            >
+              ← {lang === "es" ? "Anterior" : "Previous"}
+            </button>
+
+            <div className="flex items-center gap-2">
+              {pageNumbers.map((p, i) =>
+                p === "ellipsis" ? (
+                  <span key={`e-${i}`} className="text-gray-400 text-sm px-1">
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => goToPage(p)}
+                    className={`w-10 h-10 rounded-full text-sm font-medium transition-all ${
+                      p === currentPage
+                        ? "bg-[#1A1A1A] text-white shadow-md"
+                        : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-100"
+                    }`}
+                  >
+                    {p + 1}
+                  </button>
+                ),
+              )}
+            </div>
+
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage >= totalPages - 1}
+              className="px-4 py-2 rounded-full text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all disabled:opacity-30 disabled:pointer-events-none"
+            >
+              {lang === "es" ? "Siguiente" : "Next"} →
+            </button>
+          </div>
+        )}
       </div>
       <Lightbox
         open={lightboxOpen}
