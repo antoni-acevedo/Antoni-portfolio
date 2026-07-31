@@ -24,6 +24,12 @@ export default function ProjectsManager() {
   const [viewingItem, setViewingItem] = useState<ProjectData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // UX state
+  const [formChanged, setFormChanged] = useState(false);
+  const [previewLang, setPreviewLang] = useState<"es" | "en">("es");
+  const initialFormRef = useRef<string>("");
+  const dragOverRef = useRef(false);
+
   const BASE = import.meta.env.BASE_URL;
 
   const fetchItems = () => {
@@ -48,6 +54,24 @@ export default function ProjectsManager() {
       setIsNewFolder(false);
       setNewFolderName("");
       setFolderImages([]);
+      setFormChanged(false);
+      initialFormRef.current = "";
+    } else {
+      // Snapshot the initial form state once the modal opens, for dirty detection.
+      setTimeout(() => {
+        initialFormRef.current = JSON.stringify({
+          company: editingItem.company || "",
+          role: editingItem.role || "",
+          role_en: editingItem.role_en || "",
+          date: editingItem.date || "",
+          desc: editingItem.desc || "",
+          desc_en: editingItem.desc_en || "",
+          long_desc: editingItem.long_desc || "",
+          long_desc_en: editingItem.long_desc_en || "",
+          tags,
+          images: selectedImages,
+        });
+      }, 0);
     }
   }, [isModalOpen]);
 
@@ -66,6 +90,59 @@ export default function ProjectsManager() {
       setFolderImages([]);
     }
   }, [selectedFolder]);
+
+  // Auto-fill UX: when picking an existing folder on a new project,
+  // prefill the company field if empty.
+  useEffect(() => {
+    if (!isModalOpen) return;
+    if (!selectedFolder) return;
+    if (editingItem.id) return; // only on create
+    if (!editingItem.company || !editingItem.company.trim()) {
+      setEditingItem((prev) => ({ ...prev, company: selectedFolder }));
+    }
+  }, [selectedFolder, isModalOpen]);
+
+  // Dirty-form detection (live tracking of edits vs initial snapshot)
+  useEffect(() => {
+    if (!isModalOpen || !initialFormRef.current) return;
+    const current = JSON.stringify({
+      company: editingItem.company || "",
+      role: editingItem.role || "",
+      role_en: editingItem.role_en || "",
+      date: editingItem.date || "",
+      desc: editingItem.desc || "",
+      desc_en: editingItem.desc_en || "",
+      long_desc: editingItem.long_desc || "",
+      long_desc_en: editingItem.long_desc_en || "",
+      tags,
+      images: selectedImages,
+    });
+    setFormChanged(current !== initialFormRef.current);
+  }, [
+    editingItem,
+    tags,
+    selectedImages,
+    isModalOpen,
+  ]);
+
+  // Keyboard shortcuts: Ctrl/Cmd+S to save, Esc to close
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        const form = document.querySelector<HTMLFormElement>("form[data-projects-form]");
+        form?.requestSubmit();
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, formChanged]);
 
   const handleEdit = (item: ProjectData) => {
     setEditingItem({ ...item });
@@ -145,6 +222,106 @@ export default function ProjectsManager() {
   const handleTextChange = (field: keyof ProjectData, value: string) => {
     const key = lang === "es" ? field : (`${field}_en` as keyof ProjectData);
     setEditingItem({ ...editingItem, [key]: value });
+  };
+
+  const handleClose = () => {
+    if (formChanged && !confirm("Tienes cambios sin guardar. ¿Salir de todos modos?")) {
+      return;
+    }
+    setIsModalOpen(false);
+  };
+
+  const isFormValid = (() => {
+    if (!editingItem.company || !editingItem.company.trim()) return false;
+    if (!editingItem.role || !editingItem.role.trim()) return false;
+    if (!editingItem.date || !editingItem.date.trim()) return false;
+    if (selectedImages.length === 0) return false;
+    if (tags.length === 0) return false;
+    return true;
+  })();
+
+  // Quick date helpers — keep the existing free-text format the DB already uses.
+  const now = new Date();
+  const monthNamesEs = [
+    "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+    "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+  ];
+  const toIso = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${dd}`;
+  };
+  const setDateThisMonth = () => {
+    const v = `${monthNamesEs[now.getMonth()]} ${now.getFullYear()}`;
+    setEditingItem({ ...editingItem, date: v });
+  };
+  const setDateToday = () => {
+    setEditingItem({ ...editingItem, date: toIso(now) });
+  };
+
+  // Date parsing — supports ISO (YYYY-MM-DD), ranges ("YYYY-MM-DD — YYYY-MM-DD" / " - " / " / ")
+  // and legacy free-text values that don't match ISO.
+  const dateRangeRegex =
+    /^(\d{4}-\d{2}-\d{2})\s*(?:—|--|-|\/)\s*(\d{4}-\d{2}-\d{2})$/;
+  const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  const parseDateValue = (raw: string | undefined) => {
+    const v = (raw || "").trim();
+    if (!v) return { start: "", end: "", mode: "single" as const, isLegacy: false };
+    const m = v.match(dateRangeRegex);
+    if (m) return { start: m[1], end: m[2], mode: "range" as const, isLegacy: false };
+    if (isoDateRegex.test(v)) return { start: v, end: "", mode: "single" as const, isLegacy: false };
+    return { start: "", end: "", mode: "single" as const, isLegacy: true, legacy: v };
+  };
+  const parsedDate = parseDateValue(editingItem.date);
+  const dateMode = parsedDate.mode;
+  const setDateStart = (start: string) => {
+    const next = dateMode === "range" && parsedDate.end
+      ? `${start} — ${parsedDate.end}`
+      : start;
+    setEditingItem({ ...editingItem, date: next });
+  };
+  const setDateEnd = (end: string) => {
+    const next = parsedDate.start
+      ? `${parsedDate.start} — ${end}`
+      : end;
+    setEditingItem({ ...editingItem, date: next });
+  };
+  const setDateMode = (mode: "single" | "range") => {
+    if (mode === "single" && parsedDate.end) {
+      setEditingItem({ ...editingItem, date: parsedDate.start || "" });
+    } else if (mode === "range" && !parsedDate.end && parsedDate.start) {
+      setEditingItem({ ...editingItem, date: `${parsedDate.start} — ${parsedDate.start}` });
+    }
+  };
+
+  // Drag-and-drop upload
+  const onDropFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const targetFolder =
+      selectedFolder || newFolderName || editingItem.company || "untitled";
+    setUploading(true);
+    const formData = new FormData();
+    formData.set("folder", targetFolder);
+    for (const f of Array.from(files)) formData.append("files", f);
+    try {
+      const res = await fetch("/api/images/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.uploaded?.length) {
+        toast.success(`${data.uploaded.length} imagen(es) subida(s)`);
+        if (!selectedFolder) setSelectedFolder(targetFolder);
+        setFolderImages((prev) =>
+          [...new Set([...data.uploaded, ...prev])].sort(),
+        );
+      }
+    } catch {
+      toast.error("Error al subir imágenes");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const getValue = (field: keyof ProjectData) => {
@@ -317,7 +494,7 @@ export default function ProjectsManager() {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleClose}
         title={
           editingItem.id
             ? `Editar Proyecto (${lang})`
@@ -326,7 +503,8 @@ export default function ProjectsManager() {
       >
         <form
           onSubmit={handleSave}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          data-projects-form
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-20"
         >
           <Input
             label="Título del Proyecto"
@@ -336,23 +514,113 @@ export default function ProjectsManager() {
             }
             required
             className="md:col-span-2"
+            maxLength={60}
           />
           <Input
             label={`Rol (${lang})`}
             value={getValue("role")}
             onChange={(e: any) => handleTextChange("role", e.target.value)}
             required={lang === "es"}
+            maxLength={40}
           />
-          <Input
-            label="Fecha"
-            value={editingItem.date || ""}
-            onChange={(e: any) =>
-              setEditingItem({ ...editingItem, date: e.target.value })
-            }
-            required
-          />
+          <div className="flex flex-col gap-1 w-full">
+            <label className="text-sm font-medium text-gray-600">
+              Fecha <span className="text-red-500">*</span>
+            </label>
+            <div className="flex items-center gap-2">
+              <div className="flex bg-gray-100 p-1 rounded-lg text-xs">
+                <button
+                  type="button"
+                  onClick={() => setDateMode("single")}
+                  className={`px-2 py-1 rounded-md transition-all ${
+                    dateMode === "single"
+                      ? "bg-white shadow-sm text-black"
+                      : "text-gray-500 hover:text-black"
+                  }`}
+                >
+                  Puntual
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDateMode("range")}
+                  className={`px-2 py-1 rounded-md transition-all ${
+                    dateMode === "range"
+                      ? "bg-white shadow-sm text-black"
+                      : "text-gray-500 hover:text-black"
+                  }`}
+                >
+                  Rango
+                </button>
+              </div>
+              <Button
+                type="button"
+                variant="secondary"
+                className="text-xs px-2 ml-auto"
+                title="Establecer a hoy"
+                onClick={setDateToday}
+              >
+                Hoy
+              </Button>
+            </div>
+            {parsedDate.isLegacy ? (
+              <div className="space-y-1">
+                <input
+                  className="w-full px-4 py-2 rounded-lg border border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all"
+                  required
+                  value={editingItem.date || ""}
+                  onChange={(e: any) =>
+                    setEditingItem({ ...editingItem, date: e.target.value })
+                  }
+                  placeholder="Texto libre (formato legacy)"
+                  maxLength={40}
+                />
+                <span className="text-xs text-amber-700">
+                  Valor legacy detectado: {parsedDate.legacy}. Edita abajo o limpia para usar el picker.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setEditingItem({ ...editingItem, date: "" })}
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  Limpiar y usar picker
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="date"
+                  required
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-black focus:ring-1 focus:ring-black outline-none transition-all bg-white"
+                  value={parsedDate.start}
+                  onChange={(e: any) => setDateStart(e.target.value)}
+                />
+                {dateMode === "range" && (
+                  <>
+                    <span className="self-center text-gray-400 text-sm">—</span>
+                    <input
+                      type="date"
+                      className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-black focus:ring-1 focus:ring-black outline-none transition-all bg-white"
+                      value={parsedDate.end}
+                      min={parsedDate.start || undefined}
+                      onChange={(e: any) => setDateEnd(e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+            )}
+            {!editingItem.date && !parsedDate.isLegacy && (
+              <span className="text-xs text-gray-400">
+                Sugerencia: pulsa "Hoy" para autocompletar.
+              </span>
+            )}
+          </div>
           <div className="md:col-span-2 space-y-2">
-            <label className="text-sm font-medium text-gray-600">Tags</label>
+            <div className="flex justify-between items-baseline">
+              <label className="text-sm font-medium text-gray-600">
+                Tags <span className="text-red-500">*</span>
+              </label>
+              <span className="text-xs text-gray-400">{tags.length} añadida(s)</span>
+            </div>
             <div className="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-lg bg-white focus-within:border-black focus-within:ring-1 focus-within:ring-black transition-all min-h-[2.75rem]">
               {tags.map((tag, i) => (
                 <span
@@ -364,6 +632,7 @@ export default function ProjectsManager() {
                     type="button"
                     onClick={() => setTags((prev) => prev.filter((_, idx) => idx !== i))}
                     className="hover:text-red-500 transition-colors"
+                    aria-label={`Eliminar tag ${tag}`}
                   >
                     ✕
                   </button>
@@ -460,7 +729,7 @@ export default function ProjectsManager() {
                 )}
               </div>
 
-              {/* Upload */}
+              {/* Upload — drag-and-drop + button */}
               <div className="mb-4">
                 <input
                   ref={fileInputRef}
@@ -470,16 +739,35 @@ export default function ProjectsManager() {
                   onChange={handleUpload}
                   className="hidden"
                 />
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="text-sm"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    if (!dragOverRef.current) dragOverRef.current = true;
+                  }}
+                  onDragLeave={() => {
+                    dragOverRef.current = false;
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    dragOverRef.current = false;
+                    onDropFiles(e.dataTransfer.files);
+                  }}
+                  className="flex items-center gap-2"
                 >
-                  <Upload className="w-4 h-4" />
-                  {uploading ? "Subiendo..." : "Subir imágenes"}
-                </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="text-sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                  >
+                    <Upload className="w-4 h-4" />
+                    {uploading ? "Subiendo..." : "Subir imágenes"}
+                  </Button>
+                  <span className="text-xs text-gray-400">
+                    o arrastra y suelta archivos aquí
+                  </span>
+                </div>
               </div>
 
               {/* Image Grid */}
@@ -525,24 +813,37 @@ export default function ProjectsManager() {
               {/* Selected Images Order */}
               {selectedImages.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-gray-600 mb-2">
-                    Imágenes seleccionadas ({selectedImages.length})
-                  </p>
+                  <div className="flex justify-between items-baseline mb-2">
+                    <p className="text-sm font-medium text-gray-600">
+                      Imágenes seleccionadas ({selectedImages.length})
+                    </p>
+                    <p className="text-xs text-gray-400">La #1 es la portada</p>
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedImages.map((img, i) => (
                       <div
                         key={img}
-                        className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs"
+                        className={`flex items-center gap-1 border rounded-lg px-2 py-1 text-xs ${
+                          i === 0
+                            ? "bg-yellow-50 border-yellow-400"
+                            : "bg-white border-gray-200"
+                        }`}
                       >
                         <span className="font-medium text-gray-500 min-w-[1rem]">
                           {i + 1}.
                         </span>
+                        {i === 0 && (
+                          <span className="text-[10px] font-bold uppercase tracking-wide text-yellow-700">
+                            Portada
+                          </span>
+                        )}
                         <span className="truncate max-w-[120px]">{img}</span>
                         <button
                           type="button"
                           onClick={() => moveImage(i, -1)}
                           disabled={i === 0}
                           className="p-0.5 hover:bg-gray-100 rounded disabled:opacity-30"
+                          aria-label="Subir imagen"
                         >
                           <ChevronUp className="w-3 h-3" />
                         </button>
@@ -551,6 +852,7 @@ export default function ProjectsManager() {
                           onClick={() => moveImage(i, 1)}
                           disabled={i === selectedImages.length - 1}
                           className="p-0.5 hover:bg-gray-100 rounded disabled:opacity-30"
+                          aria-label="Bajar imagen"
                         >
                           <ChevronDown className="w-3 h-3" />
                         </button>
@@ -562,6 +864,7 @@ export default function ProjectsManager() {
                             )
                           }
                           className="p-0.5 hover:bg-red-50 text-red-400 hover:text-red-600 rounded ml-1"
+                          aria-label="Quitar imagen"
                         >
                           ✕
                         </button>
@@ -580,6 +883,7 @@ export default function ProjectsManager() {
             rows={2}
             className="md:col-span-2"
             required={lang === "es"}
+            maxLength={200}
           />
           <TextArea
             label={`Descripción Larga (${lang})`}
@@ -588,19 +892,144 @@ export default function ProjectsManager() {
             rows={4}
             className="md:col-span-2"
             required={lang === "es"}
+            maxLength={1000}
           />
 
-          <div className="flex justify-end gap-2 mt-4 md:col-span-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Cancelar
-            </Button>
-            <Button type="submit">Guardar</Button>
+          {/* Live preview */}
+          <div className="md:col-span-2 mt-2 border-t border-gray-100 pt-4">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                Vista previa
+              </h4>
+              <div className="flex bg-gray-100 p-1 rounded-lg text-xs">
+                <button
+                  type="button"
+                  onClick={() => setPreviewLang("es")}
+                  className={`px-2 py-1 rounded-md transition-all ${
+                    previewLang === "es"
+                      ? "bg-white shadow-sm text-black"
+                      : "text-gray-500 hover:text-black"
+                  }`}
+                >
+                  ES
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreviewLang("en")}
+                  className={`px-2 py-1 rounded-md transition-all ${
+                    previewLang === "en"
+                      ? "bg-white shadow-sm text-black"
+                      : "text-gray-500 hover:text-black"
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
+                  <h5 className="text-xl font-medium tracking-tight">
+                    {previewLang === "es"
+                      ? editingItem.company || "Título del proyecto"
+                      : editingItem.company || "Project title"}
+                  </h5>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {previewLang === "es"
+                      ? `${getValue("role") || "Rol"} • ${editingItem.date || "Fecha"}`
+                      : `${editingItem.role_en || editingItem.role || "Role"} • ${editingItem.date || "Date"}`}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1 justify-end max-w-[60%]">
+                  {tags.length === 0 ? (
+                    <span className="text-xs text-gray-400">Sin tags</span>
+                  ) : (
+                    tags.map((t) => (
+                      <span
+                        key={t}
+                        className="text-xs px-2 py-1 rounded-full bg-gray-200 text-gray-600"
+                      >
+                        {t}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </div>
+              {selectedImages[0] && selectedFolder && (
+                <img
+                  src={`${BASE}images/projectImages/${selectedFolder}/${selectedImages[0]}`}
+                  alt="preview"
+                  className="w-full h-40 object-cover rounded-xl mb-3"
+                />
+              )}
+              <p className="text-gray-500 italic text-sm mb-2">
+                {previewLang === "es"
+                  ? getValue("desc") || "Descripción corta..."
+                  : editingItem.desc_en || editingItem.desc || "Short description..."}
+              </p>
+              <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                {previewLang === "es"
+                  ? getValue("long_desc") || "Descripción larga..."
+                  : editingItem.long_desc_en || editingItem.long_desc || "Long description..."}
+              </p>
+            </div>
+          </div>
+
+          {/* Top action row (mirrors sticky bottom for discoverability) */}
+          <div className="md:col-span-2 mt-4">
+            {!isFormValid && (
+              <p className="text-xs text-amber-600 mb-2">
+                Faltan:{" "}
+                {!editingItem.company && "título, "}
+                {!editingItem.role && "rol (es), "}
+                {!editingItem.date && "fecha, "}
+                {selectedImages.length === 0 && "1 imagen, "}
+                {tags.length === 0 && "1 tag, "}
+                para poder guardar.
+              </p>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleClose}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={!isFormValid}>
+                Guardar
+              </Button>
+            </div>
           </div>
         </form>
+
+        {/* Sticky bottom action bar — always reachable while scrolling */}
+        <div className="sticky bottom-0 left-0 right-0 -mx-6 px-6 py-3 bg-white/95 backdrop-blur border-t border-gray-100 flex justify-between items-center">
+          <span className="text-xs text-gray-400">
+            {formChanged ? "Cambios sin guardar" : "Sin cambios"} ·{" "}
+            <kbd className="px-1 py-0.5 bg-gray-100 rounded border border-gray-200">Ctrl</kbd>
+            +
+            <kbd className="px-1 py-0.5 bg-gray-100 rounded border border-gray-200">S</kbd>
+            {" "}guardar
+          </span>
+          <div className="flex gap-2">
+            <Button type="button" variant="secondary" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                const form = document.querySelector<HTMLFormElement>(
+                  "form[data-projects-form]",
+                );
+                form?.requestSubmit();
+              }}
+              disabled={!isFormValid}
+            >
+              Guardar
+            </Button>
+          </div>
+        </div>
       </Modal>
 
       {/* Detail Modal */}
