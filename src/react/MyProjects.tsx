@@ -84,7 +84,6 @@ export default function MyProjects({ projects }: MyProjectsProps) {
   const goToPage = (page: number) => {
     setActiveId(null);
     setCurrentPage(page);
-    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const pageNumbers = useMemo(() => {

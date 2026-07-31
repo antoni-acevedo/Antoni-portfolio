@@ -166,7 +166,7 @@ const Hero = () => {
   return (
     <div
       ref={container}
-      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[820px] mx-auto max-w-[1900px] overflow-hidden"
+      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[930px] mx-auto max-w-[1900px] overflow-hidden"
     >
       {/* Right Side: Image Box (Small at bottom on mobile) - Moved to back */}
       <div className="absolute bottom-0 md:top-0 right-0 md:right-[5%] w-full md:w-[50%] h-[40vh] md:h-full z-10 flex items-end justify-center pointer-events-none overflow-hidden">
