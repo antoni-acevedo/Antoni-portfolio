@@ -241,7 +241,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                       src={getImageUrl(project.images[0])}
                       alt={project.company}
                       loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${isActive ? "" : "grayscale group-hover:grayscale-0"}`}
                     />
                     {project.images.length > 1 && (
                       <span className="absolute bottom-1.5 right-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
