@@ -198,7 +198,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                       <img
                         src={getImageUrl(img)}
                         alt=""
-                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                        className="w-full h-full object-cover transition-all duration-500"
                       />
                     </div>
                   ))}
@@ -271,7 +271,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
                                 <img
                                   src={getImageUrl(img)}
                                   alt=""
-                                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                                  className="w-full h-full object-cover transition-all duration-700"
                                 />
                               </div>
                             </SwiperSlide>

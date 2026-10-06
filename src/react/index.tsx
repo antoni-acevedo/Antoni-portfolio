@@ -316,7 +316,7 @@ const Hero = () => {
             <div className="hidden md:flex flex-col gap-12">
               <div
                 onClick={(e) => handleScroll(e as any, "#about")}
-                className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group"
+                className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group hover:underline underline-offset-4"
               >
                 {lang === "es" ? "Desliza hacia abajo" : "Scroll down"}{" "}
                 <ArrowDown />

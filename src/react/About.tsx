@@ -188,7 +188,7 @@ export default function About({ profileData }: AboutProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8 }}
-            className="self-center w-full sm:w-3/4 lg:w-3/4 aspect-square bg-white p-2 rounded-3xl shadow-sm relative group cursor-pointer hover:shadow-md transition-shadow lg:self-end"
+            className="self-center w-full sm:w-3/4 lg:w-3/4 aspect-square bg-white p-2 rounded-3xl shadow-sm relative group hover:shadow-md transition-shadow lg:self-end"
           >
             <div className="w-full h-full relative rounded-2xl overflow-hidden">
               <img
@@ -200,7 +200,7 @@ export default function About({ profileData }: AboutProps) {
                 href="https://www.linkedin.com/in/leideracevedo"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-full text-black shadow-lg transform transition-transform duration-300 group-hover:scale-110 z-20"
+                className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-full text-black shadow-lg transform transition-all duration-300 group-hover:scale-110 hover:!bg-black hover:text-white hover:rotate-12 z-20"
               >
                 <ArrowUpRight />
               </a>
