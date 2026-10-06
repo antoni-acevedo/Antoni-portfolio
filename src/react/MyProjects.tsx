@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import { getImageUrl, formatDate, formatRole } from "./projectUtils";
+import { getImageUrl, formatDate, formatRole, tagKey } from "./projectUtils";
 
 const ArrowUpRight = () => (
   <svg
@@ -61,6 +61,21 @@ export default function MyProjects({ projects }: MyProjectsProps) {
     [projects, currentPage],
   );
 
+  const stats = useMemo(() => {
+    const counts = new Map<string, { label: string; count: number }>();
+    for (const p of projects || []) {
+      for (const key of new Set(p.tags.map(tagKey))) {
+        const prev = counts.get(key);
+        counts.set(key, {
+          label: prev?.label ?? p.tags.find((t) => tagKey(t) === key)!,
+          count: (prev?.count ?? 0) + 1,
+        });
+      }
+    }
+    const top = [...counts.values()].sort((a, b) => b.count - a.count)[0];
+    return { total: projects?.length || 0, techs: counts.size, top: top?.label ?? "—" };
+  }, [projects]);
+
   if (!projects) return null;
 
   const t = (item: ProjectData, field: keyof ProjectData) => {
@@ -103,6 +118,13 @@ export default function MyProjects({ projects }: MyProjectsProps) {
     return pages;
   }, [currentPage, totalPages]);
 
+  const metrics = [
+    { value: String(stats.total), label: lang === "es" ? "Proyectos totales" : "Total projects" },
+    { value: String(stats.techs), label: lang === "es" ? "Tecnologías" : "Technologies" },
+    { value: stats.top, label: lang === "es" ? "Más utilizada" : "Most used" },
+    { value: "4+", label: lang === "es" ? "Años de experiencia" : "Years of experience" },
+  ];
+
   return (
     <section
       ref={sectionRef}
@@ -125,9 +147,21 @@ export default function MyProjects({ projects }: MyProjectsProps) {
               </span>
             </div>
             <h2 className="text-4xl md:text-6xl font-medium tracking-tight max-w-xl">
-              {lang === "es" ? "Mi Trayectoria" : "My Journey"} <br />
-              <br />
+              {lang === "es" ? "Mi Trayectoria" : "My Journey"}
             </h2>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-6 mt-10 max-w-2xl">
+              {metrics.map((m) => (
+                <div key={m.label} className="border-t border-gray-300 pt-4 min-w-0">
+                  <p className="text-3xl md:text-4xl font-medium tracking-tight truncate">
+                    {m.value}
+                  </p>
+                  <p className="mt-1.5 text-xs font-medium uppercase tracking-wide text-gray-500">
+                    {m.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div

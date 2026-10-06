@@ -6,6 +6,9 @@ const MONTHS: Record<Language, string[]> = {
   en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 };
 
+// "TailwindCSS", "Tailwind CSS" and "tailwindcss" are the same technology.
+export const tagKey = (t: string) => t.toLowerCase().replace(/\s+/g, "");
+
 export const getImageUrl = (name: string) => {
   if (!name) return "";
   if (name.startsWith("http") || name.startsWith("data:")) return name;

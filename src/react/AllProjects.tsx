@@ -3,14 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStore } from "@nanostores/react";
 import { languageStore, setLanguage } from "../store/languageStore";
 import type { ProjectData } from "./MyProjects";
-import { getImageUrl, formatDate, formatRole, localized } from "./projectUtils";
+import { getImageUrl, formatDate, formatRole, localized, tagKey } from "./projectUtils";
 
 const BASE = import.meta.env.BASE_URL;
 const MAX_TAGS = 3;
 const MAX_FILTERS = 10;
-
-// "TailwindCSS", "Tailwind CSS" and "tailwindcss" are the same filter.
-const tagKey = (t: string) => t.toLowerCase().replace(/\s+/g, "");
 
 const ArrowUpRight = ({ size = 22 }: { size?: number }) => (
   <svg
