@@ -166,7 +166,7 @@ const Hero = () => {
   return (
     <div
       ref={container}
-      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[930px] mx-auto max-w-[1900px] overflow-hidden"
+      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[1080px] mx-auto max-w-[1900px] overflow-hidden"
     >
       {/* Right Side: Image Box (Small at bottom on mobile) - Moved to back */}
       <div className="absolute bottom-0 md:top-0 right-0 md:right-[5%] w-full md:w-[50%] h-[40vh] md:h-full z-10 flex items-end justify-center pointer-events-none overflow-hidden">
@@ -297,7 +297,7 @@ const Hero = () => {
           {/* Headline */}
           <div className="relative md:pl-8 flex flex-col items-center md:items-start">
             <div className="overflow-hidden">
-              <h1 className="hero-text-reveal opacity-0 text-[16vw] sm:text-[18vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A]">
+              <h1 className="hero-text-reveal opacity-0 text-[16vw] sm:text-[18vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A] [-webkit-text-stroke:0.03em_#f3f3f3] [paint-order:stroke_fill]">
                 Antoni
               </h1>
             </div>
@@ -316,7 +316,7 @@ const Hero = () => {
             <div className="hidden md:flex flex-col gap-12">
               <div
                 onClick={(e) => handleScroll(e as any, "#about")}
-                className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group"
+                className="hero-fade-in opacity-0 flex items-center gap-2 text-sm font-medium animate-bounce cursor-pointer group hover:underline underline-offset-4"
               >
                 {lang === "es" ? "Desliza hacia abajo" : "Scroll down"}{" "}
                 <ArrowDown />

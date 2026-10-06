@@ -80,10 +80,12 @@ export default function Footer() {
         <a
           href="https://wa.me/573016236319"
           target="_blank"
-          className="inline-flex items-center gap-2 text-lg font-medium border-b border-black pb-1 hover:opacity-70 transition-opacity"
+          className="group inline-flex items-center gap-2 text-lg font-medium border-b border-black pb-1 hover:opacity-70 transition-opacity"
         >
           {lang === "es" ? "Agenda una llamada" : "Book a call"}{" "}
-          <ArrowUpRight />
+          <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            <ArrowUpRight />
+          </span>
         </a>
       </motion.div>
 
@@ -104,7 +106,7 @@ export default function Footer() {
                   href={item.href}
                   key={index}
                   onClick={(e) => handleScroll(e, item.href)}
-                  className={`px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-colors ${index === 0 ? "bg-white text-black" : "hover:text-white text-gray-400"}`}
+                  className={`px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-colors ${index === 0 ? "bg-white text-black hover:bg-gray-200" : "text-gray-400 hover:text-white hover:bg-white/10"}`}
                 >
                   {item.label}
                 </a>
@@ -114,7 +116,7 @@ export default function Footer() {
             {/* Email */}
             <a
               href="mailto:leideracevedo07@gmail.com"
-              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-light tracking-tight hover:text-gray-300 transition-colors break-all md:break-normal text-center"
+              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-light tracking-tight hover:text-gray-300 hover:underline decoration-1 underline-offset-8 transition-colors break-all md:break-normal text-center"
             >
               leideracevedo07@gmail.com
             </a>
@@ -131,14 +133,14 @@ export default function Footer() {
               <a
                 href="https://www.linkedin.com/in/leideracevedo"
                 target="_blank"
-                className="hover:text-white transition-colors"
+                className="hover:text-white hover:underline underline-offset-4 transition-colors"
               >
                 LinkedIn
               </a>
               <a
                 href="https://github.com"
                 target="_blank"
-                className="hover:text-white transition-colors"
+                className="hover:text-white hover:underline underline-offset-4 transition-colors"
               >
                 GitHub
               </a>

@@ -1,0 +1,41 @@
+---
+export const prerender = true;
+import AllProjects from "../react/AllProjects";
+import type { ProjectData } from "../react/MyProjects";
+import "../styles/global.css";
+import "../styles/all-projects.css";
+import db from "../db/client";
+
+const projects = (
+  db.prepare("SELECT * FROM projects ORDER BY id DESC").all() as any[]
+).map((p) => ({
+  ...p,
+  tags: JSON.parse(p.tags),
+  images: JSON.parse(p.images),
+})) as ProjectData[];
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="icon"
+      type="image/png"
+      href=`${import.meta.env.BASE_URL}images/logo.png`
+    />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Proyectos | Antoni Acevedo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main class="ap-page">
+      <AllProjects client:load projects={projects} />
+    </main>
+  </body>
+</html>

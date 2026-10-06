@@ -21,6 +21,22 @@
     scroll-behavior: smooth;
   }
 
+  /* Anything clickable gets a pointer (Tailwind v4 preflight resets buttons to
+     "default"). Utilities like cursor-grab still win: they live in a later layer. */
+  button:not(:disabled),
+  [role="button"],
+  a[href],
+  summary,
+  select,
+  label[for],
+  input[type="file"] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
   h1,
   h2,
   h3,
