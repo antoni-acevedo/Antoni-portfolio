@@ -98,7 +98,7 @@ export default function ProyectCarrousel({
                             openAt(idx);
                           }
                         }}
-                        className="group relative mr-5 aspect-video w-[240px] shrink-0 overflow-hidden rounded-3xl bg-gray-200 text-[#1A1A1A] cursor-pointer outline-none ring-1 ring-black/10 transition-all duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-black sm:w-[290px] lg:w-[330px]"
+                        className="group relative mr-5 aspect-video w-[240px] shrink-0 overflow-hidden rounded-3xl bg-gray-200 text-[#1A1A1A] cursor-pointer outline-none ring-1 ring-black/10 opacity-70 transition-all duration-500 hover:-translate-y-1.5 hover:opacity-100 focus-visible:ring-2 focus-visible:ring-black sm:w-[290px] lg:w-[330px]"
                       >
                         <img
                           src={`${import.meta.env.BASE_URL}images/${project.image}`}
