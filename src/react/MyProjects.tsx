@@ -81,7 +81,12 @@ export default function MyProjects({ projects }: MyProjectsProps) {
     return `${import.meta.env.BASE_URL}images/${cleanName}`;
   };
 
+  // The entrance animation is only for the first load; re-running it on every
+  // page change made the whole list flash (remount at opacity 0, staggered).
+  const hasPagedRef = useRef(false);
+
   const goToPage = (page: number) => {
+    hasPagedRef.current = true;
     setActiveId(null);
     setCurrentPage(page);
   };
@@ -160,7 +165,7 @@ export default function MyProjects({ projects }: MyProjectsProps) {
           {currentProjects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={hasPagedRef.current ? false : { opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}

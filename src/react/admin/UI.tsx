@@ -42,14 +42,14 @@ export const Card = ({ children, className = '' }: any) => (
     </motion.div>
 );
 
-export const Modal = ({ isOpen, onClose, title, children }: any) => {
+export const Modal = ({ isOpen, onClose, title, children, size = "max-w-2xl" }: any) => {
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+                className={`bg-white rounded-3xl w-full ${size} max-h-[92vh] overflow-y-auto shadow-2xl`}
             >
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
                     <h3 className="text-xl font-bold">{title}</h3>
