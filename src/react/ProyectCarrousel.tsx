@@ -1,11 +1,4 @@
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { useStore } from "@nanostores/react";
-import { languageStore } from "../store/languageStore";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
@@ -47,7 +40,6 @@ export default function ProyectCarrousel({
   initialProjects = [],
 }: ProyectCarrouselProps) {
   const projects = initialProjects;
-  const lang = useStore(languageStore);
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
 
@@ -57,88 +49,76 @@ export default function ProyectCarrousel({
     description: project.client,
   }));
 
-  const getCategory = (project: FeaturedProject) => {
-    if (lang === "es") return project.category;
-    return project.category_en || project.category;
+  if (projects.length === 0) return null; // Or return a loading skeleton?
+
+  // Two rows moving in opposite directions: even projects on the first row,
+  // odd ones on the second. Each row's set is repeated until it is wider than
+  // the screen, then rendered twice so the -50% loop is seamless.
+  const indexed = projects.map((project, idx) => ({ project, idx }));
+  const rows = [
+    indexed.filter((_, i) => i % 2 === 0),
+    indexed.filter((_, i) => i % 2 === 1),
+  ].filter((r) => r.length > 0);
+
+  const fill = <T,>(arr: T[]) => {
+    let out = arr;
+    while (out.length < 6) out = [...out, ...arr];
+    return out;
   };
 
-  if (projects.length === 0) return null; // Or return a loading skeleton?
+  const openAt = (idx: number) => {
+    setIndex(idx);
+    setOpen(true);
+  };
 
   return (
     <div className="w-full bg-[#f3f3f3]">
-      <section className="w-full bg-[#f3f3f3] py-10 px-6 md:px-0 relative z-10 text-[#1A1A1A] overflow-hidden max-w-[1700px] mx-auto">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="pl-6 md:pl-12 cursor-grab active:cursor-grabbing">
-            <Swiper
-              modules={[Navigation, Pagination, Autoplay]}
-              loop={projects.length > 2} // Only loop if enough slides
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              spaceBetween={30}
-              slidesPerView={1.2}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2.2,
-                  spaceBetween: 30,
-                },
-                1024: {
-                  slidesPerView: 2.8,
-                  spaceBetween: 40,
-                },
-              }}
-              className="w-full !overflow-visible"
-            >
-              {projects.map((project, idx) => (
-                <SwiperSlide key={project.id} className="group">
-                  <div className="flex flex-col gap-6">
-                    {/* Image Container */}
-                    <div className="relative aspect-video overflow-hidden rounded-3xl bg-gray-200 grayscale group-hover:grayscale-0 transition-all duration-700">
-                      <img
-                        src={`${import.meta.env.BASE_URL}images/${project.image}`}
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-
-
-                      {/* Hover Overlay Button */}
-                      <div
-                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10 backdrop-blur-[2px] cursor-pointer"
-                        onClick={() => {
-                          setIndex(idx);
-                          setOpen(true);
+      <section className="w-full py-10 relative z-10 text-[#1A1A1A] overflow-hidden">
+        <div className="flex flex-col gap-5">
+          {rows.map((row, rowIdx) => {
+            const set = fill(row);
+            return (
+              <div key={rowIdx} className="marquee-row marquee-mask overflow-hidden py-3">
+                <div
+                  className={`marquee-track ${rowIdx % 2 === 1 ? "marquee-track--reverse" : ""}`}
+                  style={{ ["--marquee-duration" as string]: `${set.length * 7}s` }}
+                >
+                  {[0, 1].flatMap((copy) =>
+                    set.map(({ project, idx }, k) => (
+                      <article
+                        key={`${copy}-${k}`}
+                        role="button"
+                        tabIndex={copy === 0 ? 0 : -1}
+                        aria-hidden={copy === 1}
+                        aria-label={project.title}
+                        onClick={() => openAt(idx)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            openAt(idx);
+                          }
                         }}
+                        className="group relative mr-5 aspect-video w-[240px] shrink-0 overflow-hidden rounded-3xl bg-gray-200 text-[#1A1A1A] cursor-pointer outline-none ring-1 ring-black/10 transition-all duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-black sm:w-[290px] lg:w-[330px]"
                       >
-                        <div className="bg-[#1A1A1A] text-white w-20 h-20 rounded-full flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300 shadow-xl">
-                          <ArrowUpRight />
-                        </div>
-                      </div>
-                    </div>
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/${project.image}`}
+                          alt={copy === 0 ? project.title : ""}
+                          loading="lazy"
+                          draggable={false}
+                          className="absolute inset-0 h-full w-full object-cover grayscale transition-[filter] duration-700 group-hover:grayscale-0"
+                        />
 
-                    {/* Content */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-2xl md:text-3xl font-medium tracking-tight group-hover:underline decoration-1 underline-offset-4">
-                          {project.title}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-2 text-gray-500 text-sm md:text-base font-medium">
-                          <span>{getCategory(project)}</span>
-                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                          <span>
-                            For{" "}
-                            <span className="text-[#1A1A1A]">
-                              {project.client}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+                        {/* Open button */}
+                        <span className="absolute right-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#1A1A1A] opacity-0 shadow-lg -translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                          <ArrowUpRight />
+                        </span>
+                      </article>
+                    )),
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
