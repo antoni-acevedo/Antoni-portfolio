@@ -7,7 +7,7 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://antoni-acevedo.github.io',
-  base: '/Antoni-portfolio/',
+  base: '/',
   output: 'static',
   adapter: node({ mode: 'standalone' }),
   vite: {

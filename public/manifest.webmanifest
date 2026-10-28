@@ -1,0 +1,14 @@
+{
+  "name": "Antoni Acevedo | Desarrollador Web Full-Stack",
+  "short_name": "Antoni Acevedo",
+  "description": "Portafolio de desarrollo web front-end, back-end y móvil.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "es",
+  "background_color": "#f3f3f3",
+  "theme_color": "#f3f3f3",
+  "icons": [
+    { "src": "images/logo.png", "sizes": "500x500", "type": "image/png", "purpose": "any" }
+  ]
+}

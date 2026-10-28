@@ -1,0 +1,8 @@
+/* TEAM */
+Developer: Antoni Acevedo
+Contact: leideracevedo07@gmail.com
+LinkedIn: https://www.linkedin.com/in/leideracevedo
+
+/* SITE */
+Languages: Español, English
+Tech: Astro, React, Tailwind CSS, TypeScript
