@@ -38,6 +38,19 @@ const ArrowDown = () => (
   </svg>
 );
 
+const TECHS = [
+  "React",
+  "Vue",
+  "Astro",
+  "Next.js",
+  "TypeScript",
+  "Node.js",
+  "NestJS",
+  "React Native",
+  "Ionic",
+  "Flutter",
+];
+
 const Hero = () => {
   const lang = useStore(languageStore);
   const container = useRef<HTMLDivElement>(null);
@@ -295,20 +308,32 @@ const Hero = () => {
           </div>
 
           {/* Headline */}
-          <div className="relative md:pl-8 flex flex-col items-center md:items-start">
-            <div className="overflow-hidden">
-              <h1 className="hero-text-reveal opacity-0 text-[16vw] sm:text-[18vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A] [-webkit-text-stroke:0.03em_#f3f3f3] [paint-order:stroke_fill]">
-                Antoni
-              </h1>
-            </div>
-            <div className="mt-8 flex items-center justify-center md:justify-start gap-3 md:pl-2 hero-text-reveal opacity-0">
-              <span className="h-[1px] w-8 bg-gray-400"></span>
-              <p className="text-base md:text-lg text-gray-600 font-medium max-w-[200px] md:max-w-none text-left md:text-left">
-                {lang === "es"
-                  ? "Desarrollador Full Stack & Especialista UI/UX"
-                  : "Full Stack Developer & UI/UX Specialist"}
-              </p>
-            </div>
+          <div className="relative md:pl-8">
+            <h1 className="flex flex-col items-center md:items-start">
+              <span className="block overflow-hidden">
+                <span className="block hero-text-reveal opacity-0 text-[16vw] sm:text-[18vw] md:text-[12rem] leading-[0.8] font-normal tracking-tighter text-[#1A1A1A] [-webkit-text-stroke:0.03em_#f3f3f3] [paint-order:stroke_fill]">
+                  Antoni
+                </span>
+              </span>
+              <span className="mt-8 flex items-center justify-center md:justify-start gap-3 md:pl-2 hero-text-reveal opacity-0">
+                <span className="h-[1px] w-8 bg-gray-400"></span>
+                <span className="text-base md:text-lg text-gray-600 font-medium max-w-[240px] md:max-w-none text-left">
+                  {lang === "es"
+                    ? "Desarrollador Web Full-Stack: Front-End, Back-End y Móvil"
+                    : "Full-Stack Web Developer: Front-End, Back-End & Mobile"}
+                </span>
+              </span>
+            </h1>
+            <ul className="hero-fade-in opacity-0 mt-6 flex flex-wrap justify-center md:justify-start gap-2 md:pl-2 max-w-[22rem] md:max-w-xl">
+              {TECHS.map((tech) => (
+                <li
+                  key={tech}
+                  className="px-3 py-1 rounded-full border border-gray-300 text-xs md:text-sm text-gray-600"
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Bottom Indicators */}
