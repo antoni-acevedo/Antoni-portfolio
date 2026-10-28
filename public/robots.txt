@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Crawlers de IA / agentes: contenido público, permitido para búsqueda y citación
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: CCBot
+User-agent: cohere-ai
+User-agent: Meta-ExternalAgent
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://antoni-acevedo.github.io/Antoni-portfolio/sitemap.xml

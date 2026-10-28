@@ -1,0 +1,169 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const siteUrl = new URL(base, Astro.site).href;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const asset = (path: string) => new URL(`${base}${path}`, Astro.site).href;
+const ogImage = asset("images/profile2.jpg");
+
+const name = "Antoni Acevedo";
+const sameAs = [
+  "https://www.linkedin.com/in/leideracevedo",
+  "https://github.com/antoni-acevedo",
+];
+
+const services = [
+  {
+    name: "Desarrollo Web Full-Stack",
+    description:
+      "Aplicaciones web modernas y escalables con React, Vue, Astro y NextJS.",
+  },
+  {
+    name: "Desarrollo de Aplicaciones Móviles",
+    description:
+      "Apps nativas e híbridas para iOS y Android con React Native, Ionic y Flutter.",
+  },
+  {
+    name: "Desarrollo Back-End",
+    description:
+      "APIs y sistemas robustos con Node.js y NestJS: bases de datos, WebSockets, autenticación y pasarelas de pago.",
+  },
+  {
+    name: "Desarrollo Front-End",
+    description:
+      "Interfaces rápidas, accesibles y optimizadas para SEO con React, Vue y TypeScript.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      url: siteUrl,
+      name: `${name} | Portafolio`,
+      inLanguage: ["es", "en"],
+      publisher: { "@id": `${siteUrl}#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}#person`,
+      name,
+      url: siteUrl,
+      image: ogImage,
+      email: "mailto:leideracevedo07@gmail.com",
+      jobTitle: "Desarrollador Web Full-Stack",
+      description,
+      sameAs,
+      knowsLanguage: ["es", "en"],
+      knowsAbout: [
+        "Desarrollo web",
+        "Desarrollo front-end",
+        "Desarrollo back-end",
+        "Desarrollo de aplicaciones móviles",
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Vue",
+        "Node.js",
+        "NestJS",
+        "React Native",
+        "Ionic",
+        "Flutter",
+        "Astro",
+      ],
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteUrl}#service`,
+      name: `${name} - Desarrollador Web Freelance`,
+      url: siteUrl,
+      image: ogImage,
+      email: "leideracevedo07@gmail.com",
+      telephone: "+573016236319",
+      founder: { "@id": `${siteUrl}#person` },
+      areaServed: "Worldwide",
+      availableLanguage: ["es", "en"],
+      sameAs,
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Servicios de desarrollo de software",
+        itemListElement: services.map((s) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: s.name,
+            description: s.description,
+            provider: { "@id": `${siteUrl}#person` },
+          },
+        })),
+      },
+    },
+  ],
+};
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="author" content={name} />
+    <meta
+      name="keywords"
+      content="desarrollador web, desarrollador full-stack, desarrollador front-end, desarrollador back-end, desarrollador móvil, freelance, React, Vue, Node.js, NestJS, React Native, Flutter, Ionic, contratar desarrollador web, web developer, hire developer"
+    />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+    <meta name="theme-color" content="#f3f3f3" />
+
+    <link rel="icon" type="image/png" href={asset("images/logo.png")} />
+    <link rel="apple-touch-icon" href={asset("images/logo.png")} />
+    <link rel="manifest" href={asset("manifest.webmanifest")} />
+    <link rel="sitemap" type="application/xml" href={asset("sitemap.xml")} />
+    <link rel="alternate" type="text/plain" href={asset("llms.txt")} title="llms.txt" />
+    <link rel="author" href={asset("humans.txt")} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={`${name} | Portafolio`} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`${name}, desarrollador web full-stack`} />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,21 @@
+# Antoni Acevedo — Desarrollador Web Full-Stack (Front-End, Back-End y Móvil)
+
+> Desarrollador freelance con más de 4 años de experiencia creando aplicaciones web y móviles escalables con JavaScript/TypeScript. Disponible para contratación de proyectos web, back-end y apps móviles para clientes en todo el mundo. Idiomas: español e inglés.
+
+## Servicios
+- Desarrollo Front-End y Full-Stack: React, Vue, Astro, NextJS, TypeScript.
+- Desarrollo Back-End: Node.js, NestJS, bases de datos, WebSockets, autenticación, pasarelas de pago, servicios cloud.
+- Desarrollo móvil iOS/Android: React Native, Ionic, Flutter.
+
+## Páginas
+- [Portafolio](/): servicios, proyectos destacados, experiencia y contacto.
+- [Todos los proyectos](/projects/): listado completo de proyectos.
+
+## Contacto
+- Email: leideracevedo07@gmail.com
+- WhatsApp: https://wa.me/573016236319
+- LinkedIn: https://www.linkedin.com/in/leideracevedo
+- GitHub: https://github.com/antoni-acevedo
+
+## Sitemap
+- https://antoni-acevedo.github.io/sitemap.xml
