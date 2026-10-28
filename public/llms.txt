@@ -18,4 +18,4 @@
 - GitHub: https://github.com/antoni-acevedo
 
 ## Sitemap
-- https://antoni-acevedo.github.io/sitemap.xml
+- https://antoni-portfolio.pages.dev/sitemap.xml

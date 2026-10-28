@@ -21,4 +21,4 @@ User-agent: Meta-ExternalAgent
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://antoni-acevedo.github.io/Antoni-portfolio/sitemap.xml
+Sitemap: https://antoni-portfolio.pages.dev/sitemap.xml
