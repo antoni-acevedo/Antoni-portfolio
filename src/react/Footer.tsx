@@ -138,7 +138,7 @@ export default function Footer() {
                 LinkedIn
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/antoni-acevedo"
                 target="_blank"
                 className="hover:text-white hover:underline underline-offset-4 transition-colors"
               >
