@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Circle,
   X,
+  Trash2,
   Upload,
   FolderPlus,
   Image as ImageIcon,
@@ -445,6 +446,31 @@ export default function ProjectsManager() {
     setSelectedImages(newOrder);
   };
 
+  const handleDeleteFile = (img: string) => {
+    if (!confirm(`¿Eliminar "${img}" definitivamente? El archivo se borra del disco y de todos los proyectos que lo usen.`)) return;
+
+    toast.promise(
+      fetch("/api/images/delete", {
+        method: "DELETE",
+        body: JSON.stringify({ folder: selectedFolder, filename: img }),
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        if (!res.ok) throw new Error();
+        const suffix = `projectImages/${selectedFolder}/${img}`;
+        setFolderImages((prev) => prev.filter((i) => i !== img));
+        setSelectedImages((prev) => prev.filter((i) => i !== img));
+        setItems((list) =>
+          list.map((p) => ({ ...p, images: p.images.filter((i) => !i.endsWith(suffix)) })),
+        );
+      }),
+      {
+        loading: "Eliminando imagen...",
+        success: "Imagen eliminada",
+        error: "Error al eliminar la imagen",
+      },
+    );
+  };
+
   const handleCreateFolder = () => {
     const name = newFolderName.trim();
     if (!name) return;
@@ -808,9 +834,9 @@ export default function ProjectsManager() {
                           const idx = selectedImages.indexOf(img);
                           const isSelected = idx !== -1;
                           return (
+                            <div key={img} className="relative">
                             <button
                               type="button"
-                              key={img}
                               onClick={() => toggleImage(img)}
                               title={img}
                               className={`group relative aspect-video rounded-lg overflow-hidden transition-all ${
@@ -834,6 +860,16 @@ export default function ProjectsManager() {
                                 {img}
                               </span>
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteFile(img)}
+                              title="Eliminar archivo"
+                              aria-label={`Eliminar ${img}`}
+                              className="absolute top-1 left-1 w-6 h-6 rounded-md bg-white/90 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                            </div>
                           );
                         })}
                       </div>

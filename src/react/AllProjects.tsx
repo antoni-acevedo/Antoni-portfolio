@@ -77,6 +77,13 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
     setSelected(p);
   };
 
+  // Warm the cache so browsing images swaps instantly instead of flashing.
+  useEffect(() => {
+    selected?.images.forEach((img) => {
+      new Image().src = getImageUrl(img);
+    });
+  }, [selected]);
+
   const step = (dir: 1 | -1) => {
     const n = selected?.images.length ?? 0;
     if (n > 1) setImgIndex((i) => (i + dir + n) % n);
@@ -264,13 +271,9 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
               <div className="ap-modal__scroll">
                 <div className="ap-media">
                   <div className="ap-gallery">
-                    <motion.img
-                      key={imgIndex}
+                    <img
                       src={getImageUrl(selected.images[imgIndex])}
                       alt={`${selected.company} ${imgIndex + 1}`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.2 }}
                     />
                     {selected.images.length > 1 && (
                       <>
