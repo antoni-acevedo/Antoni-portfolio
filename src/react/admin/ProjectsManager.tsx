@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import type { ProjectData } from "../MyProjects";
-import { Button, Card, Modal } from "./UI";
+import { Button, Card, Modal, Switch } from "./UI";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
@@ -179,6 +179,26 @@ export default function ProjectsManager() {
     setIsNewFolder(false);
     setNewFolderName("");
     setIsModalOpen(true);
+  };
+
+  const handleToggleActive = (item: ProjectData, active: boolean) => {
+    const previous = items;
+    setItems((list) =>
+      list.map((p) => (p.id === item.id ? { ...p, active: Number(active) } : p)),
+    );
+    fetch(`/api/projects/${item.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ active }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error();
+        toast.success(active ? "Proyecto visible" : "Proyecto oculto");
+      })
+      .catch(() => {
+        setItems(previous);
+        toast.error("Error al actualizar");
+      });
   };
 
   const handleDelete = async (id: number) => {
@@ -469,7 +489,7 @@ export default function ProjectsManager() {
               key={item.id}
               className="flex flex-col md:flex-row gap-6 relative group"
             >
-              <div className="w-full md:w-48 aspect-video bg-gray-100 rounded-lg overflow-hidden shrink-0">
+              <div className={`w-full md:w-48 aspect-video bg-gray-100 rounded-lg overflow-hidden shrink-0 ${item.active === 0 ? "opacity-50" : ""}`}>
                 <img
                   src={getImageUrl(item.images[0])}
                   alt={item.company}
@@ -479,21 +499,31 @@ export default function ProjectsManager() {
               <div className="flex-1">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-bold text-xl">{item.company}</h3>
+                    <h3 className={`font-bold text-xl ${item.active === 0 ? "text-gray-400" : ""}`}>{item.company}</h3>
                     <p className="text-sm font-medium text-gray-500">
                       {getDisplayValue(item, "role")} • {item.date}
                     </p>
                   </div>
-                  <div className="flex gap-2">
-                    {item.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="bg-gray-100 text-xs px-2 py-1 rounded-full"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                      {item.active === 0 ? "Oculto" : "Visible"}
+                      <Switch
+                        checked={item.active !== 0}
+                        onChange={(v) => handleToggleActive(item, v)}
+                        label={`Mostrar ${item.company}`}
+                      />
+                    </label>
                   </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {item.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="bg-gray-100 text-xs px-2 py-1 rounded-full"
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
                 <p className="text-gray-600 mt-2">
                   {getDisplayValue(item, "desc")}

@@ -9,22 +9,6 @@ const BASE = import.meta.env.BASE_URL;
 const MAX_TAGS = 3;
 const MAX_FILTERS = 10;
 
-const ArrowUpRight = ({ size = 22 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M7 17L17 7" />
-    <path d="M7 7h10v10" />
-  </svg>
-);
-
 const copy = {
   es: {
     back: "Volver",
@@ -212,10 +196,6 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
                       loading="lazy"
                       className="ap-card__img"
                     />
-                    <div className="ap-card__veil" />
-                    <span className="ap-card__open">
-                      <ArrowUpRight size={20} />
-                    </span>
                     {p.images.length > 1 && (
                       <span className="ap-card__more">+{p.images.length - 1}</span>
                     )}
@@ -284,17 +264,14 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
               <div className="ap-modal__scroll">
                 <div className="ap-media">
                   <div className="ap-gallery">
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.img
-                        key={imgIndex}
-                        src={getImageUrl(selected.images[imgIndex])}
-                        alt={`${selected.company} ${imgIndex + 1}`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    </AnimatePresence>
+                    <motion.img
+                      key={imgIndex}
+                      src={getImageUrl(selected.images[imgIndex])}
+                      alt={`${selected.company} ${imgIndex + 1}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
                     {selected.images.length > 1 && (
                       <>
                         <button onClick={() => step(-1)} aria-label={c.prev} className="ap-gallery__nav ap-gallery__nav--prev">
