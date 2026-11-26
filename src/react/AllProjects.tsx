@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import { useStore } from "@nanostores/react";
 import { languageStore, setLanguage } from "../store/languageStore";
 import type { ProjectData } from "./MyProjects";
@@ -12,6 +13,14 @@ const MAX_FILTERS = 10;
 const copy = {
   es: {
     back: "Volver",
+    nav: [
+      { label: "Sobre Mí", href: "#about" },
+      { label: "Portafolio", href: "#portfolio" },
+      { label: "Servicios", href: "#services" },
+      { label: "Trayectoria", href: "#experience" },
+    ],
+    talk: "Charlemos",
+    menu: "Menú",
     eyebrow: "Portafolio",
     title: "Todos los proyectos",
     subtitle:
@@ -27,6 +36,14 @@ const copy = {
   },
   en: {
     back: "Back",
+    nav: [
+      { label: "About Me", href: "#about" },
+      { label: "Portfolio", href: "#portfolio" },
+      { label: "Services", href: "#services" },
+      { label: "Experience", href: "#experience" },
+    ],
+    talk: "Let's Talk",
+    menu: "Menu",
     eyebrow: "Portfolio",
     title: "All projects",
     subtitle:
@@ -112,6 +129,7 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
   const [selected, setSelected] = useState<ProjectData | null>(null);
   const [imgIndex, setImgIndex] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   // Cards stagger in on first paint only; later filter changes enter without delay.
   const firstPaint = useRef(true);
   useEffect(() => {
@@ -184,26 +202,71 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
     <div className="ap">
       {/* Top bar */}
       <header className="ap-header">
-        <a href={`${BASE}#portfolio`} className="ap-back">
-          <span className="ap-back__icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </span>
-          {c.back}
-        </a>
+        <div className="ap-header__left">
+          <a href={`${BASE}#portfolio`} className="ap-back">
+            <span className="ap-back__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+            </span>
+            {c.back}
+          </a>
 
-        <div className="ap-lang">
-          {(["es", "en"] as const).map((l) => (
-            <button
-              key={l}
-              onClick={() => setLanguage(l)}
-              className={lang === l ? "is-active" : ""}
-            >
-              {l.toUpperCase()}
-            </button>
-          ))}
+          <nav className="ap-nav" aria-label="Principal">
+            {c.nav.map((item) => (
+              <a key={item.href} href={`${BASE}${item.href}`}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
         </div>
+
+        <div className="ap-header__right">
+          <div className="ap-lang">
+            {(["en", "es"] as const).map((l, i) => (
+              <React.Fragment key={l}>
+                {i > 0 && <span className="ap-lang__sep">/</span>}
+                <button
+                  onClick={() => setLanguage(l)}
+                  className={lang === l ? "is-active" : ""}
+                >
+                  {l.toUpperCase()}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+
+          <a
+            href="https://wa.me/573016236319"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ap-talk"
+          >
+            {c.talk}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </a>
+
+          <button
+            className="ap-menu-btn"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={c.menu}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+
+        {menuOpen && (
+          <nav className="ap-mobile-nav" aria-label="Principal">
+            {c.nav.map((item) => (
+              <a key={item.href} href={`${BASE}${item.href}`}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        )}
       </header>
 
       {/* Title */}

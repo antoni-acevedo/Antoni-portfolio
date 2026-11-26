@@ -71,10 +71,105 @@ html {
   color: #fff;
 }
 
+.ap-header__left,
+.ap-header__right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ap-nav {
+  display: none;
+  gap: 32px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ap-nav a,
+.ap-mobile-nav a {
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ap-nav a:hover,
+.ap-mobile-nav a:hover {
+  color: #000;
+}
+
+.ap-talk {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #1a1a1a;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.ap-talk:hover {
+  opacity: 0.7;
+}
+
+.ap-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ap-menu-btn:hover {
+  background: #e5e7eb;
+}
+
+.ap-menu-btn:focus-visible,
+.ap-nav a:focus-visible,
+.ap-mobile-nav a:focus-visible,
+.ap-talk:focus-visible,
+.ap-lang button:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+.ap-mobile-nav {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 24px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f3f3f3;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ap-mobile-nav a {
+  padding: 8px 0;
+}
+
 .ap-lang {
   display: flex;
-  gap: 12px;
+  align-items: center;
+  gap: 8px;
   font-size: 14px;
+}
+
+.ap-lang__sep {
+  color: #d1d5db;
 }
 
 .ap-lang button {
@@ -597,6 +692,21 @@ html {
   }
 }
 
+@media (min-width: 1024px) {
+  .ap-nav {
+    display: flex;
+  }
+
+  .ap-talk {
+    display: inline-flex;
+  }
+
+  .ap-menu-btn,
+  .ap-mobile-nav {
+    display: none;
+  }
+}
+
 @media (min-width: 768px) {
   .ap {
     padding: 0 48px 96px;
@@ -605,6 +715,11 @@ html {
   .ap-header {
     margin: 0 -48px;
     padding: 16px 48px;
+  }
+
+  .ap-mobile-nav {
+    padding-right: 48px;
+    padding-left: 48px;
   }
 
   .ap-hero {
