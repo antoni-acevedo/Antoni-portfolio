@@ -1,5 +1,10 @@
 /* "All projects" page — plain CSS, no utility classes. Prefix: ap- */
 
+/* Keep the scrollbar's space when the drawer locks page scroll, so the grid doesn't shift. */
+html {
+  scrollbar-gutter: stable;
+}
+
 .ap-page {
   position: relative;
   width: 100%;
@@ -100,11 +105,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ap-hero {
-    animation: none;
-  }
-}
+
 
 .ap-hero {
   animation: ap-rise 0.7s ease-out both;
@@ -153,6 +154,7 @@
 /* ───────── Filters ───────── */
 
 .ap-filters {
+  animation: ap-rise 0.7s ease-out 0.12s both;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -253,6 +255,12 @@
   display: block;
   width: 100%;
   height: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.ap-card__img.is-loaded {
+  opacity: 1;
 }
 
 .ap-card__more {
@@ -458,6 +466,22 @@
   height: auto;
 }
 
+.ap-gallery__img {
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.ap-gallery__img.is-loaded {
+  opacity: 1;
+}
+
+.ap-gallery__prev {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .ap-gallery__nav {
   position: absolute;
   top: 50%;
@@ -519,7 +543,7 @@
   background: none;
   opacity: 0.6;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, box-shadow 0.2s;
 }
 
 .ap-thumb:hover {
@@ -616,5 +640,17 @@
 @media (min-width: 768px) {
   .ap-modal {
     width: max(50vw, 560px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-hero,
+  .ap-filters {
+    animation: none;
+  }
+
+  .ap-card__img,
+  .ap-gallery__img {
+    transition: none;
   }
 }

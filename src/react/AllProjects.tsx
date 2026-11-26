@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { useStore } from "@nanostores/react";
 import { languageStore, setLanguage } from "../store/languageStore";
 import type { ProjectData } from "./MyProjects";
@@ -42,6 +42,69 @@ const copy = {
   },
 };
 
+// Fades in once loaded, so cards don't pop in as images arrive.
+function CardImage({ src, alt }: { src: string; alt: string }) {
+  const ref = useRef<HTMLImageElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (ref.current?.complete) setLoaded(true);
+  }, []);
+  return (
+    <img
+      ref={ref}
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onLoad={() => setLoaded(true)}
+      className={`ap-card__img ${loaded ? "is-loaded" : ""}`}
+    />
+  );
+}
+
+// Crossfade: the new image fades in over the previous one, so there is never a blank frame.
+function GalleryImage({ src, alt }: { src: string; alt: string }) {
+  const [current, setCurrent] = useState(src);
+  const [previous, setPrevious] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(true);
+  const ref = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (src === current) return;
+    setPrevious(current);
+    setCurrent(src);
+    setLoaded(false);
+  }, [src]);
+
+  const reveal = () => {
+    requestAnimationFrame(() => requestAnimationFrame(() => setLoaded(true)));
+  };
+
+  useEffect(() => {
+    if (loaded) return;
+    if (ref.current?.complete) reveal();
+  }, [current, loaded]);
+
+  useEffect(() => {
+    if (!loaded || !previous) return;
+    const t = setTimeout(() => setPrevious(null), 300);
+    return () => clearTimeout(t);
+  }, [loaded, previous]);
+
+  return (
+    <>
+      {previous && <img src={previous} alt="" aria-hidden className="ap-gallery__prev" />}
+      <img
+        key={current}
+        ref={ref}
+        src={current}
+        alt={alt}
+        onLoad={reveal}
+        className={`ap-gallery__img ${loaded ? "is-loaded" : ""}`}
+      />
+    </>
+  );
+}
+
 export default function AllProjects({ projects }: { projects: ProjectData[] }) {
   const lang = useStore(languageStore);
   const c = copy[lang];
@@ -49,6 +112,11 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
   const [selected, setSelected] = useState<ProjectData | null>(null);
   const [imgIndex, setImgIndex] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // Cards stagger in on first paint only; later filter changes enter without delay.
+  const firstPaint = useRef(true);
+  useEffect(() => {
+    firstPaint.current = false;
+  }, []);
 
   const filters = useMemo(() => {
     const map = new Map<string, { label: string; count: number }>();
@@ -112,6 +180,7 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
   }, [selected]);
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="ap">
       {/* Top bar */}
       <header className="ap-header">
@@ -171,20 +240,24 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
 
       {/* Grid */}
       {visible.length === 0 ? (
-        <p className="ap-empty">{c.empty}</p>
+        <motion.p className="ap-empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{c.empty}</motion.p>
       ) : (
         <div className="ap-grid">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {visible.map((p) => {
+          <AnimatePresence mode="popLayout">
+            {visible.map((p, i) => {
               const extra = p.tags.length - MAX_TAGS;
               return (
                 <motion.article
                   layout
                   key={p.id}
-                  initial={{ opacity: 0, scale: 0.97 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.35 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{
+                    duration: 0.35,
+                    ease: "easeOut",
+                    delay: firstPaint.current ? Math.min(i, 8) * 0.05 : 0,
+                  }}
                   role="button"
                   tabIndex={0}
                   onClick={() => open(p)}
@@ -197,12 +270,7 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
                   className="ap-card"
                 >
                   <div className="ap-card__media">
-                    <img
-                      src={getImageUrl(p.images[0])}
-                      alt={p.company}
-                      loading="lazy"
-                      className="ap-card__img"
-                    />
+                    <CardImage src={getImageUrl(p.images[0])} alt={p.company} />
                     {p.images.length > 1 && (
                       <span className="ap-card__more">+{p.images.length - 1}</span>
                     )}
@@ -268,10 +336,15 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
                 </button>
               </div>
 
-              <div className="ap-modal__scroll">
+              <motion.div
+                className="ap-modal__scroll"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.3, ease: "easeOut" }}
+              >
                 <div className="ap-media">
                   <div className="ap-gallery">
-                    <img
+                    <GalleryImage
                       src={getImageUrl(selected.images[imgIndex])}
                       alt={`${selected.company} ${imgIndex + 1}`}
                     />
@@ -325,11 +398,12 @@ export default function AllProjects({ projects }: { projects: ProjectData[] }) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+    </MotionConfig>
   );
 }
