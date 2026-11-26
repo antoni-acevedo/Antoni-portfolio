@@ -179,7 +179,7 @@ const Hero = () => {
   return (
     <div
       ref={container}
-      className="w-full h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[1080px] mx-auto max-w-[1900px] overflow-hidden"
+      className="w-full h-svh md:h-screen bg-[#f3f3f3] text-[#1A1A1A] font-sans selection:bg-blue-100 flex flex-col relative max-h-[1080px] mx-auto max-w-[1900px] overflow-hidden"
     >
       {/* Right Side: Image Box (Small at bottom on mobile) - Moved to back */}
       <div className="absolute bottom-0 md:top-0 right-0 md:right-[5%] w-full md:w-[50%] h-[40vh] md:h-full z-10 flex items-end justify-center pointer-events-none overflow-hidden">
@@ -217,7 +217,7 @@ const Hero = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="w-full flex justify-between items-center px-6 md:px-22 py-8 max-w-[1320px] mx-auto z-50">
+      <nav className="w-full flex justify-between items-center px-6 md:px-22 py-4 md:py-8 max-w-[1320px] mx-auto z-50">
         {/* Mobile Toggle */}
         <button
           className="md:hidden text-[#1A1A1A] p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors relative z-50 cursor-pointer"
@@ -286,9 +286,9 @@ const Hero = () => {
         </div>
 
         {/* Left Side: Text & Content */}
-        <div className="w-full md:w-[55%] flex flex-col justify-center items-center md:items-start text-center md:text-left relative pt-10 md:pt-0 md:pb-32 z-20">
+        <div className="w-full md:w-[55%] flex flex-col justify-start md:justify-center items-center md:items-start text-center md:text-left relative pt-2 md:pt-0 md:pb-32 z-20">
           {/* Stats */}
-          <div className="flex justify-center md:justify-start gap-8 md:gap-16 mb-8 md:pl-10 w-full md:w-auto">
+          <div className="flex justify-center md:justify-start gap-8 md:gap-16 mb-5 md:mb-8 md:pl-10 w-full md:w-auto">
             <div className="hero-fade-in opacity-0">
               <h3 className="text-3xl md:text-5xl font-light tracking-tight">
                 +4
@@ -315,7 +315,7 @@ const Hero = () => {
                   Antoni
                 </span>
               </span>
-              <span className="mt-8 flex items-center justify-center md:justify-start gap-3 md:pl-2 hero-text-reveal opacity-0">
+              <span className="mt-5 md:mt-8 flex items-center justify-center md:justify-start gap-3 md:pl-2 hero-text-reveal opacity-0">
                 <span className="h-[1px] w-8 bg-gray-400"></span>
                 <span className="text-base md:text-lg text-gray-600 font-medium max-w-[240px] md:max-w-none text-left">
                   {lang === "es"
@@ -324,11 +324,11 @@ const Hero = () => {
                 </span>
               </span>
             </h1>
-            <ul className="hero-fade-in opacity-0 mt-6 flex flex-wrap justify-center md:justify-start gap-2 md:pl-2 max-w-[22rem] md:max-w-xl">
-              {TECHS.map((tech) => (
+            <ul className="hero-fade-in opacity-0 mt-4 md:mt-6 flex flex-wrap justify-center md:justify-start gap-2 md:pl-2 max-w-[22rem] md:max-w-xl">
+              {TECHS.map((tech, i) => (
                 <li
                   key={tech}
-                  className="px-3 py-1 rounded-full border border-gray-300 text-xs md:text-sm text-gray-600"
+                  className={`${i >= 6 ? "hidden md:block" : ""} px-3 py-1 rounded-full border border-gray-300 text-xs md:text-sm text-gray-600`}
                 >
                   {tech}
                 </li>

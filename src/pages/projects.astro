@@ -7,7 +7,7 @@ import "../styles/all-projects.css";
 import db from "../db/client";
 
 const projects = (
-  db.prepare("SELECT * FROM projects ORDER BY id DESC").all() as any[]
+  db.prepare("SELECT * FROM projects WHERE active = 1 ORDER BY id DESC").all() as any[]
 ).map((p) => ({
   ...p,
   tags: JSON.parse(p.tags),

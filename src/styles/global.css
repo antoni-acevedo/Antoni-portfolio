@@ -19,6 +19,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 64px; /* fixed nav height */
   }
 
   /* Anything clickable gets a pointer (Tailwind v4 preflight resets buttons to

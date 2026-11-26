@@ -39,6 +39,7 @@ export interface ProjectData {
   role_en?: string;
   desc_en?: string;
   long_desc_en?: string;
+  active?: number;
 }
 
 interface MyProjectsProps {
